@@ -1,0 +1,285 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<form xmlns="http://www.intellij.com/uidesigner/form/" version="1" bind-to-class="main.ui.PlayerForm">
+  <grid id="27dc6" binding="basePanel" layout-manager="GridBagLayout">
+    <constraints>
+      <xy x="20" y="20" width="745" height="642"/>
+    </constraints>
+    <properties/>
+    <border type="none"/>
+    <children>
+      <component id="3081f" class="javax.swing.JLabel">
+        <constraints>
+          <grid row="1" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+          <gridbag top="0" left="0" bottom="0" right="8" weightx="0.0" weighty="0.0"/>
+        </constraints>
+        <properties>
+          <text value="Find player"/>
+        </properties>
+      </component>
+      <hspacer id="2b2f6">
+        <constraints>
+          <grid row="1" column="6" row-span="1" col-span="1" vsize-policy="1" hsize-policy="6" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+          <gridbag weightx="0.2" weighty="0.15"/>
+        </constraints>
+      </hspacer>
+      <component id="ca21b" class="javax.swing.JRadioButton" binding="byNameRadioButton" default-binding="true">
+        <constraints>
+          <grid row="1" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+          <gridbag weightx="0.0" weighty="0.0"/>
+        </constraints>
+        <properties>
+          <selected value="true"/>
+          <text value="By &amp;name"/>
+        </properties>
+      </component>
+      <component id="5c074" class="javax.swing.JRadioButton" binding="byIDRadioButton" default-binding="true">
+        <constraints>
+          <grid row="1" column="3" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+          <gridbag weightx="0.0" weighty="0.0"/>
+        </constraints>
+        <properties>
+          <enabled value="true"/>
+          <selected value="false"/>
+          <text value="By &amp;ID"/>
+        </properties>
+      </component>
+      <component id="6cb03" class="javax.swing.JTextField" binding="searchField">
+        <constraints>
+          <grid row="1" column="4" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
+            <preferred-size width="150" height="-1"/>
+          </grid>
+          <gridbag top="0" left="8" bottom="0" right="8" weightx="0.4" weighty="0.0"/>
+        </constraints>
+        <properties>
+          <columns value="10"/>
+        </properties>
+      </component>
+      <component id="dbc1a" class="javax.swing.JButton" binding="searchButton">
+        <constraints>
+          <grid row="1" column="5" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+          <gridbag weightx="0.1" weighty="0.0"/>
+        </constraints>
+        <properties>
+          <text value="&amp;Find"/>
+        </properties>
+      </component>
+      <hspacer id="164cc">
+        <constraints>
+          <grid row="1" column="0" row-span="3" col-span="1" vsize-policy="1" hsize-policy="6" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+          <gridbag weightx="0.05" weighty="0.0"/>
+        </constraints>
+      </hspacer>
+      <vspacer id="de4b9">
+        <constraints>
+          <grid row="0" column="1" row-span="1" col-span="6" vsize-policy="6" hsize-policy="1" anchor="0" fill="2" indent="0" use-parent-layout="false"/>
+          <gridbag weightx="0.0" weighty="0.01"/>
+        </constraints>
+      </vspacer>
+      <grid id="d4769" layout-manager="GridBagLayout">
+        <constraints>
+          <grid row="3" column="1" row-span="1" col-span="6" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
+          <gridbag weightx="1.0" weighty="0.8"/>
+        </constraints>
+        <properties/>
+        <border type="none"/>
+        <children>
+          <scrollpane id="370c">
+            <constraints>
+              <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="7" hsize-policy="7" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
+              <gridbag weightx="0.4" weighty="0.3"/>
+            </constraints>
+            <properties/>
+            <border type="none"/>
+            <children>
+              <component id="61f1a" class="javax.swing.JTable" binding="statsTable">
+                <constraints/>
+                <properties>
+                  <fillsViewportHeight value="true"/>
+                </properties>
+              </component>
+            </children>
+          </scrollpane>
+          <hspacer id="a28f5">
+            <constraints>
+              <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="1" hsize-policy="6" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+              <gridbag weightx="0.1" weighty="0.0"/>
+            </constraints>
+          </hspacer>
+          <vspacer id="bfe45">
+            <constraints>
+              <grid row="3" column="0" row-span="1" col-span="1" vsize-policy="6" hsize-policy="1" anchor="0" fill="2" indent="0" use-parent-layout="false"/>
+              <gridbag weightx="0.0" weighty="0.1"/>
+            </constraints>
+          </vspacer>
+          <scrollpane id="d643f">
+            <constraints>
+              <grid row="0" column="2" row-span="7" col-span="1" vsize-policy="7" hsize-policy="7" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
+              <gridbag weightx="0.4" weighty="0.3"/>
+            </constraints>
+            <properties/>
+            <border type="none"/>
+            <children>
+              <component id="84e05" class="javax.swing.JTable" binding="itemsTable">
+                <constraints/>
+                <properties>
+                  <fillsViewportHeight value="true"/>
+                </properties>
+              </component>
+            </children>
+          </scrollpane>
+          <scrollpane id="4d1cd">
+            <constraints>
+              <grid row="4" column="0" row-span="1" col-span="1" vsize-policy="7" hsize-policy="7" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
+              <gridbag weightx="0.4" weighty="0.4"/>
+            </constraints>
+            <properties/>
+            <border type="none"/>
+            <children>
+              <component id="25c47" class="javax.swing.JTable" binding="reputationTable">
+                <constraints/>
+                <properties>
+                  <fillsViewportHeight value="true"/>
+                </properties>
+              </component>
+            </children>
+          </scrollpane>
+          <vspacer id="96a2">
+            <constraints>
+              <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="6" hsize-policy="1" anchor="0" fill="2" indent="0" use-parent-layout="false"/>
+              <gridbag weightx="0.0" weighty="0.01"/>
+            </constraints>
+          </vspacer>
+          <grid id="1fb2e" layout-manager="GridBagLayout">
+            <constraints>
+              <grid row="2" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
+              <gridbag weightx="0.4" weighty="0.15"/>
+            </constraints>
+            <properties/>
+            <border type="none"/>
+            <children>
+              <component id="73b5" class="javax.swing.JButton" binding="saveStatsButton">
+                <constraints>
+                  <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="1" fill="1" indent="0" use-parent-layout="false"/>
+                  <gridbag top="0" left="4" bottom="0" right="4" weightx="0.1" weighty="1.0"/>
+                </constraints>
+                <properties>
+                  <text value="&amp;Save"/>
+                </properties>
+              </component>
+              <hspacer id="8658c">
+                <constraints>
+                  <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="1" hsize-policy="6" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+                  <gridbag weightx="0.8" weighty="0.0"/>
+                </constraints>
+              </hspacer>
+            </children>
+          </grid>
+          <vspacer id="85901">
+            <constraints>
+              <grid row="5" column="0" row-span="1" col-span="1" vsize-policy="6" hsize-policy="1" anchor="0" fill="2" indent="0" use-parent-layout="false"/>
+              <gridbag weightx="0.0" weighty="0.01"/>
+            </constraints>
+          </vspacer>
+          <grid id="ff7bf" layout-manager="GridBagLayout">
+            <constraints>
+              <grid row="6" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
+              <gridbag weightx="0.4" weighty="0.15"/>
+            </constraints>
+            <properties/>
+            <border type="none"/>
+            <children>
+              <component id="49bea" class="javax.swing.JButton" binding="saveFractionsButton">
+                <constraints>
+                  <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="1" fill="1" indent="0" use-parent-layout="false"/>
+                  <gridbag top="0" left="4" bottom="0" right="4" weightx="0.1" weighty="1.0"/>
+                </constraints>
+                <properties>
+                  <text value="&amp;Save"/>
+                </properties>
+              </component>
+              <hspacer id="dbd50">
+                <constraints>
+                  <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="1" hsize-policy="6" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+                  <gridbag weightx="0.8" weighty="0.0"/>
+                </constraints>
+              </hspacer>
+            </children>
+          </grid>
+          <vspacer id="28432">
+            <constraints>
+              <grid row="7" column="2" row-span="1" col-span="1" vsize-policy="6" hsize-policy="1" anchor="0" fill="2" indent="0" use-parent-layout="false"/>
+              <gridbag weightx="0.0" weighty="0.01"/>
+            </constraints>
+          </vspacer>
+          <grid id="b46cd" layout-manager="GridBagLayout">
+            <constraints>
+              <grid row="8" column="2" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
+              <gridbag weightx="0.4" weighty="0.15"/>
+            </constraints>
+            <properties/>
+            <border type="none"/>
+            <children>
+              <component id="1aeb9" class="javax.swing.JButton" binding="saveItemsButton">
+                <constraints>
+                  <grid row="0" column="3" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="1" fill="1" indent="0" use-parent-layout="false"/>
+                  <gridbag top="0" left="4" bottom="0" right="4" weightx="0.1" weighty="1.0"/>
+                </constraints>
+                <properties>
+                  <text value="&amp;Save"/>
+                </properties>
+              </component>
+              <hspacer id="2f109">
+                <constraints>
+                  <grid row="0" column="2" row-span="1" col-span="1" vsize-policy="1" hsize-policy="6" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+                  <gridbag weightx="0.8" weighty="0.0"/>
+                </constraints>
+              </hspacer>
+              <component id="b72fe" class="javax.swing.JButton" binding="addItemButton">
+                <constraints>
+                  <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="1" fill="1" indent="0" use-parent-layout="false"/>
+                  <gridbag top="0" left="4" bottom="0" right="4" weightx="0.1" weighty="1.0"/>
+                </constraints>
+                <properties>
+                  <text value="&amp;Add"/>
+                </properties>
+              </component>
+              <component id="c3c7b" class="javax.swing.JButton" binding="deleteButton" default-binding="true">
+                <constraints>
+                  <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="1" fill="1" indent="0" use-parent-layout="false"/>
+                  <gridbag top="0" left="4" bottom="0" right="4" weightx="0.1" weighty="1.0"/>
+                </constraints>
+                <properties>
+                  <text value="&amp;Delete"/>
+                </properties>
+              </component>
+            </children>
+          </grid>
+        </children>
+      </grid>
+      <vspacer id="6c74f">
+        <constraints>
+          <grid row="4" column="1" row-span="1" col-span="6" vsize-policy="6" hsize-policy="1" anchor="0" fill="2" indent="0" use-parent-layout="false"/>
+          <gridbag weightx="0.0" weighty="0.05"/>
+        </constraints>
+      </vspacer>
+      <hspacer id="382f6">
+        <constraints>
+          <grid row="1" column="7" row-span="3" col-span="1" vsize-policy="1" hsize-policy="6" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+          <gridbag weightx="0.05" weighty="0.0"/>
+        </constraints>
+      </hspacer>
+      <vspacer id="5903">
+        <constraints>
+          <grid row="2" column="1" row-span="1" col-span="6" vsize-policy="6" hsize-policy="1" anchor="0" fill="2" indent="0" use-parent-layout="false"/>
+          <gridbag weightx="0.0" weighty="0.05"/>
+        </constraints>
+      </vspacer>
+    </children>
+  </grid>
+  <buttonGroups>
+    <group name="searchPlayerGroup">
+      <member id="5c074"/>
+      <member id="ca21b"/>
+    </group>
+  </buttonGroups>
+</form>
