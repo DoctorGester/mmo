@@ -125,7 +125,7 @@ public class DataLoader {
 
 	public void loadMap(){
 		try {
-			FileInputStream fis = new FileInputStream("map.map");
+			FileInputStream fis = new FileInputStream("res/map.map");
 			byte data[] = new byte[fis.available()];
 			fis.read(data);
 			fis.close();

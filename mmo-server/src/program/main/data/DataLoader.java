@@ -116,7 +116,7 @@ public class DataLoader {
 
 	public void loadPathingMapFromFileSystem(){
 		try {
-			FileInputStream fis = new FileInputStream("map.map");
+			FileInputStream fis = new FileInputStream("res/map.map");
 			byte data[] = new byte[fis.available()];
 			int red = fis.read(data);
 			fis.close();
