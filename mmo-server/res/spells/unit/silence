@@ -1,0 +1,5 @@
+id: silence
+cooldown: 14
+target: UNIT
+target: GROUND
+script: silence.groovy

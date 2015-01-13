@@ -1,0 +1,48 @@
+MaterialDef UIElement {
+
+    MaterialParameters {
+		Texture2D EffectMap
+		Color EffectColor
+		Boolean UseEffectTexCoords : false
+		Vector2 AtlasOffset
+		Vector2 SecondAtlasOffset
+		Boolean Blend : false
+		Float BlendStep
+		Float GlobalAlpha : 1.0
+		Texture2D ColorMap
+        Color Color (Color)
+		Boolean UseClipping : false
+		Vector4 Clipping
+		Boolean IsTextField : false
+		Boolean HasTabFocus : false
+		Float CaretX : 1.0
+		Float CaretSpeed : 10.0
+		Float LastUpdate
+		Boolean ShowTextRange : false
+		Float TextRangeStart : 0.0
+		Float TextRangeEnd : 0.0
+		Texture2D AlphaMap
+		Vector2 OffsetAlphaTexCoord
+    }
+
+    Technique {
+        VertexShader GLSL100:   res/shaders/UIElement.vert
+        FragmentShader GLSL100: res/shaders/UIElement.frag
+
+        WorldParameters {
+            WorldViewProjectionMatrix
+            WorldViewMatrix
+			Time
+        }
+
+        Defines {
+            HAS_COLOR : Color
+			HAS_ALPHAMAP : AlphaMap
+			IS_TEXTFIELD : IsTextField
+			BLEND: Blend
+			USE_CLIPPING : UseClipping
+			SHOW_TEXT_RANGE : ShowTextRange
+			HAS_TAB_FOCUS : HasTabFocus
+        }
+    }
+}

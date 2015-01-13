@@ -1,0 +1,10 @@
+id: 0
+name: Angel
+damage: 4
+health: 16
+actionPoints: 4
+restTime: 4
+script: angel.groovy
+model: res/models/angel/angel_m00
+spell: poison
+spell: heal

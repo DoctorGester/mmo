@@ -1,0 +1,3 @@
+id: debuff-slow
+script: debuff-slow.groovy
+name: Cripple

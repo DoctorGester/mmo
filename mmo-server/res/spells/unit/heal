@@ -1,0 +1,5 @@
+id: heal
+cooldown: 16
+target: UNIT
+target: SELF
+script: heal.groovy

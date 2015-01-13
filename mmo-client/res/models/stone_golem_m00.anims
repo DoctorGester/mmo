@@ -1,0 +1,9 @@
+attack 0 55
+death 55 75
+deathWait 130 1
+stand 131 91
+walk 222 91
+run 313 91
+attackWait 404 91
+cast1 495 76
+cast2 571 117

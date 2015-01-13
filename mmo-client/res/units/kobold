@@ -1,0 +1,9 @@
+id: 2
+name: Kobold
+damage: 5
+health: 20
+actionPoints: 4
+restTime: 4
+script: kobold.groovy
+model: res/models/kobold/kobold_m00
+scale: 3.5

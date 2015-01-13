@@ -1,0 +1,6 @@
+id: 4
+damage: 5
+health: 20
+actionPoints: 4
+restTime: 4
+script: lizardman.groovy

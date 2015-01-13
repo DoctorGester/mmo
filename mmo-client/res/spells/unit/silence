@@ -1,0 +1,8 @@
+id: silence
+cooldown: 14
+target: UNIT
+target: GROUND
+script: silence.groovy
+icon: res/textures/icons/silence-icon.png
+name: Terror
+description: Renders all creatures in a huge area silenced, preventing them from casting spells for 5 turns

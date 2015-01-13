@@ -1,0 +1,11 @@
+atkwait 0 51
+death 51 101
+deathwait 152 1
+picitem 153 16
+run 169 21
+spatk02 190 76
+Wait 266 91
+Walk 357 41
+atk01 398 55
+spatk01 453 76
+SpWait01 529 216

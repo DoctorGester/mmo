@@ -1,0 +1,64 @@
+
+material _missing_material_
+{
+    receive_shadows off
+    technique
+    {
+        pass
+        {
+            ambient 0.1 0.1 0.1 1.0
+            diffuse 0.8 0.0 0.0 1.0
+            specular 0.5 0.5 0.5 1.0 12.5
+            emissive 0.3 0.3 0.3 1.0
+        }
+    }
+}
+
+// models/heroes/earthshaker/earthshakerPillar.tga genrated by blender2ogre 0.5.9
+
+material models_heroes_earthshaker_earthshakerPillar.tga 
+{
+    receive_shadows on 
+
+    technique
+    {
+        pass
+        {
+            ambient 0 0 0 1
+			diffuse 1 1 1 1
+			specular 0.5 0.5 0.5 1.0 3.5
+			emissive 0 0 0
+			
+            texture_unit
+            {
+            	texture earthshaker_color.png
+            	tex_coord_set 0
+            }
+
+        }
+    }
+}
+// models/heroes/earthshaker/earthshaker.tga genrated by blender2ogre 0.5.9
+
+material models_heroes_earthshaker_earthshaker.tga 
+{
+    receive_shadows on 
+
+    technique
+    {
+        pass
+        {
+            ambient 0 0 0 1
+			diffuse 1 1 1 1
+			specular 0.5 0.5 0.5 1.0 3.5
+			emissive 0 0 0
+			
+            texture_unit
+            {
+            	texture earthshaker_color.png
+            	tex_coord_set 0
+            }
+
+        }
+    }
+}

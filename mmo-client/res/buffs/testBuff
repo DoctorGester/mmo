@@ -1,0 +1,3 @@
+id: testBuff
+script: testBuff.groovy
+icon: res/textures/icons/fire-icon.png

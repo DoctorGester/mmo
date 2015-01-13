@@ -1,0 +1,8 @@
+atk01 0 55
+atkwait 55 61
+death 116 47
+deathwait 163 1
+run 164 16
+Wait 181 69
+Walk 252 20
+SpWait01 272 76

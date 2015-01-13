@@ -1,0 +1,4 @@
+id: poisonBuff
+script: poisonBuff.groovy
+icon: res/textures/icons/hand-icon.png
+description: This unit is taking damage over time

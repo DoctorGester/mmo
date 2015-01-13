@@ -1,0 +1,4 @@
+effect effect.groovy
+heal-effect heal-effect.groovy
+fireball-effect fireball-effect.groovy
+purge-effect purge-effect.groovy

@@ -1,0 +1,26 @@
+material "werewolf_t00"
+{
+	technique werewolf_t00_technique
+	{
+		pass werewolf_t00_standard
+		{
+			ambient 0.588 0.588 0.588 1
+			diffuse 0.588 0.588 0.588 1
+			specular 0 0 0 0 25.5
+			emissive 0 0 0 1
+		}
+	}
+}
+material "material_1"
+{
+	technique material_1_technique
+	{
+		pass material_1_standard
+		{
+			ambient 0.588 0.588 0.588 1
+			diffuse 0.588 0.588 0.588 1
+			specular 0 0 0 0 25.5
+			emissive 0 0 0 1
+		}
+	}
+}

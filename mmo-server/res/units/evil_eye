@@ -1,0 +1,7 @@
+id: 3
+damage: 5
+health: 20
+actionPoints: 4
+restTime: 4
+script: evil_eye.groovy
+spell: silence

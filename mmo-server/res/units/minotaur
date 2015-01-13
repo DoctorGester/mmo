@@ -1,0 +1,7 @@
+id: 1
+damage: 6
+health: 28
+actionPoints: 3
+restTime: 4
+script: minotaur.groovy
+spell: poison
