@@ -51,7 +51,7 @@ public class SpellSelectorUIState extends AbstractAppState {
 		panel = new Panel(screen, panelPosition, panelSize);
 		panel.setIgnoreMouse(true);
 
-		Vector2f dropPanelPosition = V.f(dimension.x, dimension.y * PANEL_HEIGHT_PERCENT);
+		Vector2f dropPanelPosition = V.f(0, dimension.y * PANEL_HEIGHT_PERCENT);
 		Vector2f dropPanelSize = V.f(dimension.x, dimension.y * DROP_PANEL_HEIGHT_PERCENT);
 
 		dropPanel = new Panel(screen, dropPanelPosition, dropPanelSize);

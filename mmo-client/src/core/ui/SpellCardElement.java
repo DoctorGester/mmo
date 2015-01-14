@@ -5,12 +5,18 @@ import com.jme3.font.LineWrapMode;
 import com.jme3.input.event.MouseMotionEvent;
 import com.jme3.math.ColorRGBA;
 import com.jme3.math.Vector2f;
+import core.main.ItemDatabase;
+import program.datastore.Data;
+import program.datastore.Subscriber;
 import program.main.Program;
 import shared.board.data.CardSpellData;
+import shared.items.types.CardItem;
 import shared.items.types.SpellCardItem;
 import tonegod.gui.controls.text.Label;
 import tonegod.gui.core.ElementManager;
 import tonegod.gui.listeners.MouseFocusListener;
+
+import java.util.concurrent.Callable;
 
 /**
  * @author doc
@@ -21,11 +27,24 @@ public class SpellCardElement extends ItemElement implements MouseFocusListener{
 
 	public SpellCardElement(ElementManager screen, Vector2f position, float height, SpellCardItem card) {
 		super(screen, position, height);
-
-		this.spellData = Program.getInstance().getCardSpellDataById(card.getSpellId());
 		this.card = card;
 
-		createElements();
+		ItemDatabase.getInstance().subscribe(card.getId(), new Subscriber() {
+			@Override
+			public void receive(String key, Data subscription) {
+				SpellCardItem card = subscription.getObject(SpellCardItem.class);
+				spellData = Program.getInstance().getCardSpellDataById(card.getSpellId());
+
+				Program.getInstance().getMainFrame().enqueue(new Callable<Object>() {
+					@Override
+					public Object call() throws Exception {
+						createElements();
+						return null;
+					}
+				});
+			}
+		});
+		ItemDatabase.getInstance().requestItem(card);
 	}
 
 	public SpellCardElement(ElementManager screen, Vector2f position, float height, CardSpellData spellData) {

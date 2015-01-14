@@ -1,19 +1,14 @@
 package core.main;
 
-import core.main.ItemDatabase;
 import shared.items.Inventory;
 import shared.items.Item;
 
 import java.io.*;
-import java.util.LinkedList;
-import java.util.List;
 
 /**
  * @author doc
  */
 public class ClientInventory extends Inventory {
-	private List<Item> items = new LinkedList<Item>();
-
 	public void fromBytes(byte data[]){
 		ByteArrayInputStream byteInputStream = new ByteArrayInputStream(data);
 		DataInputStream stream = new DataInputStream(byteInputStream);
