@@ -2,7 +2,7 @@ package program.main;
 
 import core.exceptions.IncorrectPacketException;
 import core.main.Client;
-import core.main.DataUtil;
+import shared.other.DataUtil;
 import core.main.LocalServer;
 import core.main.Packet;
 import nf.fr.eraasoft.pool.PoolException;

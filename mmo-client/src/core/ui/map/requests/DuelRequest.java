@@ -1,7 +1,7 @@
 package core.ui.map.requests;
 
-import core.main.CardMaster;
 import program.main.Program;
+import shared.map.CardMaster;
 
 public class DuelRequest extends Request {
 	public DuelRequest(CardMaster from, CardMaster to) {

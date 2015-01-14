@@ -1,8 +1,9 @@
 package core.handlers;
 
-import core.board.interfaces.Board;
 import core.main.*;
 import program.main.Program;
+import shared.board.Board;
+import shared.map.CardMaster;
 
 public class PlacementFinishedMessageHandler extends PacketHandler {
 	private Program program;

@@ -30,18 +30,20 @@ import com.jme3.texture.Texture;
 import com.jme3.util.SkyFactory;
 import core.board.*;
 import core.board.turns.TurnQueue;
-import core.board.turns.TurnSmart;
 import core.graphics.FloatingText;
 import core.graphics.MainFrame;
 import core.graphics.MaterialDebugAppState;
 import core.graphics.UnitSpatial;
-import core.main.CardMaster;
-import core.main.inventory.items.SpellCardItem;
 import core.ui.BattleController;
 import core.ui.BattleState;
 import core.ui.UI;
 import program.main.Program;
-import program.main.Util;
+import program.main.data.ClientDataLoader;
+import shared.board.*;
+import shared.board.data.CardSpellData;
+import shared.board.data.SpellData;
+import shared.items.types.SpellCardItem;
+import shared.map.CardMaster;
 
 import java.awt.Rectangle;
 import java.util.ArrayList;
@@ -71,7 +73,7 @@ public class BattleScene extends AbstractScene implements ActionListener {
 	private Program program;
 
 	private ChaseCamera camera;
-	private Spell focusedSpell;
+	private ClientSpell focusedSpell;
 	private SpellCardItem focusedSpellCard;
 	private CardSpell focusedCardSpell;
 	private float timePassedSinceQuadUpdate;
@@ -121,7 +123,7 @@ public class BattleScene extends AbstractScene implements ActionListener {
 
 		program = Program.getInstance();
 
-		Board board = battleState.getBoard();
+		ClientBoard board = battleState.getBoard();
 
 		Node quads = (Node) root.getChild("quads");
 
@@ -293,7 +295,7 @@ public class BattleScene extends AbstractScene implements ActionListener {
 	}
 
 	public ColorRGBA getPlayerColor(Board board, CardMaster player){
-		return Board.PLAYER_COLORS[findPlayerNumber(board, player)];
+		return ClientBoard.PLAYER_COLORS[findPlayerNumber(board, player)];
 	}
 
 	private void loadMaterials(AssetManager assetManager){
@@ -341,7 +343,7 @@ public class BattleScene extends AbstractScene implements ActionListener {
 				y >= area.y && y < area.y + area.height);
 	}
 
-	public Cell getCellAtCursor(Board board, Vector2f clickPosition){
+	public ClientCell getCellAtCursor(ClientBoard board, Vector2f clickPosition){
 		Camera cam = program.getMainFrame().getCamera();
 
 		Node quads = (Node) root.getChild("quads");
@@ -385,9 +387,9 @@ public class BattleScene extends AbstractScene implements ActionListener {
 			return;
 
 		MainFrame frame = program.getMainFrame();
-		Board board = battleState.getBoard();
+		ClientBoard board = battleState.getBoard();
 		Cell hover = getCellAtCursor(board, app.getInputManager().getCursorPosition());
-		Unit unit = battleState.getSelectedUnit();
+		ClientUnit unit = battleState.getSelectedUnit();
 		if (unit == null || hover == null || battleState.getSpellToCast() != null){
 			defaultCursor();
 			return;
@@ -444,10 +446,10 @@ public class BattleScene extends AbstractScene implements ActionListener {
 	}
 
 	private void updateSpatials(Application app, float tpf){
-		Unit selectedUnit = battleState.getSelectedUnit();
+		ClientUnit selectedUnit = battleState.getSelectedUnit();
 
 		for(UnitSpatial unitSpatial: unitSpatials){
-			Unit unit = unitSpatial.getUnit();
+			ClientUnit unit = unitSpatial.getUnit();
 			Spatial spatial = unitSpatial.getSpatial();
 			Node node = unitSpatial.getNode();
 
@@ -455,7 +457,7 @@ public class BattleScene extends AbstractScene implements ActionListener {
 			float quadSizeHalf = Cell.CELL_WIDTH * 0.1f / 2f;
 
 			node.setLocalTranslation(unit.getRealPositionX() * 0.1f + quadSizeHalf, 0,
-					unit.getRealPositionY() * 0.1f - quadSizeHalf);
+									 unit.getRealPositionY() * 0.1f - quadSizeHalf);
 
 			// Updating unit facing
 			Quaternion q = new Quaternion();
@@ -506,9 +508,9 @@ public class BattleScene extends AbstractScene implements ActionListener {
 		if (spatialList == null)
 			return;
 
-		Board board = battleState.getBoard();
+		ClientBoard board = battleState.getBoard();
 		Cell hover = getCellAtCursor(board, app.getInputManager().getCursorPosition());
-		Spell toCast = battleState.getSpellToCast();
+		ClientSpell toCast = battleState.getSpellToCast();
 
 		for(Spatial spatial: spatialList){
 			int x = spatial.getUserData("x"),
@@ -544,7 +546,7 @@ public class BattleScene extends AbstractScene implements ActionListener {
 				toSet = materialStripedBlue;
 
 			Cell aoePointer = null;
-			Spell spell = null;
+			ClientSpell spell = null;
 			if (toCast != null && focusedSpell == null && focusedSpellCard == null) {
 				aoePointer = hover;
 				spell = toCast;
@@ -592,16 +594,16 @@ public class BattleScene extends AbstractScene implements ActionListener {
 		return turnQueue;
 	}
 
-	public void loadFromBoard(final Board board){
+	public void loadFromBoard(final ClientBoard board){
 		final Application frame = Program.getInstance().getMainFrame();
 
 		frame.enqueue(new Callable<Void>() {
 			public Void call() throws Exception {
 				MaterialDebugAppState state = new MaterialDebugAppState();
 
-				List<Unit> units = board.getUnits();
-				for (Unit unit : units) {
-					UnitSpatial unitSpatial = new UnitSpatial(unit.getUnitData().getModel(true), unit);
+				List<ClientUnit> units = board.getUnits();
+				for (ClientUnit unit : units) {
+					UnitSpatial unitSpatial = new UnitSpatial(ClientDataLoader.getUnitModel(unit.getUnitData()), unit);
 					unitSpatial.createBars(frame.getAssetManager());
 					unitSpatial.debug(state);
 					unitSpatials.add(unitSpatial);
@@ -615,7 +617,7 @@ public class BattleScene extends AbstractScene implements ActionListener {
 		});
 	}
 
-	public void setFocusedSpell(Spell focusedSpell) {
+	public void setFocusedSpell(ClientSpell focusedSpell) {
 		this.focusedSpell = focusedSpell;
 	}
 
@@ -631,12 +633,12 @@ public class BattleScene extends AbstractScene implements ActionListener {
 		BattleController controller = program.getBattleController();
 		MainFrame mainFrame = program.getMainFrame();
 
-		Board board = battleState.getBoard();
+		ClientBoard board = battleState.getBoard();
 		Unit selectedUnit = battleState.getSelectedUnit();
 		boolean isCastMode = battleState.isCastMode();
 
 		if (name.equals("leftClick") && pressed){
-			Cell clicked = getCellAtCursor(board, mainFrame.getInputManager().getCursorPosition());
+			ClientCell clicked = getCellAtCursor(board, mainFrame.getInputManager().getCursorPosition());
 
 			if (isCastMode && clicked == null)
 				return;

@@ -1,5 +1,8 @@
 package core.main;
 
+import shared.map.CardMaster;
+import shared.map.Hero;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -34,8 +37,8 @@ public class ClusterGrid {
 		return getCell(rx, ry);
 	}
 
-	public void updateCardMaster(CardMaster cardMaster){
-		Hero hero = cardMaster.getHero();
+	public void updateCardMaster(ServerCardMaster cardMaster){
+		ServerHero hero = cardMaster.getHero();
 		ClusterCell position = hero.getClusterPosition();
 		int heroX = (int) hero.getX(),
 			heroY = (int) hero.getY();
@@ -51,16 +54,16 @@ public class ClusterGrid {
 		}
 	}
 
-    public void removeCardMaster(CardMaster cardMaster){
-        Hero hero = cardMaster.getHero();
+    public void removeCardMaster(ServerCardMaster cardMaster){
+        ServerHero hero = cardMaster.getHero();
         ClusterCell position = hero.getClusterPosition();
 
         position.getCardMastersInside().remove(cardMaster);
     }
 
-	private static final List<CardMaster> zeroList = new ArrayList<CardMaster>(0);
+	private static final List<ServerCardMaster> zeroList = new ArrayList<ServerCardMaster>(0);
 
-	public List<CardMaster> getHeroesInRadiusOf(CardMaster cardMaster, float radius){
+	public List<ServerCardMaster> getHeroesInRadiusOf(CardMaster cardMaster, float radius){
 		Hero hero = cardMaster.getHero();
 		float heroX = hero.getX(),
 			  heroY = hero.getY(),
@@ -69,20 +72,20 @@ public class ClusterGrid {
 		ClusterCell topLeft = getCellByRealCords((int) (heroX - radius), (int) (heroY - radius)),
 					botRight = getCellByRealCords((int) (heroX + radius), (int) (heroY + radius));
 
-		List<CardMaster> cardMasters = null;
+		List<ServerCardMaster> cardMasters = null;
 
 		for(int y = topLeft.getY(); y <= botRight.getY(); y++)
 			for(int x = topLeft.getX(); x <= botRight.getX(); x++){
 				ClusterCell toCheck = getCell(x, y);
 
-				for(CardMaster cmInCell: toCheck.getCardMastersInside()){
+				for(ServerCardMaster cmInCell: toCheck.getCardMastersInside()){
 					Hero heroInCell = cmInCell.getHero();
 					float distance = (heroInCell.getX() - heroX) * (heroInCell.getX() - heroX) +
 									 (heroInCell.getY() - heroY) * (heroInCell.getY() - heroY);
 
 					if (distance <= radSquare){
 						if (cardMasters == null)
-							cardMasters = new ArrayList<CardMaster>();
+							cardMasters = new ArrayList<ServerCardMaster>();
 
 						cardMasters.add(cmInCell);
 					}

@@ -1,6 +1,7 @@
 package program.main;
 
-import core.main.Faction;
+import core.main.ServerFaction;
+import shared.map.Faction;
 
 import java.util.Collection;
 import java.util.HashMap;
@@ -25,12 +26,12 @@ public class FactionController {
 	}
 
 	public void createFactions(){
-		Faction mongoloids = new Faction("Mongoloids"),
-				rusians = new Faction("Rusians"),
-				beetards = new Faction("Bee Tards"),
-				weaboos = new Faction("Weaboos"),
-				fagets = new Faction("Fagets"),
-				neutrals = new Faction("Neutrals");
+		ServerFaction mongoloids = new ServerFaction("Mongoloids"),
+					  rusians = new ServerFaction("Rusians"),
+					  beetards = new ServerFaction("Bee Tards"),
+					  weaboos = new ServerFaction("Weaboos"),
+					  fagets = new ServerFaction("Fagets"),
+					  neutrals = new ServerFaction("Neutrals");
 		addFaction(mongoloids);
 		addFaction(rusians);
 		addFaction(beetards);

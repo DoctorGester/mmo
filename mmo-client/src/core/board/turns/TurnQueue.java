@@ -2,7 +2,7 @@ package core.board.turns;
 
 import core.ui.UI;
 import core.ui.battle.BattleLogUIState;
-import program.main.Util;
+import program.main.SceneUtil;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -23,7 +23,7 @@ public class TurnQueue {
 	}
 
 	private void next(){
-		Util.getUI(UI.STATE_BATTLE_LOG, BattleLogUIState.class).log(currentTurn.toStringRepresentation());
+		SceneUtil.getUI(UI.STATE_BATTLE_LOG, BattleLogUIState.class).log(currentTurn.toStringRepresentation());
 		turnNumber++;
 		currentTurn = turns.get(turnNumber);
 	}

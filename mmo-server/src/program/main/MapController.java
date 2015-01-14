@@ -5,6 +5,10 @@ import core.main.*;
 import nf.fr.eraasoft.pool.PoolException;
 import program.main.database.entities.CardMasterEntity;
 import program.main.database.entities.NpcEntity;
+import shared.map.CardMaster;
+import shared.map.Faction;
+import shared.map.Hero;
+import shared.other.DataUtil;
 
 import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
@@ -24,7 +28,7 @@ public class MapController {
 		program = Program.getInstance();
 	}
 
-	public void teleportPlayer(CardMaster player, float x, float y){
+	public void teleportPlayer(ServerCardMaster player, float x, float y){
 		byte data[] = new byte[12];
 		System.arraycopy(DataUtil.intToByte(player.getId()), 0, data, 0, 4);
 		System.arraycopy(DataUtil.floatToByte(x), 0, data, 4, 4);
@@ -116,7 +120,7 @@ public class MapController {
 
 				Npc npc = new Npc();
 
-				CardMaster cardMaster = npc.getCardMaster();
+				ServerCardMaster cardMaster = npc.getCardMaster();
 
 				cardMaster.setId(masterEntity.getId());
 				cardMaster.setName(masterEntity.getName());
@@ -130,7 +134,7 @@ public class MapController {
 		}
 	}
 
-	public void saveCardMaster(CardMaster master) throws Exception{
+	public void saveCardMaster(ServerCardMaster master) throws Exception{
 		CardMasterEntity entity = program.getDatabase().getCardMasterDao().queryForId(master.getId());
 		entity.setData(master.getData());
 

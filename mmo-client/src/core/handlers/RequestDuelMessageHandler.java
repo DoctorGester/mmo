@@ -6,7 +6,9 @@ import core.ui.map.RequestsUIState;
 import core.ui.map.requests.DuelRequest;
 import core.ui.map.requests.Request;
 import program.main.Program;
-import program.main.Util;
+import program.main.SceneUtil;
+import shared.map.CardMaster;
+import shared.other.DataUtil;
 
 import java.util.concurrent.Callable;
 
@@ -30,7 +32,7 @@ public class RequestDuelMessageHandler extends PacketHandler{
 
 				CardMaster sender = program.getMainPlayer();
 
-				RequestsUIState uiState = Util.getUI(UI.STATE_REQUESTS, RequestsUIState.class);
+				RequestsUIState uiState = SceneUtil.getUI(UI.STATE_REQUESTS, RequestsUIState.class);
 
 				Request request = new DuelRequest(program.getVisiblePlayerById(from), program.getVisiblePlayerById(to));
 

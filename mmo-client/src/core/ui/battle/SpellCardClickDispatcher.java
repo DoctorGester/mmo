@@ -4,7 +4,7 @@ import com.jme3.input.event.MouseButtonEvent;
 import core.ui.SpellCardElement;
 import core.ui.UI;
 import program.main.Program;
-import program.main.Util;
+import program.main.SceneUtil;
 import tonegod.gui.core.Screen;
 import tonegod.gui.listeners.MouseButtonListener;
 
@@ -19,7 +19,7 @@ public class SpellCardClickDispatcher implements MouseButtonListener{
 
 	public void onMouseLeftReleased(MouseButtonEvent mouseButtonEvent) {
 		if (screen.getDragElement() == cardElement
-				&& screen.getDropElement() == Util.getUI(UI.STATE_SPELL_SELECTOR, SpellSelectorUIState.class).getDropPanel()
+				&& screen.getDropElement() == SceneUtil.getUI(UI.STATE_SPELL_SELECTOR, SpellSelectorUIState.class).getDropPanel()
 				&& cardElement.getCard() != null){
 			Program.getInstance().getBattleController().battleCastCard(cardElement.getCard());
 		}

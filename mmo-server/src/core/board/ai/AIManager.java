@@ -1,7 +1,8 @@
 package core.board.ai;
 
-import core.board.interfaces.Board;
-import core.main.CardMaster;
+import core.main.ServerCardMaster;
+import shared.board.Board;
+import shared.map.CardMaster;
 
 import java.util.HashMap;
 import java.util.Map;

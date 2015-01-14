@@ -1,10 +1,11 @@
 package core.handlers;
 
-import core.board.Board;
 import core.main.*;
 import program.datastore.DataStore;
 import program.datastore.GameStateCondition;
 import program.main.Program;
+import shared.board.Board;
+import shared.other.DataUtil;
 
 import java.io.DataInputStream;
 import java.io.IOException;

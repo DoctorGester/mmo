@@ -1,7 +1,7 @@
-import core.board.DamageType
-import core.board.interfaces.Board
-import core.board.interfaces.Cell
-import core.board.interfaces.Unit
+import shared.board.Board
+import shared.board.Cell
+import shared.board.DamageType
+import shared.board.Unit
 
 def onInit(Unit unit, Board board){
 }

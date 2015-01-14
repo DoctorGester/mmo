@@ -1,8 +1,8 @@
-import core.board.Board
 import core.board.CardSpell
-import core.board.Cell
-import core.board.Unit
-import core.main.CardMaster
+import shared.board.Board
+import shared.board.Cell
+import shared.board.Unit
+import shared.map.CardMaster
 
 def onCheck(CardSpell spell, Board board, CardMaster caster, Cell cell){
     cell.contentsType == Cell.CONTENTS_UNIT && board.areAllies(cell.unit.owner, caster) && cell.unit.state != Unit.STATE_DEAD

@@ -1,14 +1,16 @@
 package core.handlers;
 
-import core.board.Board;
+import core.board.ClientBoard;
 import core.board.turns.TurnPick;
 import core.graphics.scenes.BattleScene;
 import core.graphics.scenes.Scenes;
 import core.main.*;
-import core.main.inventory.items.CardItem;
 import program.datastore.*;
 import program.main.Program;
-import program.main.Util;
+import program.main.SceneUtil;
+import shared.items.types.CardItem;
+import shared.map.CardMaster;
+import shared.other.DataUtil;
 
 import java.io.DataInputStream;
 import java.io.IOException;
@@ -46,7 +48,7 @@ public class BattlePickMessageHandler extends PacketHandler {
 		final short turnNumber = stream.readShort();
 		int id = stream.readByte();
 
-		final Board board = program.getBattleController().getBattleState(boardNumber).getBoard();;
+		final ClientBoard board = program.getBattleController().getBattleState(boardNumber).getBoard();;
 		final CardMaster cardMaster = board.getCardMasters().get(id);
 
 		int cardId = stream.readInt();
@@ -57,7 +59,7 @@ public class BattlePickMessageHandler extends PacketHandler {
 			public void receive(String key, Data subscription) {
 				TurnPick turn = new TurnPick(board, cardMaster, pickedCard);
 
-				Util.getScene(Scenes.BATTLE, BattleScene.class).getTurnQueue().add(turnNumber, turn);
+				SceneUtil.getScene(Scenes.BATTLE, BattleScene.class).getTurnQueue().add(turnNumber, turn);
 			}
 		});
 		ItemDatabase.getInstance().requestItem(pickedCard);

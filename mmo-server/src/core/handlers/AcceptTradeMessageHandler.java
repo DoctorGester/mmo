@@ -2,6 +2,8 @@ package core.handlers;
 
 import core.main.*;
 import program.main.Program;
+import shared.map.CardMaster;
+import shared.other.DataUtil;
 
 public class AcceptTradeMessageHandler extends PacketHandler{
 	private Program program;
@@ -24,8 +26,8 @@ public class AcceptTradeMessageHandler extends PacketHandler{
 		if (target == null)
 			return;
 
-		CardMaster first = sender.getCardMaster();
-		CardMaster second = target.getCardMaster();
+		ServerCardMaster first = sender.getCardMaster();
+		ServerCardMaster second = target.getCardMaster();
 
 		if (first.getState() != CardMaster.STATE_IN_GLOBAL_MAP || second.getState() != CardMaster.STATE_IN_GLOBAL_MAP)
 			return;

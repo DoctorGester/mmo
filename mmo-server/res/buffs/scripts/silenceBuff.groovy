@@ -1,7 +1,7 @@
-import core.board.ControlType
-import core.board.interfaces.Board
-import core.board.interfaces.Buff
-import core.board.interfaces.Unit
+import shared.board.Board
+import shared.board.Buff
+import shared.board.ControlType
+import shared.board.Unit
 
 def onInit(Buff buff, Board board){
     if (buff.data instanceof Unit) {

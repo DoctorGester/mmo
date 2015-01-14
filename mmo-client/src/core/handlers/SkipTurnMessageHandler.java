@@ -6,7 +6,8 @@ import core.graphics.scenes.BattleScene;
 import core.graphics.scenes.Scenes;
 import core.main.*;
 import program.main.Program;
-import program.main.Util;
+import program.main.SceneUtil;
+import shared.other.DataUtil;
 
 import java.io.DataInputStream;
 import java.io.IOException;
@@ -30,7 +31,7 @@ public class SkipTurnMessageHandler extends PacketHandler{
 			short turnNumber = stream.readShort();
 
 			Turn turn = new TurnSkip(program.getBattleController().getBattleState(boardNumber).getBoard());
-			Util.getScene(Scenes.BATTLE, BattleScene.class).getTurnQueue().add(turnNumber, turn);
+			SceneUtil.getScene(Scenes.BATTLE, BattleScene.class).getTurnQueue().add(turnNumber, turn);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

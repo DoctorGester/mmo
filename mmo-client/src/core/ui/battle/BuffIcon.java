@@ -4,7 +4,8 @@ import com.jme3.font.BitmapFont;
 import com.jme3.input.event.MouseMotionEvent;
 import com.jme3.math.Vector2f;
 import com.jme3.math.Vector4f;
-import core.board.Buff;
+import core.board.ClientBuff;
+import shared.board.Buff;
 import tonegod.gui.core.Element;
 import tonegod.gui.core.Screen;
 import tonegod.gui.core.utils.UIDUtil;
@@ -23,7 +24,7 @@ public class BuffIcon extends Element implements MouseFocusListener{
 		setFont("res/other/segoe_outlined.fnt");
 	}
 
-	public void setBuffData(Buff buff){
+	public void setBuffData(ClientBuff buff){
 		int ticks = buff.getTimeLeft();
 		int repeats = buff.getTimesToRepeatLeft();
 

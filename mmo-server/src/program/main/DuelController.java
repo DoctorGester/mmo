@@ -1,7 +1,9 @@
 package program.main;
 
-import core.board.BoardSetup;
+import shared.board.BoardSetup;
 import core.main.*;
+import shared.map.CardMaster;
+import shared.other.DataUtil;
 
 import java.awt.*;
 import java.util.Iterator;
@@ -21,7 +23,7 @@ public class DuelController {
 		return null;
 	}
 
-	public void request(CardMaster from, CardMaster to){
+	public void request(ServerCardMaster from, ServerCardMaster to){
 		if (from == to)
 			return;
 

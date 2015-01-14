@@ -1,12 +1,13 @@
 package core.handlers;
 
+import core.board.ServerBoard;
 import core.board.TurnManager;
-import core.board.ai.AIManager;
-import core.board.interfaces.Board;
-import core.board.interfaces.Cell;
 import core.main.*;
-import core.main.inventory.items.CardItem;
+import shared.board.Board;
+import shared.items.types.CardItem;
 import program.main.Program;
+import shared.map.CardMaster;
+import shared.other.DataUtil;
 
 public class BattlePickMessageHandler extends PacketHandler {
 	private Program program;
@@ -29,8 +30,8 @@ public class BattlePickMessageHandler extends PacketHandler {
 		if (data.length != 4)
 			return;
 
-		CardMaster cm = gameClient.getCardMaster();
-		Board board = cm.getCurrentBoard();
+		ServerCardMaster cm = gameClient.getCardMaster();
+		ServerBoard board = cm.getCurrentBoard();
 
 		int id = DataUtil.byteToInt(data);
 		CardItem pickedCard = cm.getInventory().findById(id, CardItem.class);

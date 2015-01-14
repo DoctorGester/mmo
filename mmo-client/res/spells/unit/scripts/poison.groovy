@@ -1,10 +1,13 @@
-import core.board.Board
-import core.board.Cell
-import core.board.Spell
-import core.board.Unit
+import core.board.ClientBoard
+import core.board.ClientCell
+import core.board.ClientSpell
+import shared.board.Board
+import shared.board.Cell
+import shared.board.Spell
+import shared.board.Unit
 import core.graphics.scenes.BattleScene
 import core.graphics.scenes.Scenes
-import program.main.Util
+import program.main.SceneUtil
 
 def onCheck(Spell spell, Board board, Cell target){
     target.contentsType == Cell.CONTENTS_UNIT && target.unit.state != Unit.STATE_DEAD
@@ -14,14 +17,14 @@ def onCheckAOE(Spell spell, Board board, Cell from, Cell to){
     from == to
 }
 
-def onCastBegin(Spell spell, Board board, Cell target){
+def onCastBegin(ClientSpell spell, Board board, ClientCell target){
 	spell.caster.setFacing(target.unit);
 	1.0F
 }
 
-def onCastEnd(Spell spell, Board board, Cell target){
-    def from = Util.getScene(Scenes.BATTLE, BattleScene.class).getSpatialByUnit(spell.caster).node,
-        to = Util.getScene(Scenes.BATTLE, BattleScene.class).getSpatialByUnit(target.unit).node;
+def onCastEnd(Spell spell, ClientBoard board, Cell target){
+    def from = SceneUtil.getScene(Scenes.BATTLE, BattleScene.class).getSpatialByUnit(spell.caster).node,
+        to = SceneUtil.getScene(Scenes.BATTLE, BattleScene.class).getSpatialByUnit(target.unit).node;
 
     board.addBuff("poisonBuff", 1, 6, target.unit)
 	board.nextTurn()

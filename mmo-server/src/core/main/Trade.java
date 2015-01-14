@@ -1,5 +1,7 @@
 package core.main;
 
+import shared.map.CardMaster;
+
 /**
  * @author doc
  */
@@ -18,7 +20,7 @@ public class Trade {
 	private float timeLeft = TIMEOUT;
 	private int status = STATUS_PENDING;
 
-	public Trade(CardMaster initiator, CardMaster target) {
+	public Trade(ServerCardMaster initiator, ServerCardMaster target) {
 		this.initiator = new TradePartner(initiator);
 		this.target = new TradePartner(target);
 	}

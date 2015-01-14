@@ -1,8 +1,11 @@
 package core.handlers;
 
-import core.board.BoardSetup;
+import shared.board.BoardSetup;
 import core.main.*;
 import program.main.Program;
+import shared.map.CardMaster;
+import shared.other.DataUtil;
+import shared.other.Vector2;
 
 import java.awt.*;
 
@@ -35,14 +38,14 @@ public class AttackPlayerMessageHandler extends PacketHandler{
 								.setShuffle(true)
 								.setTurnTime(60f);
 
-		CardMaster first = sender.getCardMaster();
-		CardMaster second = program.getCardMasterById(id);
+		ServerCardMaster first = sender.getCardMaster();
+		ServerCardMaster second = program.getCardMasterById(id);
 
 		if (first.getState() != CardMaster.STATE_IN_GLOBAL_MAP || second.getState() != CardMaster.STATE_IN_GLOBAL_MAP)
 			return;
 
-		Vector2f firstPos = new Vector2f(first.getHero().getX(), first.getHero().getY());
-		Vector2f secondPos = new Vector2f(second.getHero().getX(), second.getHero().getY());
+		Vector2 firstPos = new Vector2(first.getHero().getX(), first.getHero().getY());
+		Vector2 secondPos = new Vector2(second.getHero().getX(), second.getHero().getY());
 		float dist = firstPos.distance(secondPos);
 
 		if (dist <= ATTACK_RANGE)

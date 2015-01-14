@@ -3,13 +3,14 @@ package core.handlers;
 import com.j256.ormlite.dao.Dao;
 import core.exceptions.IncorrectHeaderException;
 import core.main.*;
-import core.main.inventory.Item;
-import core.main.inventory.ItemDatabase;
-import core.main.inventory.items.CardItem;
+import shared.items.Item;
+import core.main.ItemDatabase;
+import shared.items.types.CardItem;
 import program.main.database.Database;
 import program.main.Program;
 import program.main.database.entities.CardMasterEntity;
 import program.main.database.entities.GameClientEntity;
+import shared.map.CardMaster;
 
 import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
@@ -98,7 +99,7 @@ public class RegisterMessageHandler extends PacketHandler{
 				passwordBuilder.append(Integer.toHexString((passEncodedByte & 0xFF) | 0x100).substring(1, 3));
 
 			// Storing name and md5 password into database
-			CardMaster empty = new CardMaster();
+			ServerCardMaster empty = new ServerCardMaster();
 
 			// Creating card master entity
 			CardMasterEntity masterEntity = new CardMasterEntity();

@@ -6,6 +6,8 @@ import core.main.*;
 import core.ui.BattleState;
 import program.datastore.DataKey;
 import program.datastore.DataStore;
+import shared.map.CardMaster;
+import shared.other.DataUtil;
 
 import java.util.*;
 import java.util.concurrent.Callable;
@@ -86,7 +88,7 @@ public class UpdateLoop implements Runnable {
 	}
 
 	private void updateGlobalMap() throws IncorrectHeaderException {
-		Set<CardMaster> players = program.getVisiblePlayers();
+		Set<ClientCardMaster> players = program.getVisiblePlayers();
 
 		// Updating all heroes every 20 ms
 		for (CardMaster player: players)

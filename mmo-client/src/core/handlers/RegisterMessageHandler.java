@@ -4,7 +4,7 @@ import core.main.*;
 import core.ui.UI;
 import core.ui.menu.MenuUIState;
 import program.main.Program;
-import program.main.Util;
+import program.main.SceneUtil;
 
 import java.util.concurrent.Callable;
 
@@ -34,7 +34,7 @@ public class RegisterMessageHandler extends PacketHandler{
 			public Object call() throws Exception {
 				int responseCode = b[0];
 
-                Util.getUI(UI.STATE_MAIN_MENU, MenuUIState.class).setMessage(responses[responseCode], responseCode != 0);
+                SceneUtil.getUI(UI.STATE_MAIN_MENU, MenuUIState.class).setMessage(responses[responseCode], responseCode != 0);
 
 				return null;
 			}

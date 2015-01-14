@@ -1,6 +1,6 @@
 package core.handlers.admin.models;
 
-import core.main.inventory.Item;
+import shared.items.Item;
 
 import java.util.List;
 

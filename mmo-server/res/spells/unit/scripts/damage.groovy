@@ -1,8 +1,8 @@
-import core.board.DamageType
-import core.board.interfaces.Board
-import core.board.interfaces.Cell
-import core.board.interfaces.Spell
-import core.board.interfaces.Unit
+import shared.board.Board
+import shared.board.Cell
+import shared.board.DamageType
+import shared.board.Spell
+import shared.board.Unit
 
 def onCheck(Spell spell, Board board, Cell target){
     target.getContentsType() == Cell.CONTENTS_UNIT && target.getUnit().getState() != Unit.STATE_DEAD

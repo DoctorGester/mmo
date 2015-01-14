@@ -2,10 +2,10 @@ package core.handlers;
 
 import core.exceptions.IncorrectHeaderException;
 import core.main.*;
-import core.main.inventory.Item;
-import core.main.inventory.ItemDatabase;
+import shared.items.Item;
+import core.main.ItemDatabase;
 import program.main.Program;
-import program.main.ReliablePacketManager;
+import shared.other.DataUtil;
 
 import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;

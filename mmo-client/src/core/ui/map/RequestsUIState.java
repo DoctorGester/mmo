@@ -3,14 +3,10 @@ package core.ui.map;
 import com.jme3.app.Application;
 import com.jme3.app.state.AppStateManager;
 import com.jme3.math.Vector2f;
-import core.main.CardMaster;
 import core.ui.ScriptableUIState;
 import core.ui.map.requests.Request;
-import tonegod.gui.controls.buttons.Button;
-import tonegod.gui.controls.buttons.ButtonAdapter;
-import tonegod.gui.controls.text.Label;
+import shared.map.CardMaster;
 import tonegod.gui.controls.windows.Panel;
-import tonegod.gui.core.Screen;
 
 import java.util.Iterator;
 import java.util.LinkedList;

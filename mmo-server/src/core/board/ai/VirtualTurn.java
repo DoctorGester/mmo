@@ -1,9 +1,10 @@
 package core.board.ai;
 
-import core.board.interfaces.Board;
-import core.board.interfaces.Cell;
+import core.board.ServerBoard;
 import core.board.TurnManager;
-import core.main.CardMaster;
+import shared.board.Board;
+import shared.board.Cell;
+import shared.map.CardMaster;
 
 /**
  * @author doc
@@ -29,7 +30,7 @@ public class VirtualTurn implements Comparable<VirtualTurn> {
 
 	public boolean execute(){
 		TurnManager turnManager = TurnManager.getInstance();
-		Board realBoard = board.ai.realBoard;
+		ServerBoard realBoard = board.ai.realBoard;
 		CardMaster cardMaster = board.ai.cardMaster;
 
 		Cell target = realBoard.getCell(this.target.getX(), this.target.getY());

@@ -2,6 +2,8 @@ package core.handlers;
 
 import core.main.*;
 import program.main.Program;
+import shared.map.CardMaster;
+import shared.other.DataUtil;
 
 import java.io.DataInputStream;
 import java.io.IOException;
@@ -22,7 +24,7 @@ public class GetPositionInfoMessageHandler extends PacketHandler{
 			for (int i = 0; i < amount; i++){
 				int id = stream.readInt();
 
-				CardMaster master = Program.getInstance().getVisiblePlayerById(id);
+				ClientCardMaster master = Program.getInstance().getVisiblePlayerById(id);
 
 				if (master != null)
 					master.setPositionInfo(stream);

@@ -1,5 +1,8 @@
 package core.main;
 
+import shared.map.Hero;
+import shared.other.Vector2;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -15,7 +18,7 @@ public class HeroPath {
 	private int heroSize, maxLength;
 	private boolean found;
 	
-	private Vector2f finalPath[];
+	private Vector2 finalPath[];
 	
 	private Hero hero;
 	
@@ -101,7 +104,7 @@ public class HeroPath {
 		return false;
 	}
 	
-	public Vector2f[] getPath(){
+	public Vector2[] getPath(){
 		if (finalPath == null)
 			throw new IllegalStateException("Path not found!");
 		return finalPath;
@@ -117,18 +120,18 @@ public class HeroPath {
 		return found;
 	}
 	
-	private Vector2f[] optimizePath(Vector2f[] path){
+	private Vector2[] optimizePath(Vector2[] path){
 		if (path.length <= 2)
 			return path;
 		
 		// Array length is definitely >= 3
 		int optSize = 1;
-		Vector2f opt[] = new Vector2f[path.length];
+		Vector2 opt[] = new Vector2[path.length];
 		opt[0] = path[0];
 		
-		Vector2f lastDir = path[1].clone().subLocal(path[0]).normalizeLocal();
+		Vector2 lastDir = path[1].clone().subLocal(path[0]).normalizeLocal();
 		for(int i = 2; i < path.length; i++){
-			Vector2f thisDir = path[i].clone().subLocal(path[i - 1]).normalizeLocal();
+			Vector2 thisDir = path[i].clone().subLocal(path[i - 1]).normalizeLocal();
 			
 			// If direction is different enough, addLocal current vector to array,
 			// save this direction
@@ -175,14 +178,14 @@ public class HeroPath {
 			if (current.x == end.x && current.y == end.y){
 				
 				// Fill path array
-				ArrayList<Vector2f> path = new ArrayList<Vector2f>();
+				ArrayList<Vector2> path = new ArrayList<Vector2>();
 				for(; current != null; current = current.parent)
-					path.add(new Vector2f(current.x * PathingMap.CELL_SIZE, current.y * PathingMap.CELL_SIZE));
+					path.add(new Vector2(current.x * PathingMap.CELL_SIZE, current.y * PathingMap.CELL_SIZE));
 				
 				Collections.reverse(path);
-				path.set(0, new Vector2f(hero.getX(), hero.getY()));
+				path.set(0, new Vector2(hero.getX(), hero.getY()));
 				
-				finalPath = optimizePath(path.toArray(new Vector2f[path.size()]));
+				finalPath = optimizePath(path.toArray(new Vector2[path.size()]));
 				
 				found = true;
 				

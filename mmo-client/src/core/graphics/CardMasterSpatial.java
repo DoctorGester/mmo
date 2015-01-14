@@ -10,14 +10,15 @@ import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 import com.jme3.scene.control.BillboardControl;
-import core.main.CardMaster;
+import core.main.ClientCardMaster;
 import program.main.Program;
+import shared.map.CardMaster;
 
 public class CardMasterSpatial {
 	private Node node;
 	private Spatial spatial;
 	private Geometry mainGeometry;
-	private CardMaster cardMaster;
+	private ClientCardMaster cardMaster;
 
 	private Node nameNode;
 	private String name = "";
@@ -26,7 +27,7 @@ public class CardMasterSpatial {
 	private AnimControl animControl;
 	private AnimChannel animChannel;
 
-	public CardMasterSpatial(Spatial spatial, CardMaster cardMaster){
+	public CardMasterSpatial(Spatial spatial, ClientCardMaster cardMaster){
 		this.node = new Node("CardMaster");
 		this.cardMaster = cardMaster;
 		this.spatial = spatial;
@@ -60,7 +61,7 @@ public class CardMasterSpatial {
 		return spatial;
 	}
 
-	public CardMaster getCardMaster(){
+	public ClientCardMaster getCardMaster(){
 		return cardMaster;
 	}
 

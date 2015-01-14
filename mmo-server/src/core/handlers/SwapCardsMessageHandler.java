@@ -2,6 +2,8 @@ package core.handlers;
 
 import core.main.*;
 import program.main.Program;
+import shared.map.CardMaster;
+import shared.other.DataUtil;
 
 @Deprecated
 public class SwapCardsMessageHandler extends PacketHandler {
@@ -30,7 +32,7 @@ public class SwapCardsMessageHandler extends PacketHandler {
 
 		CardMaster cardMaster = gameClient.getCardMaster();
 
-		short swapTargetOne = DataUtil.byteToShort(new byte[]{ data[0], data[1] }),
+		short swapTargetOne = DataUtil.byteToShort(new byte[]{data[0], data[1]}),
 			  swapTargetTwo = DataUtil.byteToShort(new byte[]{ data[2], data[3] });
 
 		// Exit if swap targets are wrong

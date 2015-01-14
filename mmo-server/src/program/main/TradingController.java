@@ -1,7 +1,9 @@
 package program.main;
 
 import core.main.*;
-import core.main.inventory.Item;
+import shared.items.Item;
+import shared.map.CardMaster;
+import shared.other.DataUtil;
 
 import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
@@ -31,7 +33,7 @@ public class TradingController {
 		return null;
 	}
 
-	public void request(CardMaster from, CardMaster to){
+	public void request(ServerCardMaster from, ServerCardMaster to){
 		System.out.println("rq " + from.getName() + " " + to.getName());
 		if (from == to)
 			return;

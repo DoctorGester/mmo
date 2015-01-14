@@ -1,11 +1,11 @@
 package core.board.turns;
 
-import core.main.CardMaster;
 import core.ui.BattleState;
 import core.ui.UI;
 import core.ui.battle.BattleOverUIState;
 import program.main.Program;
-import program.main.Util;
+import program.main.SceneUtil;
+import shared.map.CardMaster;
 
 import java.util.concurrent.Callable;
 
@@ -43,7 +43,7 @@ public class TurnBattleOver implements Turn {
 		if (!windowVisible && timePassed >= WAIT_TIME){
 			windowVisible = true;
 			Program.getInstance().getMainFrame().setUIState(UI.STATE_BATTLE_OVER);
-			Util.getUI(UI.STATE_BATTLE_OVER, BattleOverUIState.class).setStatus(status, winners);
+			SceneUtil.getUI(UI.STATE_BATTLE_OVER, BattleOverUIState.class).setStatus(status, winners);
 		}
 	}
 
@@ -52,7 +52,7 @@ public class TurnBattleOver implements Turn {
 	}
 
 	public boolean firstStepFinished(){
-		return windowVisible && Util.getUI(UI.STATE_BATTLE_OVER, BattleOverUIState.class).exitWasClicked();
+		return windowVisible && SceneUtil.getUI(UI.STATE_BATTLE_OVER, BattleOverUIState.class).exitWasClicked();
 	}
 
 	@Override

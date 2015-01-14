@@ -1,9 +1,12 @@
 package core.handlers;
 
+import core.board.ServerBoard;
 import core.board.TurnManager;
-import core.board.interfaces.Board;
 import core.main.*;
 import program.main.Program;
+import shared.board.Board;
+import shared.map.CardMaster;
+import shared.other.DataUtil;
 
 public class CastCardSpellMessageHandler extends PacketHandler {
 	private Program program;
@@ -25,8 +28,9 @@ public class CastCardSpellMessageHandler extends PacketHandler {
 		if (data.length != 4)
 			return;
 
-		CardMaster cm = gameClient.getCardMaster();
-		Board board = cm.getCurrentBoard();
+		ServerCardMaster cm = gameClient.getCardMaster();
+		ServerBoard board = cm.getCurrentBoard();
+
 		// Board has to be in the wait for order state
 		if (board.getState() != Board.STATE_WAIT_FOR_ORDER)
 			return;

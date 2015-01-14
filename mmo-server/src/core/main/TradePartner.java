@@ -1,6 +1,7 @@
 package core.main;
 
-import core.main.inventory.Item;
+import shared.items.Item;
+import shared.map.CardMaster;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -9,17 +10,17 @@ import java.util.List;
  * @author doc
  */
 public class TradePartner {
-	private CardMaster client;
+	private ServerCardMaster client;
 	private final List<Item> offering;
 	private boolean hasAuthorizedTrade,
 					hasRequestedToCompleteTrade;
 
-	public TradePartner(CardMaster client) {
+	public TradePartner(ServerCardMaster client) {
 		offering = new LinkedList<Item>();
 		this.client = client;
 	}
 
-	public CardMaster getClient() {
+	public ServerCardMaster getClient() {
 		return client;
 	}
 

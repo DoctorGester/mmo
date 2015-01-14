@@ -6,18 +6,19 @@ import com.jme3.app.state.AppStateManager;
 import com.jme3.font.BitmapFont;
 import com.jme3.math.Vector2f;
 import com.jme3.scene.Spatial;
-import core.board.Board;
-import core.board.Unit;
+import core.board.ClientBoard;
 import core.graphics.MainFrame;
-import core.main.CardMaster;
-import core.main.DataUtil;
-import core.main.inventory.ItemTypes;
-import core.main.inventory.filters.TypeFilter;
-import core.main.inventory.items.CardItem;
+import gui.core.V;
+import shared.board.Board;
+import shared.board.Unit;
+import shared.items.ItemTypes;
+import shared.items.filters.TypeFilter;
 import core.ui.BattleState;
 import core.ui.ItemElement;
 import core.ui.UnitCardElement;
 import program.main.Program;
+import shared.items.types.CardItem;
+import shared.map.CardMaster;
 import tonegod.gui.controls.text.Label;
 import tonegod.gui.controls.windows.Panel;
 import tonegod.gui.core.Screen;
@@ -63,9 +64,8 @@ public class BattlePickUIState extends AbstractAppState {
 
 		super.initialize(stateManager, app);
 
-		int panelHeight = (int) (PANEL_HEIGHT_PERCENT * 100);
 		Vector2f panelPosition = new Vector2f();
-		panelSize = DataUtil.parseVector2f(String.format("100%%, %d%%", panelHeight), dimension);
+		panelSize = V.f(dimension.x, dimension.y * PANEL_HEIGHT_PERCENT);
 
 		panel = new Panel(screen, panelPosition, panelSize);
 		panel.setIgnoreMouse(true);
@@ -75,9 +75,8 @@ public class BattlePickUIState extends AbstractAppState {
 
 		screen.addElement(panel);
 
-		int pickedPanelHeight = (int) (PICKED_PANEL_HEIGHT_PERCENT * 100);
-		Vector2f pickedPanelPosition = DataUtil.parseVector2f(String.format("0%%, %d%%", panelHeight), dimension);
-		pickedPanelSize = DataUtil.parseVector2f(String.format("100%%, %d%%", pickedPanelHeight), dimension);
+		Vector2f pickedPanelPosition = V.f(dimension.x, dimension.y * PANEL_HEIGHT_PERCENT);
+		pickedPanelSize = V.f(dimension.x, dimension.y * PICKED_PANEL_HEIGHT_PERCENT);
 
 		pickedPanel = new Panel(screen, pickedPanelPosition, pickedPanelSize);
 		pickedPanel.setIsDragDropDropElement(true);
@@ -94,7 +93,7 @@ public class BattlePickUIState extends AbstractAppState {
 	}
 
 	private void updateFromDeck(){
-		List<CardItem> cards = Program.getInstance().getMainInventory().filter(CardItem.class, new TypeFilter(ItemTypes.UNIT_CARD));
+		List<CardItem> cards = Program.getInstance().getMainInventory().filter(CardItem.class, new TypeFilter(ItemTypes.CREATURE_CARD));
 		for (CardItem card: cards){
 			UnitCardElement element = new UnitCardElement(screen, new Vector2f(), panelSize.y * 0.9f, card);
 			element.setMouseButtonDispatcher(new UnitCardClickDispatcher(screen, element));
@@ -106,7 +105,7 @@ public class BattlePickUIState extends AbstractAppState {
 		updateFromDeck();
 
 		List<CardMaster> cardMasters = battleState.getBoard().getCardMasters();
-		pickedCards = new ArrayList<ItemElement>(Board.OWNED_UNITS * cardMasters.size());
+		pickedCards = new ArrayList<ItemElement>(ClientBoard.OWNED_UNITS * cardMasters.size());
 
 		float labelOffsetX = pickedPanelSize.x * 0.35f;
 		Vector2f size = new Vector2f(dimension.x * 0.2f, dimension.y * 0.1f);
@@ -131,7 +130,7 @@ public class BattlePickUIState extends AbstractAppState {
 			Label name = new Label(screen, pos, size);
 			name.setText(cardMaster.getName());
 			name.setInitialized();
-			name.setFontColor(Board.PLAYER_COLORS[cardMaster.getBattleId()]);
+			name.setFontColor(ClientBoard.PLAYER_COLORS[cardMaster.getBattleId()]);
 			if (side == -1)
 				name.setTextAlign(BitmapFont.Align.Right);
 

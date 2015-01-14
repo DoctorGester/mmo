@@ -1,9 +1,11 @@
 package core.board;
 
-import core.board.interfaces.Board;
-import core.main.CardMaster;
 import groovy.lang.Binding;
 import groovy.lang.Script;
+import program.main.Program;
+import shared.board.Board;
+import shared.board.data.CardSpellData;
+import shared.map.CardMaster;
 
 public class CardSpell {
 	private CardSpellData spellData;
@@ -44,6 +46,6 @@ public class CardSpell {
 	private void initScope(){
 		scope = new Binding();
 
-		script = spellData.compileScript(scope);
+		script = spellData.compileScript(Program.getInstance().getScriptEngine(), scope);
 	}
 }

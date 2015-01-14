@@ -7,13 +7,11 @@ import com.jme3.renderer.RenderManager;
 import com.jme3.renderer.ViewPort;
 import com.jme3.scene.Spatial;
 import com.jme3.scene.control.Control;
-import core.main.inventory.Inventory;
-import core.main.inventory.Item;
-import core.main.inventory.ItemFilter;
-import core.main.inventory.ItemTypes;
-import core.main.inventory.filters.TypeFilter;
-import core.main.inventory.items.CardItem;
-import core.main.inventory.items.SpellCardItem;
+import shared.items.Inventory;
+import shared.items.Item;
+import shared.items.ItemFilter;
+import shared.items.ItemTypes;
+import shared.items.filters.TypeFilter;
 import core.ui.ItemElement;
 import core.ui.Pager;
 import core.ui.SpellCardElement;
@@ -22,7 +20,8 @@ import program.datastore.Data;
 import program.datastore.DataKey;
 import program.datastore.DataStore;
 import program.main.Program;
-import tonegod.gui.controls.windows.Panel;
+import shared.items.types.CardItem;
+import shared.items.types.SpellCardItem;
 import tonegod.gui.core.Element;
 import tonegod.gui.core.ElementManager;
 import tonegod.gui.core.utils.UIDUtil;
@@ -90,7 +89,7 @@ public class InventoryPanel extends Element implements Control {
 		this.inventory = inventory;
 	}
 
-	private void createFilterButton(String name, ItemFilter ... filters){
+	private void createFilterButton(String name, ItemFilter... filters){
 		float padding = panelSize.x * 0.04f;
 
 		FilterButton button = new FilterButton(screen, Vector2f.ZERO, Vector2f.ZERO, filters);
@@ -124,7 +123,7 @@ public class InventoryPanel extends Element implements Control {
 	}
 
 	private void createFilterButtons(){
-		createFilterButton("Creatures", new TypeFilter(ItemTypes.UNIT_CARD));
+		createFilterButton("Creatures", new TypeFilter(ItemTypes.CREATURE_CARD));
 		createFilterButton("Spells", new TypeFilter(ItemTypes.SPELL_CARD));
 		createFilterButton("Items");
 

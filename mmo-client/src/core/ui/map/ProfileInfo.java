@@ -1,7 +1,7 @@
 package core.ui.map;
 
 import core.main.Faction;
-import core.main.Stat;
+import shared.map.Stat;
 
 import java.util.HashMap;
 import java.util.Map;

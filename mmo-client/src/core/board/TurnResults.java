@@ -1,5 +1,7 @@
 package core.board;
 
+import shared.board.Unit;
+
 /**
  * @author doc
  */

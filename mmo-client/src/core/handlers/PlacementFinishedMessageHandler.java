@@ -8,9 +8,9 @@ import core.main.*;
 import core.ui.BattleState;
 import program.datastore.DataStore;
 import program.datastore.GameStateCondition;
-import program.main.ConditionalAction;
 import program.main.Program;
-import program.main.Util;
+import program.main.SceneUtil;
+import shared.other.DataUtil;
 
 import java.io.DataInputStream;
 import java.io.IOException;
@@ -49,7 +49,7 @@ public class PlacementFinishedMessageHandler extends PacketHandler {
 		stream.readFully(dataLeft);
 
 		Turn turn = new TurnFinishPlacement(battleState, dataLeft);
-		Util.getScene(Scenes.BATTLE, BattleScene.class).getTurnQueue().add(turnNumber, turn);
+		SceneUtil.getScene(Scenes.BATTLE, BattleScene.class).getTurnQueue().add(turnNumber, turn);
 	}
 
 	public void handle(LocalServer localServer, Client client, Packet data) {}

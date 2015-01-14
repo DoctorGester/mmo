@@ -5,20 +5,20 @@ import com.jme3.app.state.AbstractAppState;
 import com.jme3.app.state.AppStateManager;
 import com.jme3.font.BitmapFont;
 import com.jme3.math.Vector2f;
-import core.board.Board;
-import core.board.Unit;
 import core.graphics.MainFrame;
 import core.graphics.scenes.BattleScene;
 import core.graphics.scenes.Scenes;
-import core.main.CardMaster;
-import core.main.DataUtil;
-import core.main.inventory.ItemTypes;
-import core.main.inventory.filters.TypeFilter;
-import core.main.inventory.items.SpellCardItem;
+import gui.core.V;
+import shared.board.Board;
+import shared.board.Unit;
+import shared.items.ItemTypes;
+import shared.items.filters.TypeFilter;
 import core.ui.SpellCardElement;
 import core.ui.UI;
 import program.main.Program;
-import program.main.Util;
+import program.main.SceneUtil;
+import shared.items.types.SpellCardItem;
+import shared.map.CardMaster;
 import tonegod.gui.controls.windows.Panel;
 import tonegod.gui.core.Screen;
 
@@ -45,16 +45,14 @@ public class SpellSelectorUIState extends AbstractAppState {
 		this.screen = frame.getGuiScreen();
 		dimension = new Vector2f(screen.getWidth(), screen.getHeight());
 
-		int panelHeight = (int) (PANEL_HEIGHT_PERCENT * 100);
 		Vector2f panelPosition = new Vector2f();
-		panelSize = DataUtil.parseVector2f(String.format("100%%, %d%%", panelHeight), dimension);
+		panelSize = V.f(dimension.x, dimension.y * PANEL_HEIGHT_PERCENT);
 
 		panel = new Panel(screen, panelPosition, panelSize);
 		panel.setIgnoreMouse(true);
 
-		int pickedPanelHeight = (int) (DROP_PANEL_HEIGHT_PERCENT * 100);
-		Vector2f dropPanelPosition = DataUtil.parseVector2f(String.format("0%%, %d%%", panelHeight), dimension);
-		Vector2f dropPanelSize = DataUtil.parseVector2f(String.format("100%%, %d%%", pickedPanelHeight), dimension);
+		Vector2f dropPanelPosition = V.f(dimension.x, dimension.y * PANEL_HEIGHT_PERCENT);
+		Vector2f dropPanelSize = V.f(dimension.x, dimension.y * DROP_PANEL_HEIGHT_PERCENT);
 
 		dropPanel = new Panel(screen, dropPanelPosition, dropPanelSize);
 		dropPanel.setIsDragDropDropElement(true);
@@ -97,7 +95,7 @@ public class SpellSelectorUIState extends AbstractAppState {
 
 			// Initializing card description
 			String description = Program.getInstance().getCardSpellDataById(card.getSpellId()).getDescription();
-			Util.getUI(UI.STATE_BATTLE, BattleUIState.class).addDescriptionForElement(element, description);
+			SceneUtil.getUI(UI.STATE_BATTLE, BattleUIState.class).addDescriptionForElement(element, description);
 		}
 	}
 
@@ -130,7 +128,7 @@ public class SpellSelectorUIState extends AbstractAppState {
 	}
 
 	public void update(float tpf){
-		BattleScene battleScene = Util.getScene(Scenes.BATTLE, BattleScene.class);
+		BattleScene battleScene = SceneUtil.getScene(Scenes.BATTLE, BattleScene.class);
 		CardMaster master = Program.getInstance().getMainPlayer();
 		Unit usedUnit = master.getUsedUnit();
 		boolean turning = master.getCurrentBoard().getCurrentTurningPlayer() == master;

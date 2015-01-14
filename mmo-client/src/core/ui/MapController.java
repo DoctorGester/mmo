@@ -15,10 +15,12 @@ import core.graphics.scenes.Scenes;
 import core.main.*;
 import core.ui.map.MapUIState;
 import program.main.Program;
-import program.main.Util;
+import program.main.SceneUtil;
+import shared.map.CardMaster;
+import shared.map.Hero;
+import shared.other.DataUtil;
 
 import java.io.DataOutputStream;
-import java.io.OutputStream;
 import java.util.*;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -117,7 +119,7 @@ public class MapController implements ActionListener {
 			Ray ray = new Ray(worldPosition, dir);
 			CollisionResults results = new CollisionResults();
 
-			Util.getScene(Scenes.MAIN_MAP, MapScene.class).getTerrain().collideWith(ray, results);
+			SceneUtil.getScene(Scenes.MAIN_MAP, MapScene.class).getTerrain().collideWith(ray, results);
 
 			if (results.size() == 0)
 				return;
@@ -142,12 +144,12 @@ public class MapController implements ActionListener {
 		if (name.equals("rightClick") && !pressed){
 			Vector2f clickPosition = im.getCursorPosition();
 
-			CardMaster clicked = Util.getScene(Scenes.MAIN_MAP, MapScene.class).getCardMasterAtCursor(clickPosition);
+			CardMaster clicked = SceneUtil.getScene(Scenes.MAIN_MAP, MapScene.class).getCardMasterAtCursor(clickPosition);
 
 			if (clicked != null && clicked != Program.getInstance().getMainPlayer())
-				Util.getUI(UI.STATE_MAP_MAIN, MapUIState.class).showMenu(clicked, clickPosition);
+				SceneUtil.getUI(UI.STATE_MAP_MAIN, MapUIState.class).showMenu(clicked, clickPosition);
 			else
-				Util.getUI(UI.STATE_MAP_MAIN, MapUIState.class).hideMenu();
+				SceneUtil.getUI(UI.STATE_MAP_MAIN, MapUIState.class).hideMenu();
 		}
 	}
 
@@ -165,7 +167,7 @@ public class MapController implements ActionListener {
 				if (++counter > 4){
 					counter = 0;
 
-					for (CardMaster player: Program.getInstance().getVisiblePlayers())
+					for (ClientCardMaster player: Program.getInstance().getVisiblePlayers())
 						if (!player.isInitialized())
 							undefinedPlayers.add(player);
 				}

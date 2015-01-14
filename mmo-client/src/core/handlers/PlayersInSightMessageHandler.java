@@ -2,6 +2,8 @@ package core.handlers;
 
 import core.main.*;
 import program.main.Program;
+import shared.map.CardMaster;
+import shared.other.DataUtil;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -14,13 +16,13 @@ public class PlayersInSightMessageHandler extends PacketHandler{
 		this.program = Program.getInstance();
 	}
 
-    private void handlePlayerIdArray(Set<Integer> idList, Set<CardMaster> visible, Set<CardMaster> invisible){
-		Set<CardMaster> newPlayers = new HashSet<CardMaster>();
+    private void handlePlayerIdArray(Set<Integer> idList, Set<ClientCardMaster> visible, Set<ClientCardMaster> invisible){
+		Set<ClientCardMaster> newPlayers = new HashSet<ClientCardMaster>();
 
 		for (Integer id: idList)
 			newPlayers.add(program.getOrCreatePlayerById(id));
 
-		Set<CardMaster> clone = new HashSet<CardMaster>(visible);
+		Set<ClientCardMaster> clone = new HashSet<ClientCardMaster>(visible);
 
 		clone.removeAll(newPlayers);
 		invisible.addAll(clone);
@@ -32,8 +34,8 @@ public class PlayersInSightMessageHandler extends PacketHandler{
 	public void handle(LocalClient localClient, Packet data) {
 		int idArray[] = DataUtil.varIntsToInts(data.getData());
 
-		Set<CardMaster> visiblePlayers = program.getVisiblePlayers(),
-						invisiblePlayers = program.getInvisiblePlayers();
+		Set<ClientCardMaster> visiblePlayers = program.getVisiblePlayers(),
+							  invisiblePlayers = program.getInvisiblePlayers();
 
 		Set<Integer> idSet = new HashSet<Integer>(idArray.length);
 		for (int id: idArray)

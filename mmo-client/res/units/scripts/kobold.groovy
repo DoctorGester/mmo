@@ -1,7 +1,7 @@
-import core.board.Board
-import core.board.Cell
-import core.board.DamageType
-import core.board.Unit
+import shared.board.Board
+import shared.board.Cell
+import shared.board.Unit
+import shared.board.DamageType
 
 def onCheckAttack(Unit unit, Board board, Unit target, Cell from){
     if (target.getState() == Unit.STATE_DEAD || target == unit)

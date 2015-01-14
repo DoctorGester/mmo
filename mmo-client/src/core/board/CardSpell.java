@@ -1,8 +1,12 @@
 package core.board;
 
-import core.main.CardMaster;
 import groovy.lang.Binding;
 import groovy.lang.Script;
+import program.main.Program;
+import shared.board.Board;
+import shared.board.Cell;
+import shared.board.data.CardSpellData;
+import shared.map.CardMaster;
 
 public class CardSpell {
 	public static final int SCRIPT_EVENT_CAST_BEGIN = 0x00,
@@ -60,7 +64,7 @@ public class CardSpell {
 	private void initScope(){
 		scope = new Binding();
 
-		script = spellData.compileScript(scope);
+		script = spellData.compileScript(Program.getInstance().getScriptEngine(), scope);
 
 		functionCheck = "onCheck";
 		functionCastBegin = "onCastBegin";

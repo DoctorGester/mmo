@@ -1,8 +1,10 @@
-import core.board.Board
-import core.board.Cell
-import core.board.DamageType
-import core.board.Spell
-import core.board.Unit
+import core.board.ClientCell
+import core.board.ClientSpell
+import shared.board.Board
+import shared.board.Cell
+import shared.board.DamageType
+import shared.board.Spell
+import shared.board.Unit
 
 def onCheck(Spell spell, Board board, Cell target){
     target.getContentsType() == Cell.CONTENTS_UNIT && target.getUnit().getState() != Unit.STATE_DEAD
@@ -12,7 +14,7 @@ def onCheckAOE(Spell spell, Board board, Cell from, Cell to){
     from == to
 }
 
-def onCastBegin(Spell spell, Board board, Cell target){
+def onCastBegin(ClientSpell spell, Board board, ClientCell target){
 	spell.caster.setFacing(target.unit);
 	0.5F
 }

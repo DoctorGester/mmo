@@ -1,13 +1,11 @@
 package core.board.ai;
 
-import core.board.*;
-import core.board.interfaces.Buff;
-import core.board.interfaces.Cell;
-import core.board.interfaces.Spell;
-import core.board.interfaces.Unit;
-import core.main.CardMaster;
 import groovy.lang.Binding;
 import groovy.lang.Script;
+import shared.board.*;
+import shared.board.data.SpellData;
+import shared.board.data.UnitData;
+import shared.map.CardMaster;
 
 import java.util.*;
 
@@ -226,10 +224,14 @@ public class VirtualUnit implements Unit {
 		return canAttack;
 	}
 
-	public List<Spell> getSpells(){
-		return new ArrayList<Spell>(spells);
+	public List<VirtualSpell> getSpells(){
+		return spells;
 	}
-	
+
+	public List<Buff> getBuffs() {
+		return buffs;
+	}
+
 	public VirtualCell getPosition() {
 		return position;
 	}

@@ -5,6 +5,10 @@ import program.main.database.Database;
 import program.main.Program;
 import program.main.ReliablePacketManager;
 import program.main.database.entities.CardMasterEntity;
+import shared.map.CardMaster;
+import shared.map.Faction;
+import shared.map.Stat;
+import shared.other.DataUtil;
 
 import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
@@ -67,7 +71,7 @@ public class GetProfileInfoMessageHandler extends PacketHandler{
 			if (entity == null)
 				return;
 
-			CardMaster stub = new CardMaster();
+			ServerCardMaster stub = new ServerCardMaster();
 			stub.setId(entity.getId());
 			stub.setData(entity.getData());
 			stub.setName(entity.getName());

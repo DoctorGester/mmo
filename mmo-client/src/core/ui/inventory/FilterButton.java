@@ -2,7 +2,7 @@ package core.ui.inventory;
 
 import com.jme3.input.event.MouseButtonEvent;
 import com.jme3.math.Vector2f;
-import core.main.inventory.ItemFilter;
+import shared.items.ItemFilter;
 import tonegod.gui.controls.buttons.ButtonAdapter;
 import tonegod.gui.core.ElementManager;
 

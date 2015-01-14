@@ -4,6 +4,8 @@ import core.exceptions.IncorrectHeaderException;
 import core.main.*;
 import nf.fr.eraasoft.pool.PoolException;
 import program.main.Program;
+import shared.map.CardMaster;
+import shared.other.DataUtil;
 
 import java.util.Arrays;
 import java.util.Set;
@@ -30,7 +32,7 @@ public class LookaroundMessageHandler extends PacketHandler{
 			if (sender == null)
 				return;
 			
-			Set<CardMaster> cardMastersInSight = sender.getPlayersInSight();
+			Set<ServerCardMaster> cardMastersInSight = sender.getPlayersInSight();
 			int ids[] = new int[cardMastersInSight.size()];
 			int c = 0;
 			for(CardMaster cardMaster: cardMastersInSight){

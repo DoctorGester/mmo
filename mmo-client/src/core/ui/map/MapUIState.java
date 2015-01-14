@@ -6,13 +6,13 @@ import com.jme3.app.state.AppStateManager;
 import com.jme3.input.event.MouseButtonEvent;
 import com.jme3.math.Vector2f;
 import core.graphics.MainFrame;
-import core.main.CardMaster;
 import core.ui.ChatUIState;
 import core.ui.MainChatBox;
 import core.ui.MapController;
 import core.ui.UI;
 import program.main.Program;
-import program.main.Util;
+import program.main.SceneUtil;
+import shared.map.CardMaster;
 import tonegod.gui.controls.buttons.Button;
 import tonegod.gui.controls.buttons.ButtonAdapter;
 import tonegod.gui.controls.menuing.Menu;
@@ -89,8 +89,8 @@ public class MapUIState extends AbstractAppState{
 					CardMaster main = Program.getInstance().getMainPlayer();
 
 					controller.requestProfileInfo(Program.getInstance().getMainPlayer());
-					Util.getUI(UI.STATE_PROFILE, CardMasterProfileUIState.class).getProfileInfoPanel().setTarget(main);
-					Util.getUI(UI.STATE_PROFILE, CardMasterProfileUIState.class).setInventoryLocked(false);
+					SceneUtil.getUI(UI.STATE_PROFILE, CardMasterProfileUIState.class).getProfileInfoPanel().setTarget(main);
+					SceneUtil.getUI(UI.STATE_PROFILE, CardMasterProfileUIState.class).setInventoryLocked(false);
 				}
 
 				updateLeftSide();
@@ -100,7 +100,7 @@ public class MapUIState extends AbstractAppState{
 		addBottomBarButton("res/textures/interface/duel.png", 1, new BottomBarButtonListener() {
 			@Override
 			public void buttonPressed() {
-				RequestsUIState ui = Util.getUI(UI.STATE_REQUESTS, RequestsUIState.class);
+				RequestsUIState ui = SceneUtil.getUI(UI.STATE_REQUESTS, RequestsUIState.class);
 				ui.showPanel(!ui.isPanelVisible());
 
 				updateLeftSide();
@@ -110,7 +110,7 @@ public class MapUIState extends AbstractAppState{
 		addBottomBarButton("res/textures/interface/chat.png", 2, new BottomBarButtonListener() {
 			@Override
 			public void buttonPressed() {
-				MainChatBox chatBox = Util.getUI(UI.STATE_CHAT, ChatUIState.class).getChatBox();
+				MainChatBox chatBox = SceneUtil.getUI(UI.STATE_CHAT, ChatUIState.class).getChatBox();
 				chatBox.setIsVisible(!chatBox.getIsVisible());
 
 				updateLeftSide();
@@ -138,14 +138,14 @@ public class MapUIState extends AbstractAppState{
 	}
 
 	public void updateLeftSide(){
-		MainChatBox chatBox = Util.getUI(UI.STATE_CHAT, ChatUIState.class).getChatBox();
+		MainChatBox chatBox = SceneUtil.getUI(UI.STATE_CHAT, ChatUIState.class).getChatBox();
 
 		leftOccupied = (chatBox != null && chatBox.getIsVisible()) ||
-					   Util.getUI(UI.STATE_REQUESTS, RequestsUIState.class).isPanelVisible();
+					   SceneUtil.getUI(UI.STATE_REQUESTS, RequestsUIState.class).isPanelVisible();
 
 		Element elementsAtLeftSide[] = new Element[]{
 				chatBox,
-				Util.getUI(UI.STATE_REQUESTS, RequestsUIState.class).getPanel()
+				SceneUtil.getUI(UI.STATE_REQUESTS, RequestsUIState.class).getPanel()
 		};
 
 		float y = dimension.y * (0.03f + BUTTON_SIZE);
@@ -179,7 +179,7 @@ public class MapUIState extends AbstractAppState{
 			public void itemSelected(CardMaster menuTarget) {
 				MapController controller = Program.getInstance().getMapController();
 				controller.requestProfileInfo(menuTarget);
-				CardMasterProfileUIState profileState = Util.getUI(UI.STATE_PROFILE, CardMasterProfileUIState.class);
+				CardMasterProfileUIState profileState = SceneUtil.getUI(UI.STATE_PROFILE, CardMasterProfileUIState.class);
 
 				profileState.getProfileInfoPanel().setTarget(menuTarget);
 				profileState.setInventoryLocked(menuTarget != Program.getInstance().getMainPlayer());

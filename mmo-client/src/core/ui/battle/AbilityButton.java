@@ -9,7 +9,7 @@ import com.jme3.math.Vector2f;
 import core.ui.BattleState;
 import core.ui.UI;
 import program.main.Program;
-import program.main.Util;
+import program.main.SceneUtil;
 import tonegod.gui.controls.buttons.ButtonAdapter;
 import tonegod.gui.core.Screen;
 
@@ -88,7 +88,7 @@ public class AbilityButton extends ButtonAdapter{
 	public void onButtonMouseLeftUp(MouseButtonEvent evt, boolean toggled) {
 		getMaterial().setBoolean("Pressed", false);
 		if (clicked){
-			BattleState battleState = Util.getUI(UI.STATE_BATTLE, BattleUIState.class).getBattleState();
+			BattleState battleState = SceneUtil.getUI(UI.STATE_BATTLE, BattleUIState.class).getBattleState();
 			Program.getInstance().getBattleController().abilityButtonClicked(battleState, (Integer) getUserData(SPELL_KEY));
 			clicked = false;
 		}

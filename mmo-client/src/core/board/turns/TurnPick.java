@@ -1,15 +1,16 @@
 package core.board.turns;
 
-import core.board.Board;
-import core.board.Cell;
-import core.board.Unit;
-import core.board.UnitData;
-import core.main.CardMaster;
-import core.main.inventory.items.CardItem;
+import core.board.ClientBoard;
+import core.board.ClientUnit;
 import core.ui.UI;
 import core.ui.battle.BattlePickUIState;
 import program.main.Program;
-import program.main.Util;
+import program.main.SceneUtil;
+import shared.board.Board;
+import shared.board.Cell;
+import shared.board.data.UnitData;
+import shared.items.types.CardItem;
+import shared.map.CardMaster;
 
 import java.awt.*;
 
@@ -19,13 +20,13 @@ import java.awt.*;
 public class TurnPick implements Turn {
 	private static final float WAIT_TIME = 5f;
 
-	private Board board;
+	private ClientBoard board;
 	private CardMaster cardMaster;
 	private CardItem card;
 
 	private float timePassed = 0f;
 
-	public TurnPick(Board board, CardMaster cardMaster, CardItem card) {
+	public TurnPick(ClientBoard board, CardMaster cardMaster, CardItem card) {
 		this.board = board;
 		this.cardMaster = cardMaster;
 		this.card = card;
@@ -50,11 +51,11 @@ public class TurnPick implements Turn {
 				if (board.getCell(x, y).getContentsType() == Cell.CONTENTS_EMPTY){
 					UnitData unitData = Program.getInstance().getUnitDataById(card.getUnitId());
 
-					Unit unit = new Unit(cardMaster, unitData, board.getCell(x, y));
-					unit.setFacingInstantly(Board.DEFAULT_FACING[cardMaster.getBattleId()]);
+					ClientUnit unit = new ClientUnit(cardMaster, unitData, board.getCell(x, y));
+					unit.setFacingInstantly(ClientBoard.DEFAULT_FACING[cardMaster.getBattleId()]);
 
 					// Update UI
-					BattlePickUIState pick = Util.getUI(UI.STATE_BATTLE_PICK_INTERFACE, BattlePickUIState.class);
+					BattlePickUIState pick = SceneUtil.getUI(UI.STATE_BATTLE_PICK_INTERFACE, BattlePickUIState.class);
 
 					pick.addPickedCard(card);
 
@@ -74,7 +75,7 @@ public class TurnPick implements Turn {
 	public boolean firstStepFinished(){
 		boolean enoughTimePassed = timePassed >= WAIT_TIME;
 		boolean pickFinished = board.getUnits().size() == board.getCardMasters().size() * Board.OWNED_UNITS;
-		boolean interfaceUpdated = Util.getUI(UI.STATE_BATTLE_PICK_INTERFACE, BattlePickUIState.class).isCardPlacementFinished();
+		boolean interfaceUpdated = SceneUtil.getUI(UI.STATE_BATTLE_PICK_INTERFACE, BattlePickUIState.class).isCardPlacementFinished();
 
 		return !pickFinished || (interfaceUpdated && enoughTimePassed);
 	}

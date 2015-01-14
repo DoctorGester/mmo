@@ -4,6 +4,8 @@ import core.main.*;
 import core.ui.map.ProfileInfo;
 import program.datastore.DataStore;
 import program.main.Program;
+import shared.map.Stat;
+import shared.other.DataUtil;
 
 import java.io.DataInputStream;
 

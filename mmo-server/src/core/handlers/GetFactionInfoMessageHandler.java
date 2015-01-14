@@ -4,6 +4,7 @@ import core.main.*;
 import program.main.FactionController;
 import program.main.Program;
 import program.main.ReliablePacketManager;
+import shared.map.Faction;
 
 import java.nio.charset.Charset;
 import java.util.Arrays;

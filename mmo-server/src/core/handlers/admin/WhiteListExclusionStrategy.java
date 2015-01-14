@@ -2,10 +2,10 @@ package core.handlers.admin;
 
 import com.google.gson.ExclusionStrategy;
 import com.google.gson.FieldAttributes;
-import core.main.CardMaster;
-import core.main.Faction;
-import core.main.inventory.Inventory;
-import core.main.inventory.Item;
+import core.main.ServerCardMaster;
+import shared.items.Inventory;
+import shared.items.Item;
+import shared.map.Faction;
 
 import java.util.HashMap;
 import java.util.HashSet;
@@ -21,11 +21,11 @@ public class WhiteListExclusionStrategy implements ExclusionStrategy {
 	private Map<Class<?>, Set<String>> whiteList = new HashMap<Class<?>, Set<String>>();
 
 	public WhiteListExclusionStrategy(){
-		addField(CardMaster.class, "id");
-		addField(CardMaster.class, "name");
-		addField(CardMaster.class, "reputation");
-		addField(CardMaster.class, "stats");
-		addField(CardMaster.class, "inventory");
+		addField(ServerCardMaster.class, "id");
+		addField(ServerCardMaster.class, "name");
+		addField(ServerCardMaster.class, "reputation");
+		addField(ServerCardMaster.class, "stats");
+		addField(ServerCardMaster.class, "inventory");
 
 		addField(Inventory.class, "items");
 

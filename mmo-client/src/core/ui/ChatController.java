@@ -1,12 +1,12 @@
 package core.ui;
 
 import core.exceptions.IncorrectHeaderException;
-import core.main.DataUtil;
 import core.main.Packet;
 import program.datastore.DataStore;
 import program.datastore.UIStateCondition;
 import program.main.Program;
-import program.main.Util;
+import program.main.SceneUtil;
+import shared.other.DataUtil;
 
 /**
  * @author doc
@@ -31,7 +31,7 @@ public class ChatController {
 		DataStore.getInstance().awaitAndExecute(new Runnable() {
 			@Override
 			public void run() {
-				Util.getUI(UI.STATE_CHAT, ChatUIState.class).addChatMessage(channelId, message);
+				SceneUtil.getUI(UI.STATE_CHAT, ChatUIState.class).addChatMessage(channelId, message);
 			}
 		}, new UIStateCondition(UI.STATE_CHAT));
 	}
@@ -40,7 +40,7 @@ public class ChatController {
 		DataStore.getInstance().awaitAndExecute(new Runnable() {
 			@Override
 			public void run() {
-				Util.getUI(UI.STATE_CHAT, ChatUIState.class).addChatChannel(id, name);
+				SceneUtil.getUI(UI.STATE_CHAT, ChatUIState.class).addChatChannel(id, name);
 			}
 		}, new UIStateCondition(UI.STATE_CHAT));
 	}
@@ -49,7 +49,7 @@ public class ChatController {
 		DataStore.getInstance().awaitAndExecute(new Runnable() {
 			@Override
 			public void run() {
-				Util.getUI(UI.STATE_CHAT, ChatUIState.class).removeChatChannel(id);
+				SceneUtil.getUI(UI.STATE_CHAT, ChatUIState.class).removeChatChannel(id);
 			}
 		}, new UIStateCondition(UI.STATE_CHAT));
 	}

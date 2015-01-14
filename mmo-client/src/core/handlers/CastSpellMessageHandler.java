@@ -1,7 +1,7 @@
 package core.handlers;
 
-import core.board.Board;
-import core.board.Cell;
+import core.board.ClientBoard;
+import core.board.ClientCell;
 import core.board.turns.Turn;
 import core.board.turns.TurnCast;
 import core.graphics.scenes.BattleScene;
@@ -9,9 +9,9 @@ import core.graphics.scenes.Scenes;
 import core.main.*;
 import program.datastore.DataStore;
 import program.datastore.GameStateCondition;
-import program.main.ConditionalAction;
 import program.main.Program;
-import program.main.Util;
+import program.main.SceneUtil;
+import shared.other.DataUtil;
 
 import java.io.DataInputStream;
 import java.io.IOException;
@@ -49,13 +49,13 @@ public class CastSpellMessageHandler extends PacketHandler {
 
 		int spell = stream.readByte();
 
-		Board board = program.getBattleController().getBattleState(boardNumber).getBoard();
+		ClientBoard board = program.getBattleController().getBattleState(boardNumber).getBoard();
 
-		Cell selected = board.getCellChecked(stream.readByte(), stream.readByte()),
-			   target = board.getCellChecked(stream.readByte(), stream.readByte());
+		ClientCell selected = board.getCellChecked(stream.readByte(), stream.readByte()),
+			   	   target = board.getCellChecked(stream.readByte(), stream.readByte());
 
 		Turn turn = new TurnCast(board, selected, target, spell);
-		Util.getScene(Scenes.BATTLE, BattleScene.class).getTurnQueue().add(turnNumber, turn);
+		SceneUtil.getScene(Scenes.BATTLE, BattleScene.class).getTurnQueue().add(turnNumber, turn);
 	}
 
 }

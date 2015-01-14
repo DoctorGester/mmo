@@ -7,14 +7,14 @@ import com.jme3.font.BitmapFont;
 import com.jme3.input.event.KeyInputEvent;
 import com.jme3.math.Vector2f;
 import core.graphics.MainFrame;
-import core.main.DataUtil;
-import core.main.inventory.ItemTypes;
-import core.main.inventory.filters.TypeFilter;
-import core.main.inventory.items.CardItem;
+import gui.core.V;
+import shared.items.ItemTypes;
+import shared.items.filters.TypeFilter;
 import core.ui.CloseablePanel;
 import core.ui.UI;
 import core.ui.UnitCardElement;
 import program.main.Program;
+import shared.items.types.CardItem;
 import tonegod.gui.controls.lists.Slider;
 import tonegod.gui.controls.text.Label;
 import tonegod.gui.controls.text.TextField;
@@ -84,15 +84,15 @@ public class CardbookUIState  extends AbstractAppState {
 			}
 		});
 
-		Label windowLabel = new Label(screen, DataUtil.parseVector2f("5%, 5%", mainPanelSize),
-											  DataUtil.parseVector2f("20%, 10%", mainPanelSize));
+		Label windowLabel = new Label(screen, V.f(mainPanelSize.x * 0.05f, mainPanelSize.y * 0.05f),
+											  V.f(mainPanelSize.x * 0.2f, mainPanelSize.y * 0.1f));
 
 		windowLabel.setFontSize(mainPanelSize.y * 0.05f);
 		windowLabel.setText("Cardbook");
 		mainPanel.addChild(windowLabel);
 
-		searchInput = new TextField(screen, DataUtil.parseVector2f("70%, 7%", mainPanelSize),
-											DataUtil.parseVector2f("20%, 5%", mainPanelSize)){
+		searchInput = new TextField(screen, V.f(mainPanelSize.x * 0.7f, mainPanelSize.y * 0.07f),
+											V.f(mainPanelSize.x * 0.2f, mainPanelSize.y * 0.05f)){
 			@Override
 			public void controlKeyPressHook(KeyInputEvent evt, String text) {
 				super.controlKeyPressHook(evt, text);
@@ -105,8 +105,8 @@ public class CardbookUIState  extends AbstractAppState {
 		searchInput.setType(TextField.Type.EXCLUDE_SPECIAL);
 		mainPanel.addChild(searchInput);
 
-		pageSlider = new Slider(screen, DataUtil.parseVector2f("75%, 92%", mainPanelSize),
-										DataUtil.parseVector2f("20%, 5%", mainPanelSize),
+		pageSlider = new Slider(screen, V.f(mainPanelSize.x * 0.75f, mainPanelSize.y * 0.92f),
+										V.f(mainPanelSize.x * 0.2f, mainPanelSize.y * 0.05f),
 										Slider.Orientation.HORIZONTAL,
 										true) {
 			@Override
@@ -118,7 +118,7 @@ public class CardbookUIState  extends AbstractAppState {
 
 		mainPanel.addChild(pageSlider);
 
-		pageLabel = new Label(screen, DataUtil.parseVector2f("65%, 92%", mainPanelSize), DataUtil.parseVector2f("9%, 5%", mainPanelSize));
+		pageLabel = new Label(screen, V.f(mainPanelSize.x * 0.65f, mainPanelSize.y * 0.92f), V.f(mainPanelSize.x * 0.09f, mainPanelSize.y * 0.05f));
 		pageLabel.setTextAlign(BitmapFont.Align.Right);
 		pageLabel.setTextVAlign(BitmapFont.VAlign.Top);
 
@@ -158,7 +158,7 @@ public class CardbookUIState  extends AbstractAppState {
 	}
 
 	public void reloadFromDeck(){
-		List<CardItem> cards = Program.getInstance().getMainInventory().filter(CardItem.class, new TypeFilter(ItemTypes.UNIT_CARD));
+		List<CardItem> cards = Program.getInstance().getMainInventory().filter(CardItem.class, new TypeFilter(ItemTypes.CREATURE_CARD));
 
 		cardElements = new ArrayList<UnitCardElement>();
 

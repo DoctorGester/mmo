@@ -1,11 +1,11 @@
 package core.board.ai;
 
-import core.board.*;
-import core.board.interfaces.Cell;
-import core.board.interfaces.Spell;
-import core.board.interfaces.Unit;
 import groovy.lang.Binding;
 import groovy.lang.Script;
+import shared.board.Cell;
+import shared.board.Spell;
+import shared.board.Unit;
+import shared.board.data.SpellData;
 
 import java.util.HashMap;
 

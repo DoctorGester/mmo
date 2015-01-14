@@ -1,6 +1,6 @@
 package core.board.ai;
 
-import core.board.interfaces.Cell;
+import shared.board.Cell;
 
 import java.util.ArrayList;
 import java.util.List;

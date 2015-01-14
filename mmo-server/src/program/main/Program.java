@@ -12,6 +12,9 @@ import groovy.util.GroovyScriptEngine;
 import org.apache.commons.io.FileUtils;
 import program.main.data.DataLoader;
 import program.main.database.Database;
+import shared.board.data.*;
+import shared.map.CardMaster;
+import shared.other.DataUtil;
 
 import java.io.File;
 import java.net.SocketException;
@@ -90,7 +93,7 @@ public class Program {
 
 	protected Map<CardMaster, GameClient> cardMasterGameClientMap;
 	protected Map<CardMaster, Npc> cardMasterNpcMap;
-	protected Map<Integer, CardMaster> idCardMasterMap;
+	protected Map<Integer, ServerCardMaster> idCardMasterMap;
 	protected Map<Integer, GameClient> idGameClientMap;
 	protected Map<Integer, Npc> idNpcMap;
 	protected Map<Integer, UnitData> unitDataMap;
@@ -195,7 +198,7 @@ public class Program {
 		return idGameClientMap.get(id);
 	}
 
-	public CardMaster getCardMasterById(int id){
+	public ServerCardMaster getCardMasterById(int id){
 		return idCardMasterMap.get(id);
 	}
 
@@ -259,7 +262,7 @@ public class Program {
 	}
 
 	public Program() {
-		idCardMasterMap = new ConcurrentHashMap<Integer, CardMaster>();
+		idCardMasterMap = new ConcurrentHashMap<Integer, ServerCardMaster>();
 		idGameClientMap = new ConcurrentHashMap<Integer, GameClient>();
 		idNpcMap = new ConcurrentHashMap<Integer, Npc>();
 		cardMasterGameClientMap = new ConcurrentHashMap<CardMaster, GameClient>();
@@ -290,10 +293,10 @@ public class Program {
 
 		groovyScriptEngine = dataLoader.loadScriptEngine();
 
-		dataLoader.loadDataList("res/units/datalist", Integer.class, UnitData.class, unitDataMap);
-		dataLoader.loadDataList("res/spells/unit/datalist", String.class, SpellData.class, spellDataMap);
-		dataLoader.loadDataList("res/spells/hero/datalist", String.class, CardSpellData.class, cardSpellDataMap);
-		dataLoader.loadDataList("res/buffs/datalist", String.class, BuffData.class, buffDataMap);
+		DataUtil.loadDataList("res/units/datalist", Integer.class, UnitData.class, unitDataMap);
+		DataUtil.loadDataList("res/spells/unit/datalist", String.class, SpellData.class, spellDataMap);
+		DataUtil.loadDataList("res/spells/hero/datalist", String.class, CardSpellData.class, cardSpellDataMap);
+		DataUtil.loadDataList("res/buffs/datalist", String.class, BuffData.class, buffDataMap);
 
 		dataLoader.loadPathingMapFromFileSystem();
 
@@ -335,7 +338,7 @@ public class Program {
 			for (String name: names){
 				Npc npc = mapController.createNpc(name);
 
-				CardMaster cardMaster = npc.getCardMaster();
+				ServerCardMaster cardMaster = npc.getCardMaster();
 
 				cardMaster.getHero().setX(256 + (float) Math.random() * 2000f);
 				cardMaster.getHero().setY(256 + (float) Math.random() * 2000f);
@@ -349,19 +352,19 @@ public class Program {
 
 	public void loadScripts(){
 		for (String key: spellDataMap.keySet())
-			getSpellDataById(key).compileScript(new Binding());
+			getSpellDataById(key).compileScript(groovyScriptEngine, new Binding());
 
 		for (String key: passiveDataMap.keySet())
-			getSpellDataById(key).compileScript(new Binding());
+			getSpellDataById(key).compileScript(groovyScriptEngine, new Binding());
 
 		for (String key: cardSpellDataMap.keySet())
-			getCardSpellDataById(key).compileScript(new Binding());
+			getCardSpellDataById(key).compileScript(groovyScriptEngine, new Binding());
 
 		for (String key: buffDataMap.keySet())
-			getBuffScriptById(key).compileScript(new Binding());
+			getBuffScriptById(key).compileScript(groovyScriptEngine, new Binding());
 
 		for (int key: unitDataMap.keySet())
-			getUnitDataById(key).compileScript(new Binding());
+			getUnitDataById(key).compileScript(groovyScriptEngine, new Binding());
 	}
 
 	public DuelController getDuelController() {

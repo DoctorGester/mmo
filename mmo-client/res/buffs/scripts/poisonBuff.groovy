@@ -1,7 +1,7 @@
-import core.board.Board
-import core.board.Buff
-import core.board.DamageType
-import core.board.Unit
+import shared.board.Board
+import shared.board.Buff
+import shared.board.DamageType
+import shared.board.Unit
 
 def onInit(Buff buff, Board board){
     (buff.data as Unit).addBuff(buff)

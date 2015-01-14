@@ -1,6 +1,5 @@
 package core.handlers;
 
-import com.j256.ormlite.dao.Dao;
 import com.j256.ormlite.stmt.QueryBuilder;
 import core.exceptions.IncorrectHeaderException;
 import core.main.*;
@@ -9,11 +8,10 @@ import program.main.Program;
 import program.main.ReliablePacketManager;
 import program.main.database.entities.CardMasterEntity;
 import program.main.database.entities.GameClientEntity;
+import shared.map.CardMaster;
+import shared.other.DataUtil;
 
 import java.security.MessageDigest;
-import java.sql.Blob;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.util.Arrays;
 
 public class LoginMessageHandler extends PacketHandler{
@@ -116,7 +114,7 @@ public class LoginMessageHandler extends PacketHandler{
 
 			GameClient loggedUser = new GameClient(client);
 
-			CardMaster cardMaster = loggedUser.getCardMaster();
+			ServerCardMaster cardMaster = loggedUser.getCardMaster();
 
 			cardMaster.setId(id);
 			cardMaster.setName(masterEntity.getName());

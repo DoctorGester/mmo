@@ -16,15 +16,16 @@ import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 import com.jme3.scene.control.BillboardControl;
 import com.jme3.scene.shape.Quad;
-import core.board.Board;
-import core.board.Cell;
-import core.board.Unit;
+import core.board.ClientBoard;
+import core.board.ClientUnit;
 import program.main.Program;
+import shared.board.Cell;
+import shared.board.Unit;
 
 public class UnitSpatial {
 	private static final float BAR_SIZE = 2.8f;
 
-	private Unit unit;
+	private ClientUnit unit;
 	private Node node;
 	private Spatial spatial;
 	private Geometry geometry;
@@ -49,7 +50,7 @@ public class UnitSpatial {
 	private boolean wasSelected = false;
 	private Geometry selectionQuad;
 
-	public UnitSpatial(Spatial spatial, Unit unit){
+	public UnitSpatial(Spatial spatial, ClientUnit unit){
 		this.node = new Node("unit");
 		this.spatial = spatial;
 		this.unit = unit;
@@ -100,7 +101,7 @@ public class UnitSpatial {
 
 		selectionQuadMaterial = new Material(assetManager, "res/shaders/ColoredCell.j3md");
 		selectionQuadMaterial.setColor("Specular", ColorRGBA.White);
-		selectionQuadMaterial.setColor("Front", Board.PLAYER_COLORS[playerId]);
+		selectionQuadMaterial.setColor("Front", ClientBoard.PLAYER_COLORS[playerId]);
 		selectionQuadMaterial.setColor("Back", ColorRGBA.LightGray);
 		selectionQuadMaterial.setTexture("DiffuseMap", assetManager.loadTexture("res/textures/selection.png"));
 		selectionQuadMaterial.getAdditionalRenderState().setBlendMode(RenderState.BlendMode.Alpha);
@@ -234,7 +235,7 @@ public class UnitSpatial {
 		actionBarMaterial.setFloat("ValuePerBar", 1);
 	}
 
-	public Unit getUnit() {
+	public ClientUnit getUnit() {
 		return unit;
 	}
 

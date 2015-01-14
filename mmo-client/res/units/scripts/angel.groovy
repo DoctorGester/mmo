@@ -1,8 +1,8 @@
-import core.board.Board
-import core.board.Cell
-import core.board.DamageType
-import core.board.Unit
-import program.main.Util
+import program.main.SceneUtil
+import shared.board.Board
+import shared.board.Cell
+import shared.board.Unit
+import shared.board.DamageType
 
 def animationStand(Unit unit){
 	unit.setAnimation("stand", 1.2f, true)
@@ -33,7 +33,7 @@ def onCheckAttack(Unit unit, Board board, Unit target, Cell attackerPos){
 def onCheckAOE(Unit unit, Board board, Unit target, Cell toCheck){
     Cell pos = unit.getPosition()
     Cell tar = target.getPosition()
-    def dist = Util.distance(pos, toCheck);
+    def dist = SceneUtil.distance(pos, toCheck);
 
     def tx = tar.getX()
     def px = pos.getX()

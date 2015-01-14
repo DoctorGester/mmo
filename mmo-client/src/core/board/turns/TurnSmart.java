@@ -1,9 +1,11 @@
 package core.board.turns;
 
-import core.board.Board;
-import core.board.Cell;
-import core.board.Path;
-import core.board.Unit;
+import core.board.ClientCell;
+import core.board.ClientUnit;
+import shared.board.Board;
+import shared.board.Cell;
+import shared.board.Unit;
+import shared.other.Path;
 
 /**
  * @author doc
@@ -13,9 +15,9 @@ public class TurnSmart implements Turn {
 	public static final float MOVING_SPEED = 1.5f;
 
 	private Board board;
-	private final Cell from;
-	private final Cell to;
-	private Unit ordered;
+	private final ClientCell from;
+	private final ClientCell to;
+	private ClientUnit ordered;
 
 	private boolean finished;
 	private boolean attack;
@@ -27,7 +29,7 @@ public class TurnSmart implements Turn {
 
 	private float waitForAttackTime;
 
-	public TurnSmart(Board board, Cell from, Cell to){
+	public TurnSmart(Board board, ClientCell from, ClientCell to){
 		this.board = board;
 		this.from = from;
 		this.to = to;

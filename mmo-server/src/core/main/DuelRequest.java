@@ -1,5 +1,7 @@
 package core.main;
 
+import shared.map.CardMaster;
+
 /**
  * @author doc
  */
@@ -12,11 +14,11 @@ public class DuelRequest {
 
 	private static final float TIMEOUT = 500f;
 
-	private CardMaster sender, target;
+	private ServerCardMaster sender, target;
 	private float timeLeft = TIMEOUT;
 	private int status = STATUS_PENDING;
 
-	public DuelRequest(CardMaster sender, CardMaster target) {
+	public DuelRequest(ServerCardMaster sender, ServerCardMaster target) {
 		this.sender = sender;
 		this.target = target;
 	}
@@ -29,11 +31,11 @@ public class DuelRequest {
 		return status;
 	}
 
-	public CardMaster getTarget() {
+	public ServerCardMaster getTarget() {
 		return target;
 	}
 
-	public CardMaster getSender() {
+	public ServerCardMaster getSender() {
 		return sender;
 	}
 

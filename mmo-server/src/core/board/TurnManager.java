@@ -1,14 +1,14 @@
 package core.board;
 
-import core.board.ai.AIManager;
-import core.board.interfaces.Board;
-import core.board.interfaces.Cell;
-import core.board.interfaces.Unit;
-import core.main.CardMaster;
-import core.main.DataUtil;
+import shared.board.Alliance;
+import shared.board.Board;
+import shared.board.Cell;
+import shared.board.Unit;
+import shared.map.CardMaster;
+import shared.other.DataUtil;
 import core.main.GameClient;
-import core.main.inventory.items.CardItem;
-import core.main.inventory.items.SpellCardItem;
+import shared.items.types.CardItem;
+import shared.items.types.SpellCardItem;
 import program.main.Program;
 import program.main.ReliablePacketManager;
 
@@ -47,7 +47,7 @@ public class TurnManager {
 		sendAll(board, Program.HEADER_BATTLE_IS_OVER, data);
 	}
 
-	public boolean smart(Board board, CardMaster owner, Cell from, Cell to){
+	public boolean smart(ServerBoard board, CardMaster owner, Cell from, Cell to){
 		if(board.handleSimpleOrder(owner, from, to)) {
 			byte data[] = new byte[]{
 				(byte) from.getX(),
@@ -64,7 +64,7 @@ public class TurnManager {
 		return false;
 	}
 
-	public boolean pick(Board board, CardMaster owner, int cardItemId){
+	public boolean pick(ServerBoard board, CardMaster owner, int cardItemId){
 		CardItem card = owner.getInventory().findById(cardItemId, CardItem.class);
 		Unit picked = board.handlePickOrder(owner, card, Program.getInstance().getUnitDataById(card.getUnitId()));
 
@@ -81,7 +81,7 @@ public class TurnManager {
 		return false;
 	}
 
-	public boolean place(Board board, CardMaster owner, Cell from, Cell to){
+	public boolean place(ServerBoard board, CardMaster owner, Cell from, Cell to){
 		if (board.handlePlacementOrder(owner, from, to)){
 			Program program = Program.getInstance();
 
@@ -105,7 +105,7 @@ public class TurnManager {
 		return false;
 	}
 
-	public boolean cast(Board board, CardMaster owner, int spell, Cell from, Cell to){
+	public boolean cast(ServerBoard board, CardMaster owner, int spell, Cell from, Cell to){
 		if (board.handleCastOrder(owner, from, to, spell)){
 			byte data[] = new byte[]{
 				(byte) spell,
@@ -123,7 +123,7 @@ public class TurnManager {
 		return false;
 	}
 
-	public boolean castCard(Board board, CardMaster caster, int cardId){
+	public boolean castCard(ServerBoard board, CardMaster caster, int cardId){
 		if (board.handleCastCardSpellOrder(caster, cardId)){
 			SpellCardItem spellCard = caster.getInventory().findById(cardId, SpellCardItem.class);
 
@@ -137,7 +137,7 @@ public class TurnManager {
 		return false;
 	}
 
-	public boolean skip(Board board, CardMaster owner){
+	public boolean skip(ServerBoard board, CardMaster owner){
 		// Skip turn if board is in idle state and turning player is right
 		if (board.getState() == Board.STATE_WAIT_FOR_ORDER && board.getCurrentTurningPlayer() == owner){
 			board.skipTurn();
@@ -152,7 +152,7 @@ public class TurnManager {
 	public void finishPlacement(Board board){
 		// If board state has changed to idle state, send all unit information to clients
 		if (board.getState() == Board.STATE_WAIT_FOR_ORDER){
-			List<Unit> units = board.getUnits();
+			List<? extends Unit> units = board.getUnits();
 			byte data[] = new byte[units.size() * 2];
 			int number = 0;
 			for(Unit unit: units){

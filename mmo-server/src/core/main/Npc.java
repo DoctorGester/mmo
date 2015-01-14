@@ -1,22 +1,16 @@
 package core.main;
 
-import core.main.inventory.Inventory;
-import core.main.inventory.Item;
-import core.main.inventory.ItemDatabase;
-import core.main.inventory.items.CardItem;
-import program.main.Program;
+import shared.items.Item;
+import shared.items.types.CardItem;
+import shared.map.CardMaster;
 
-import java.io.UnsupportedEncodingException;
 import java.util.Arrays;
-import java.util.Collection;
-import java.util.Set;
-import java.util.concurrent.CopyOnWriteArraySet;
 
 public class Npc {
-    private CardMaster cardMaster;
+    private ServerCardMaster cardMaster;
 
     public Npc(){
-        cardMaster = new CardMaster();
+        cardMaster = new ServerCardMaster();
         cardMaster.setName("Undefined");
 		cardMaster.setType(CardMaster.TYPE_NPC);
 
@@ -24,7 +18,7 @@ public class Npc {
     }
 
 	private void createDefaultInventory(){
-		Inventory inventory = cardMaster.getInventory();
+		ServerInventory inventory = cardMaster.getInventory();
 
 		CardItem itemOne, itemTwo, itemThree;
 		itemOne = new CardItem();
@@ -41,7 +35,7 @@ public class Npc {
 		ItemDatabase.getInstance().registerItem(itemThree);
 	}
 
-    public CardMaster getCardMaster(){
+    public ServerCardMaster getCardMaster(){
         return cardMaster;
     }
 }

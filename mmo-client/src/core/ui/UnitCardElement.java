@@ -4,15 +4,15 @@ import com.jme3.font.BitmapFont;
 import com.jme3.math.ColorRGBA;
 import com.jme3.math.Vector2f;
 import com.jme3.math.Vector3f;
-import core.board.UnitData;
 import core.main.ItemDatabase;
-import core.main.inventory.items.CardItem;
 import program.datastore.Data;
 import program.datastore.Subscriber;
 import program.main.Program;
+import program.main.data.ClientDataLoader;
+import shared.board.data.UnitData;
+import shared.items.types.CardItem;
 import tonegod.gui.controls.text.Label;
 import tonegod.gui.core.ElementManager;
-import tonegod.gui.core.Screen;
 
 import java.util.concurrent.Callable;
 
@@ -85,7 +85,7 @@ public class UnitCardElement extends ItemElement {
 
 		Vector3f cameraPosition = new Vector3f(5, 5, 5);
 		Vector3f cameraTarget = new Vector3f(0, 3, 0);
-		portrait = new PortraitElement(screen, unitData.getName(), height, unitData.getModel(true), cameraPosition, cameraTarget);
+		portrait = new PortraitElement(screen, unitData.getName(), height, ClientDataLoader.getUnitModel(unitData), cameraPosition, cameraTarget);
 		portrait.setInitialized();
 
 		float width = portrait.getWidth();

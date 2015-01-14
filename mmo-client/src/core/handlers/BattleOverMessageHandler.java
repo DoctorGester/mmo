@@ -1,6 +1,5 @@
 package core.handlers;
 
-import core.board.Board;
 import core.board.turns.Turn;
 import core.board.turns.TurnBattleOver;
 import core.graphics.scenes.BattleScene;
@@ -11,7 +10,10 @@ import core.ui.battle.BattleOverUIState;
 import program.datastore.DataStore;
 import program.datastore.GameStateCondition;
 import program.main.Program;
-import program.main.Util;
+import program.main.SceneUtil;
+import shared.board.Board;
+import shared.map.CardMaster;
+import shared.other.DataUtil;
 
 import java.io.DataInputStream;
 import java.io.IOException;
@@ -64,7 +66,7 @@ public class BattleOverMessageHandler extends PacketHandler{
 		}
 
 		Turn turn = new TurnBattleOver(battleState, status, winners);
-		Util.getScene(Scenes.BATTLE, BattleScene.class).getTurnQueue().add(turnNumber, turn);
+		SceneUtil.getScene(Scenes.BATTLE, BattleScene.class).getTurnQueue().add(turnNumber, turn);
 	}
 
 

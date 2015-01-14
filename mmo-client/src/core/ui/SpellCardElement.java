@@ -5,12 +5,11 @@ import com.jme3.font.LineWrapMode;
 import com.jme3.input.event.MouseMotionEvent;
 import com.jme3.math.ColorRGBA;
 import com.jme3.math.Vector2f;
-import core.board.CardSpellData;
-import core.main.inventory.items.SpellCardItem;
 import program.main.Program;
+import shared.board.data.CardSpellData;
+import shared.items.types.SpellCardItem;
 import tonegod.gui.controls.text.Label;
 import tonegod.gui.core.ElementManager;
-import tonegod.gui.core.Screen;
 import tonegod.gui.listeners.MouseFocusListener;
 
 /**

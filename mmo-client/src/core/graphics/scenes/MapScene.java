@@ -28,6 +28,9 @@ import core.graphics.TerrainPager;
 import core.main.*;
 import jme3tools.optimize.GeometryBatchFactory;
 import program.main.Program;
+import shared.map.CardMaster;
+import shared.map.Hero;
+import shared.other.Vector2;
 
 import java.util.Set;
 import java.util.concurrent.CopyOnWriteArraySet;
@@ -157,7 +160,7 @@ public class MapScene extends AbstractScene{
 			Quaternion q = new Quaternion();
 
 			if (hero.getPath() != null){
-				Vector2f pos = hero.getFacing();
+				Vector2 pos = hero.getFacing();
 
 				q.lookAt(new Vector3f(pos.x, 0, pos.y), Vector3f.UNIT_Y);
 			}
@@ -225,7 +228,7 @@ public class MapScene extends AbstractScene{
 		// Adding previously invisible spatials to root node
 		for (CardMasterSpatial spatial: invisibleCardMasterSpatials){
 
-			CardMaster player = spatial.getCardMaster();
+			ClientCardMaster player = spatial.getCardMaster();
 
 			if (program.getVisiblePlayers().contains(player) && player.isInitialized()){
 				invisibleCardMasterSpatials.remove(spatial);
@@ -238,7 +241,7 @@ public class MapScene extends AbstractScene{
 		// Adding recently visible spatials to invisible node
 		for (CardMasterSpatial spatial: visibleCardMasterSpatials){
 
-			CardMaster player = spatial.getCardMaster();
+			ClientCardMaster player = spatial.getCardMaster();
 
 			if (program.getInvisiblePlayers().contains(player) || !player.isInitialized()){
 				visibleCardMasterSpatials.remove(spatial);

@@ -1,7 +1,5 @@
 package core.handlers;
 
-import core.board.Board;
-import core.board.Cell;
 import core.board.turns.Turn;
 import core.board.turns.TurnPlace;
 import core.graphics.scenes.BattleScene;
@@ -12,7 +10,10 @@ import program.datastore.DataStore;
 import program.datastore.ExistenceCondition;
 import program.datastore.GameStateCondition;
 import program.main.Program;
-import program.main.Util;
+import program.main.SceneUtil;
+import shared.board.Board;
+import shared.board.Cell;
+import shared.other.DataUtil;
 
 import java.io.DataInputStream;
 import java.io.IOException;
@@ -62,7 +63,7 @@ public class BattlePlaceMessageHandler extends PacketHandler {
 			turn = new TurnPlace(selected, target);
 		}
 
-		Util.getScene(Scenes.BATTLE, BattleScene.class).getTurnQueue().add(turnNumber, turn);
+		SceneUtil.getScene(Scenes.BATTLE, BattleScene.class).getTurnQueue().add(turnNumber, turn);
 
 	}
 

@@ -1,16 +1,11 @@
 package core.board.ai;
 
-import core.board.Alliance;
-import core.board.BoardImpl;
-import core.board.UnitData;
-import core.board.interfaces.Board;
-import core.board.BuffData;
-import core.board.interfaces.Cell;
-import core.board.interfaces.Spell;
-import core.board.interfaces.Unit;
-import core.main.CardMaster;
-import core.main.inventory.items.CardItem;
+import shared.board.*;
+import shared.board.data.BuffData;
+import shared.board.data.UnitData;
+import shared.items.types.CardItem;
 import program.main.Program;
+import shared.map.CardMaster;
 
 import java.awt.*;
 import java.util.ArrayList;
@@ -173,6 +168,8 @@ public class VirtualBoard implements Board {
 		return null;
 	}
 
+	public Alliance getAllianceById(int id) { return null; }
+	public Rectangle[] getPlacementArea(){ return null; }
 	public void setPlacementArea(Rectangle[] area) {}
 	public void setTimeRemaining(float time) {}
 	public void setTurnTime(float time) {}

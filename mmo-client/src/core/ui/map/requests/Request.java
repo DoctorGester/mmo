@@ -1,6 +1,6 @@
 package core.ui.map.requests;
 
-import core.main.CardMaster;
+import shared.map.CardMaster;
 
 public abstract class Request {
 	private CardMaster from, to;

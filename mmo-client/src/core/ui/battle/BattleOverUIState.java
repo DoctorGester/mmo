@@ -8,7 +8,7 @@ import com.jme3.input.event.MouseButtonEvent;
 import com.jme3.math.ColorRGBA;
 import com.jme3.math.Vector2f;
 import core.graphics.MainFrame;
-import core.main.CardMaster;
+import shared.map.CardMaster;
 import tonegod.gui.controls.buttons.Button;
 import tonegod.gui.controls.buttons.ButtonAdapter;
 import tonegod.gui.controls.text.Label;
@@ -94,7 +94,7 @@ public class BattleOverUIState extends AbstractAppState {
 		screen.addElement(panel);
 	}
 
-	public void setStatus(int value, CardMaster ... winners){
+	public void setStatus(int value, CardMaster... winners){
 		status.setText(STATUSES[value]);
 		status.setFontColor(STATUS_COLORS[value]);
 	}

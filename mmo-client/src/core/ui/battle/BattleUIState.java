@@ -11,13 +11,16 @@ import core.board.*;
 import core.graphics.MainFrame;
 import core.graphics.scenes.BattleScene;
 import core.graphics.scenes.Scenes;
-import core.main.DataUtil;
 import core.ui.BattleState;
 import core.ui.ChatUIState;
 import core.ui.MainChatBox;
 import core.ui.UI;
+import gui.core.V;
 import program.main.Program;
-import program.main.Util;
+import program.main.SceneUtil;
+import shared.board.*;
+import shared.board.data.SpellData;
+import shared.board.data.UnitData;
 import tonegod.gui.controls.buttons.Button;
 import tonegod.gui.controls.buttons.ButtonAdapter;
 import tonegod.gui.controls.text.Label;
@@ -75,7 +78,7 @@ public class BattleUIState extends AbstractAppState {
 
 	private Vector2f rightPanelSize, centerPanelSize;
 
-	private Unit lastUpdated = null;
+	private ClientUnit lastUpdated = null;
 	private UnitData lastUnitData = null;
 
 	private BannerElement banners[];
@@ -97,12 +100,9 @@ public class BattleUIState extends AbstractAppState {
 	public void initialize(AppStateManager stateManager, Application app) {
 		super.initialize(stateManager, app);
 
-		int panelHeight = (int) (PANEL_HEIGHT_PERCENT * 100);
-		int centerPanelHeight = (int) (CENTER_PANEL_HEIGHT_PERCENT * 100);
-
 		// Right
-		rightPanelSize = DataUtil.parseVector2f(String.format("30%%, %d%%", panelHeight), dimension);
-		Vector2f panelPosition = DataUtil.parseVector2f(String.format("70%%, %d%%", 100 - panelHeight), dimension);
+		rightPanelSize = V.f(dimension.x * 0.3f, dimension.y * PANEL_HEIGHT_PERCENT);
+		Vector2f panelPosition = V.f(dimension.x * 0.7f, dimension.y * (1f - PANEL_HEIGHT_PERCENT));
 
 		rightPanel = new Panel(screen, panelPosition, rightPanelSize);
 		rightPanel.setIgnoreMouse(true);
@@ -110,14 +110,14 @@ public class BattleUIState extends AbstractAppState {
 		screen.addElement(rightPanel);
 
 		// Center
-		centerPanelSize = DataUtil.parseVector2f(String.format("16%%, %d%%", centerPanelHeight), dimension);
-		panelPosition = DataUtil.parseVector2f(String.format("42%%, %d%%", 100 - centerPanelHeight), dimension);
+		centerPanelSize = V.f(dimension.x * 0.16f, dimension.y * CENTER_PANEL_HEIGHT_PERCENT);
+		panelPosition = V.f(dimension.x * 0.42f, dimension.y * (1f - CENTER_PANEL_HEIGHT_PERCENT));
 
 		centerPanel = new Panel(screen, panelPosition, centerPanelSize);
 		centerPanel.setIgnoreMouse(true);
 
-		turningPlayer = new Label(screen, DataUtil.parseVector2f("0%, 80%", centerPanelSize),
-										  DataUtil.parseVector2f("100%, 20%", centerPanelSize));
+		turningPlayer = new Label(screen, V.f(0, centerPanelSize.y * 0.8f),
+										  V.f(centerPanelSize.x, centerPanelSize.y * 0.2f));
 		turningPlayer.setInitialized();
 		turningPlayer.setTextAlign(BitmapFont.Align.Center);
 		turningPlayer.setTextVAlign(BitmapFont.VAlign.Center);
@@ -137,7 +137,7 @@ public class BattleUIState extends AbstractAppState {
 
 		turnTime.setZOrder(centerPanel.getZOrder() + centerPanelSize.x * FLAG_RADIUS * 2f + 1);
 
-		Vector2f leftPanelSize = DataUtil.parseVector2f(String.format("30%%, %d%%", panelHeight), dimension);
+		Vector2f leftPanelSize = V.f(dimension.x * 0.3f, dimension.y * PANEL_HEIGHT_PERCENT);
 
 		frame.addUIState(UI.STATE_CHAT);
 
@@ -208,7 +208,7 @@ public class BattleUIState extends AbstractAppState {
 	public void updateFromBoard(){
 		Board board = battleState.getBoard();
 		turningPlayer.setText(board.getCurrentTurningPlayer().getName());
-		turningPlayer.setFontColor(Board.PLAYER_COLORS[board.getCurrentTurningPlayer().getBattleId()]);
+		turningPlayer.setFontColor(ClientBoard.PLAYER_COLORS[board.getCurrentTurningPlayer().getBattleId()]);
 
 		if (board.getState() == Board.STATE_WAIT_FOR_PICK)
 			skipButton.setText("Random");
@@ -226,16 +226,16 @@ public class BattleUIState extends AbstractAppState {
 		if (banners == null){
 			banners = new BannerElement[board.getCardMasters().size()];
 
-			Vector2f size = DataUtil.parseVector2f("20%, 70%", centerPanelSize);
+			Vector2f size = V.f(centerPanelSize.x * 0.2f, centerPanelSize.y * 0.7f);
 			for(int i = 0; i < banners.length; i++){
-				banners[i] = new BannerElement(screen, new Vector2f(0, centerPanelSize.y * 0.2f), size, Board.PLAYER_COLORS[i], "");
+				banners[i] = new BannerElement(screen, new Vector2f(0, centerPanelSize.y * 0.2f), size, ClientBoard.PLAYER_COLORS[i], "");
 
 				centerPanel.addChild(banners[i]);
 			}
 		}
 	}
 
-	public void updateUnitUI(Unit unit){
+	public void updateUnitUI(ClientUnit unit){
 		rightPanel.removeAllChildren();
 		for (BuffIcon buffIcon: buffIcons){
 			removeDescriptionForElement(buffIcon);
@@ -350,12 +350,12 @@ public class BattleUIState extends AbstractAppState {
 		moveLabel.setText(String.valueOf(unitData.getActionPoints() - 1));
 	}
 
-	private void updateBuffIcons(Unit unit){
+	private void updateBuffIcons(ClientUnit unit){
 		float offset = rightPanelSize.x * STANDARD_OFFSET;
 		Vector2f size = new Vector2f(rightPanelSize.x * BUFF_ICON_SIZE_PERCENT, rightPanelSize.x * BUFF_ICON_SIZE_PERCENT);
 		int index = 0;
 
-		for (Buff buff: unit.getBuffs()){
+		for (ClientBuff buff: unit.getBuffs()){
 			float xOffset = offset + index * size.x + index * (size.x * STANDARD_OFFSET * 2);
 			Vector2f position = rightPanel.getPosition().add(new Vector2f(xOffset, rightPanelSize.y + offset));
 			BuffIcon icon = new BuffIcon(screen, position, size, buff.getBuffData().getIcon());
@@ -407,7 +407,7 @@ public class BattleUIState extends AbstractAppState {
 	}
 
 	public void update(float tpf){
-		Board board = battleState.getBoard();
+		ClientBoard board = battleState.getBoard();
 		turnTime.setText(String.valueOf((int) board.getTimeRemaining()));
 		turnTime.setZOrder(centerPanel.getZOrder() + centerPanelSize.x * FLAG_RADIUS * 2f + 1);
 
@@ -444,14 +444,14 @@ public class BattleUIState extends AbstractAppState {
 		if (lastUpdated == null)
 			return;
 
-		Spell focused = null;
-		for (Spell spell: lastUpdated.getSpells()){
+		ClientSpell focused = null;
+		for (ClientSpell spell: lastUpdated.getSpells()){
 			AbilityButton button = getAbilityButton(spell.getSpellData());
 			button.updateCooldownProgress();
 			if (button.getHasFocus())
 				focused = spell;
 		}
-		Util.getScene(Scenes.BATTLE, BattleScene.class).setFocusedSpell(focused);
+		SceneUtil.getScene(Scenes.BATTLE, BattleScene.class).setFocusedSpell(focused);
 	}
 
 	public void cleanup() {
@@ -512,8 +512,8 @@ public class BattleUIState extends AbstractAppState {
 		menuButton = new ButtonAdapter(screen, new Vector2f(dimension.x * 0.3f, buttonSize.y), buttonSize);
 		chatButton = new ButtonAdapter(screen, new Vector2f(dimension.x * 0.3f, 0), buttonSize){
 			public void onButtonMouseLeftUp(MouseButtonEvent evt, boolean toggled) {
-				MainChatBox chatBox = Util.getUI(UI.STATE_CHAT, ChatUIState.class).getChatBox();
-				BattleLog log = Util.getUI(UI.STATE_BATTLE_LOG, BattleLogUIState.class).getLog();
+				MainChatBox chatBox = SceneUtil.getUI(UI.STATE_CHAT, ChatUIState.class).getChatBox();
+				BattleLog log = SceneUtil.getUI(UI.STATE_BATTLE_LOG, BattleLogUIState.class).getLog();
 
 				if (chatBox.getIsVisible()){
 					chatBox.setIsVisible(false);
@@ -536,7 +536,7 @@ public class BattleUIState extends AbstractAppState {
 		};
 		bookButton = new ButtonAdapter(screen, new Vector2f(dimension.x * (0.46f + BUTTON_WIDTH), 0), buttonSize){
 			public void onButtonMouseLeftUp(MouseButtonEvent evt, boolean toggled) {
-				Util.getUI(UI.STATE_SPELL_SELECTOR, SpellSelectorUIState.class).getPanel().setIsVisible();
+				SceneUtil.getUI(UI.STATE_SPELL_SELECTOR, SpellSelectorUIState.class).getPanel().setIsVisible();
 			}
 		};
 

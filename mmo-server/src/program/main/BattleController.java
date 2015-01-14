@@ -1,19 +1,19 @@
 package program.main;
 
-import core.board.Alliance;
-import core.board.BoardImpl;
-import core.board.BoardSetup;
+import shared.board.Alliance;
+import core.board.ServerBoard;
+import shared.board.Board;
+import shared.board.BoardSetup;
 import core.board.ai.AI;
 import core.board.ai.AIManager;
-import core.board.interfaces.Board;
 import core.main.*;
 import program.main.database.entities.MatchEntity;
+import shared.map.CardMaster;
+import shared.other.DataUtil;
 
 import java.awt.*;
 import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
-import java.io.IOException;
-import java.sql.SQLException;
 import java.util.*;
 import java.util.List;
 
@@ -38,7 +38,7 @@ public class BattleController {
 		startTime = System.nanoTime();
 	}
 
-	private MatchEntity createMatchEntity(BoardSetup setup, CardMaster... cardMasters) {
+	private MatchEntity createMatchEntity(BoardSetup setup, ServerCardMaster... cardMasters) {
 		int idArray[] = new int[cardMasters.length];
 
 		for (int i = 0; i < cardMasters.length; i++)
@@ -63,7 +63,7 @@ public class BattleController {
 	private Board createBattleBoard(BoardSetup setup, CardMaster... cardMasters){
 		MatchEntity match = createMatchEntity(setup);
 
-		Board board = new BoardImpl(setup.getWidth(), setup.getHeight());
+		Board board = new ServerBoard(setup.getWidth(), setup.getHeight());
 		board.setId(match.getId());
 		board.setPlacementArea(setup.getPlacementAreas());
 
@@ -93,7 +93,7 @@ public class BattleController {
 		return board;
 	}
 
-	private Packet createBattlePacket(Board board, BoardSetup boardSetup, CardMaster ... masters){
+	private Packet createBattlePacket(Board board, BoardSetup boardSetup, CardMaster... masters){
 		try {
 			ByteArrayOutputStream bytes = new ByteArrayOutputStream();
 			DataOutputStream stream = new DataOutputStream(bytes);
@@ -116,20 +116,20 @@ public class BattleController {
 		return null;
 	}
 
-	public void startBattle(BoardSetup setup, CardMaster... masters){
+	public void startBattle(BoardSetup setup, ServerCardMaster... masters){
 		// Shuffling list if required
 		if (setup.isShuffle()){
-			List<CardMaster> list = Arrays.asList(masters);
+			List<ServerCardMaster> list = Arrays.asList(masters);
 			Collections.shuffle(list);
-			masters = list.toArray(new CardMaster[masters.length]);
+			masters = list.toArray(new ServerCardMaster[masters.length]);
 		}
 
 		Board board = createBattleBoard(setup, masters);
 
 		List<GameClient> toSend = new LinkedList<GameClient>();
-		List<CardMaster> aiTargets = new LinkedList<CardMaster>();
+		List<ServerCardMaster> aiTargets = new LinkedList<ServerCardMaster>();
 
-		for (CardMaster cardMaster: masters){
+		for (ServerCardMaster cardMaster: masters){
 			GameClient gameClient = program.cardMasterGameClientMap.get(cardMaster);
 
 			if (gameClient != null)
@@ -149,7 +149,7 @@ public class BattleController {
 			ReliablePacketManager.sendPacket(program.localServer, gameClient.getClient(), battlePacket);
 		}
 
-		for(CardMaster master: aiTargets){
+		for(ServerCardMaster master: aiTargets){
 			AI ai = new AI(master);
 			AIManager.getInstance().addAI(ai);
 		}
@@ -158,9 +158,9 @@ public class BattleController {
 	}
 
 	public void checkIfClientIsGoingToBattle(GameClient client){
-		CardMaster cardMaster = client.getCardMaster();
-		List<CardMaster> cardMasters = program.clusterGrid.getHeroesInRadiusOf(cardMaster, 50f);
-		for (CardMaster closeOne: cardMasters){
+		ServerCardMaster cardMaster = client.getCardMaster();
+		List<ServerCardMaster> cardMasters = program.clusterGrid.getHeroesInRadiusOf(cardMaster, 50f);
+		for (ServerCardMaster closeOne: cardMasters){
 			if (closeOne != cardMaster
 					&& closeOne.getState() == CardMaster.STATE_IN_GLOBAL_MAP
 					&& program.getNpcByCardMaster(closeOne) != null){

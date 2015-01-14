@@ -8,9 +8,9 @@ import com.jme3.math.Vector2f;
 import core.graphics.MainFrame;
 import core.graphics.scenes.BattleScene;
 import core.graphics.scenes.Scenes;
-import core.main.DataUtil;
+import gui.core.V;
 import program.main.Program;
-import program.main.Util;
+import program.main.SceneUtil;
 import tonegod.gui.controls.buttons.Button;
 import tonegod.gui.controls.buttons.ButtonAdapter;
 import tonegod.gui.core.Screen;
@@ -37,11 +37,11 @@ public class BattlePlacementUIState extends AbstractAppState {
 	public void initialize(AppStateManager stateManager, Application app) {
 		super.initialize(stateManager, app);
 
-		Vector2f buttonPosition = DataUtil.parseVector2f("0%, 25%", dimension),
-				 buttonSize = DataUtil.parseVector2f("30%, 10%", dimension);
+		Vector2f buttonPosition = V.f(0, dimension.y * 0.25f),
+				 buttonSize = V.f(dimension.x * 0.3f, dimension.y * 0.1f);
 		finishButton = new ButtonAdapter(screen, buttonPosition, buttonSize){
 			public void onButtonMouseLeftUp(MouseButtonEvent evt, boolean toggled) {
-				BattleScene battleScene = Util.getScene(Scenes.BATTLE, BattleScene.class);
+				BattleScene battleScene = SceneUtil.getScene(Scenes.BATTLE, BattleScene.class);
 				Program.getInstance().getBattleController().battlePlacementFinishedLocal(battleScene.getBattleState());
 			}
 		};

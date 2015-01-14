@@ -1,7 +1,7 @@
-import core.board.interfaces.Board
 import core.board.CardSpell
-import core.board.interfaces.Unit
-import core.main.CardMaster
+import shared.board.Board
+import shared.board.Unit
+import shared.map.CardMaster
 
 def onCast(CardSpell spell, Board board, CardMaster caster){
 	for (Unit unit: board.units)

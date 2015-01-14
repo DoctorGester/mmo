@@ -1,5 +1,5 @@
-import core.board.interfaces.Board
-import core.board.interfaces.Buff
+import shared.board.Board
+import shared.board.Buff
 
 def onInit(Buff buff, Board board){
 	System.out.println('init');

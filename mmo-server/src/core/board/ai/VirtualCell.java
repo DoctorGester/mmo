@@ -1,8 +1,8 @@
 package core.board.ai;
 
-import core.board.interfaces.Cell;
-import core.board.interfaces.Doodad;
-import core.board.interfaces.Unit;
+import shared.board.Cell;
+import shared.board.Doodad;
+import shared.board.Unit;
 
 /**
  * @author doc

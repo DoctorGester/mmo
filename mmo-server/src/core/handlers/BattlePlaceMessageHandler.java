@@ -1,12 +1,12 @@
 package core.handlers;
 
+import core.board.ServerBoard;
 import core.board.TurnManager;
-import core.board.ai.AIManager;
-import core.board.interfaces.Board;
-import core.board.interfaces.Cell;
 import core.main.*;
-import core.main.inventory.items.CardItem;
 import program.main.Program;
+import shared.board.Board;
+import shared.board.Cell;
+import shared.map.CardMaster;
 
 public class BattlePlaceMessageHandler extends PacketHandler {
 	private Program program;
@@ -28,8 +28,8 @@ public class BattlePlaceMessageHandler extends PacketHandler {
 		if (data.length != 4)
 			return;
 
-		CardMaster cm = gameClient.getCardMaster();
-		Board board = cm.getCurrentBoard();
+		ServerCardMaster cm = gameClient.getCardMaster();
+		ServerBoard board = cm.getCurrentBoard();
 
 		// Special case where the board is in the placement state
 		if (board.getState() != Board.STATE_WAIT_FOR_PLACEMENT)

@@ -3,6 +3,8 @@ package core.handlers;
 import core.main.*;
 import program.main.Program;
 import program.main.ReliablePacketManager;
+import shared.map.CardMaster;
+import shared.other.DataUtil;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -37,9 +39,9 @@ public class GetCharacterInfoMessageHandler extends PacketHandler{
 
 		ByteArrayOutputStream stream = new ByteArrayOutputStream();
 
-		Set<CardMaster> request = new HashSet<CardMaster>();
+		Set<ServerCardMaster> request = new HashSet<ServerCardMaster>();
 		for (int id: idArray) {
-			CardMaster master = program.getCardMasterById(id);
+			ServerCardMaster master = program.getCardMasterById(id);
 
 			if (master != null)
 				request.add(master);
@@ -48,7 +50,7 @@ public class GetCharacterInfoMessageHandler extends PacketHandler{
 		stream.write(request.size());
 
 		try {
-			for (CardMaster master: request) {
+			for (ServerCardMaster master: request) {
 				stream.write(DataUtil.intToByte(master.getId()));
 				stream.write(master.getCharacterInfo());
 			}

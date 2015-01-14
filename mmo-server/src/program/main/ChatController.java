@@ -1,7 +1,7 @@
 package program.main;
 
 import core.main.ChatChannel;
-import core.main.DataUtil;
+import shared.other.DataUtil;
 import core.main.GameClient;
 import core.main.LocalServer;
 

@@ -7,7 +7,6 @@ import com.jme3.input.controls.KeyTrigger;
 import com.jme3.input.controls.MouseButtonTrigger;
 import com.jme3.renderer.queue.RenderQueue;
 import com.jme3.scene.Spatial;
-import core.board.*;
 import core.exceptions.IncorrectPacketException;
 import core.graphics.CardMasterSpatial;
 import core.graphics.MainFrame;
@@ -15,15 +14,18 @@ import core.graphics.scenes.BattleScene;
 import core.graphics.scenes.MapScene;
 import core.graphics.scenes.Scenes;
 import core.main.*;
-import core.main.inventory.Inventory;
+import core.main.ClientInventory;
 import core.ui.BattleController;
 import core.ui.ChatController;
 import core.ui.MapController;
 import groovy.lang.Binding;
 import groovy.lang.Script;
 import groovy.util.GroovyScriptEngine;
-import program.main.data.DataLoader;
+import program.main.data.ClientDataLoader;
 import core.handlers.*;
+import shared.board.data.*;
+import shared.map.CardMaster;
+import shared.other.DataUtil;
 
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -95,16 +97,16 @@ public class Program {
 	
 	protected int mainId = -1; // Logged client id
 	protected CardMaster mainPlayer;
-	protected Inventory mainInventory = new Inventory();
+	protected ClientInventory mainInventory = new ClientInventory();
 
 	protected GroovyScriptEngine groovyScriptEngine;
 
 	private LocalClient localClient;
 
 	// Global map data
-	private Set<CardMaster> visiblePlayers, invisiblePlayers;
+	private Set<ClientCardMaster> visiblePlayers, invisiblePlayers;
 
-	private Map<Integer, CardMaster> playerMap;
+	private Map<Integer, ClientCardMaster> playerMap;
     private Map<Integer, Faction> factions;
     private Map<Integer, UnitData> unitDataMap;
 	protected Map<String, BuffData> buffDataMap;
@@ -122,7 +124,7 @@ public class Program {
 	private static Program instance;
 	private UpdateLoop mainThread;
 
-	private DataLoader dataLoader = new DataLoader();
+	private ClientDataLoader dataLoader = new ClientDataLoader();
 
 	public static Program getInstance(){
 		if (instance == null)
@@ -145,11 +147,11 @@ public class Program {
 	}
 
 	public Program() {
-		visiblePlayers = new CopyOnWriteArraySet<CardMaster>();
-		invisiblePlayers = new CopyOnWriteArraySet<CardMaster>();
+		visiblePlayers = new CopyOnWriteArraySet<ClientCardMaster>();
+		invisiblePlayers = new CopyOnWriteArraySet<ClientCardMaster>();
 
         factions = new ConcurrentHashMap<Integer, Faction>();
-		playerMap = new ConcurrentHashMap<Integer, CardMaster>();
+		playerMap = new ConcurrentHashMap<Integer, ClientCardMaster>();
 		buffDataMap = new HashMap<String, BuffData>();
 		spellDataMap = new HashMap<String, SpellData>();
 		passiveDataMap = new HashMap<String, PassiveData>();
@@ -173,13 +175,13 @@ public class Program {
 		groovyScriptEngine = dataLoader.loadScriptEngine();
 	}
 
-	public CardMaster createPlayer(int id){
-		CardMaster cardMaster = new CardMaster();
+	public ClientCardMaster createPlayer(int id){
+		ClientCardMaster cardMaster = new ClientCardMaster();
 		cardMaster.setId(id);
 
 		playerMap.put(id, cardMaster);
 
-		Util.getScene(Scenes.MAIN_MAP, MapScene.class)
+		SceneUtil.getScene(Scenes.MAIN_MAP, MapScene.class)
 				.addCardMasterSpatial(new CardMasterSpatial(createTestModelInstance(), cardMaster));
 
 		mapController.requestInitialInfo(cardMaster);
@@ -187,8 +189,8 @@ public class Program {
 		return cardMaster;
 	}
 
-	public CardMaster getOrCreatePlayerById(int id){
-		CardMaster master = playerMap.get(id);
+	public ClientCardMaster getOrCreatePlayerById(int id){
+		ClientCardMaster master = playerMap.get(id);
 
 		if (master == null)
 			master = createPlayer(id);
@@ -204,7 +206,7 @@ public class Program {
 		return groovyScriptEngine;
 	}
 
-	public DataLoader getDataLoader() {
+	public ClientDataLoader getDataLoader() {
 		return dataLoader;
 	}
 
@@ -214,11 +216,11 @@ public class Program {
 		setClientState(STATE_MENU);
 		mainFrame.setScene(Scenes.MENU);
 
-		dataLoader.loadDataList("res/units/datalist", Integer.class, UnitData.class, unitDataMap);
-		dataLoader.loadDataList("res/spells/unit/datalist", String.class, SpellData.class, spellDataMap);
-		dataLoader.loadDataList("res/spells/hero/datalist", String.class, CardSpellData.class, cardSpellDataMap);
-		dataLoader.loadDataList("res/spells/passive/datalist", String.class, PassiveData.class, passiveDataMap);
-		dataLoader.loadDataList("res/buffs/datalist", String.class, BuffData.class, buffDataMap);
+		DataUtil.loadDataList("res/units/datalist", Integer.class, UnitData.class, unitDataMap);
+		DataUtil.loadDataList("res/spells/unit/datalist", String.class, SpellData.class, spellDataMap);
+		DataUtil.loadDataList("res/spells/hero/datalist", String.class, CardSpellData.class, cardSpellDataMap);
+		DataUtil.loadDataList("res/spells/passive/datalist", String.class, PassiveData.class, passiveDataMap);
+		DataUtil.loadDataList("res/buffs/datalist", String.class, BuffData.class, buffDataMap);
 
 		dataLoader.loadSpecialEffectsFromFileSystem();
 
@@ -233,19 +235,19 @@ public class Program {
 					groovyScriptEngine.createScript(effectScriptMap.get(key), new Binding());
 
 				for (String key: spellDataMap.keySet())
-					getSpellDataById(key).compileScript(new Binding());
+					getSpellDataById(key).compileScript(groovyScriptEngine, new Binding());
 
 				for (String key: passiveDataMap.keySet())
-					getSpellDataById(key).compileScript(new Binding());
+					getSpellDataById(key).compileScript(groovyScriptEngine, new Binding());
 
 				for (String key: cardSpellDataMap.keySet())
-					getCardSpellDataById(key).compileScript(new Binding());
+					getCardSpellDataById(key).compileScript(groovyScriptEngine, new Binding());
 
 				for (String key: buffDataMap.keySet())
-					getBuffScriptById(key).compileScript(new Binding());
+					getBuffScriptById(key).compileScript(groovyScriptEngine, new Binding());
 
 				for (int key: unitDataMap.keySet())
-					getUnitDataById(key).compileScript(new Binding());
+					getUnitDataById(key).compileScript(groovyScriptEngine, new Binding());
 
 				return null;
 			}
@@ -349,26 +351,26 @@ public class Program {
 		im.addMapping("rightClick", new MouseButtonTrigger(MouseInput.BUTTON_RIGHT));
 		im.addMapping("space", new KeyTrigger(KeyInput.KEY_SPACE));
 
-		BattleScene battleScene = Util.getScene(Scenes.BATTLE, BattleScene.class);
+		BattleScene battleScene = SceneUtil.getScene(Scenes.BATTLE, BattleScene.class);
 		battleScene.setActionListener(battleScene, "leftClick", "rightClick", "space");
 
-		Util.getScene(Scenes.MAIN_MAP, MapScene.class).setActionListener(mapController, "leftClick", "rightClick");
+		SceneUtil.getScene(Scenes.MAIN_MAP, MapScene.class).setActionListener(mapController, "leftClick", "rightClick");
 	}
 
 	public Map<Integer, Faction> getFactions() {
 		return factions;
 	}
 
-	public Set<CardMaster> getVisiblePlayers() {
+	public Set<ClientCardMaster> getVisiblePlayers() {
 		return visiblePlayers;
 	}
 
-	public Set<CardMaster> getInvisiblePlayers() {
+	public Set<ClientCardMaster> getInvisiblePlayers() {
 		return invisiblePlayers;
 	}
 
-	public CardMaster getVisiblePlayerById(int id) {
-		for (CardMaster player: visiblePlayers)
+	public ClientCardMaster getVisiblePlayerById(int id) {
+		for (ClientCardMaster player: visiblePlayers)
 			if (player.getId() == id)
 				return player;
 		return null;
@@ -428,7 +430,7 @@ public class Program {
 		}
 	}
 
-	public Inventory getMainInventory() {
+	public ClientInventory getMainInventory() {
 		return mainInventory;
 	}
 

@@ -1,13 +1,13 @@
 package core.board.ai;
 
-import core.board.interfaces.Board;
+import core.board.ServerBoard;
 import core.board.TurnManager;
-import core.board.interfaces.Cell;
-import core.board.interfaces.Unit;
-import core.main.CardMaster;
-import core.main.inventory.ItemTypes;
-import core.main.inventory.filters.TypeFilter;
-import core.main.inventory.items.CardItem;
+import core.main.ServerCardMaster;
+import shared.board.Cell;
+import shared.board.Unit;
+import shared.items.ItemTypes;
+import shared.items.filters.TypeFilter;
+import shared.items.types.CardItem;
 
 import javax.swing.*;
 import java.awt.*;
@@ -28,10 +28,10 @@ public class AI implements Runnable {
 
 	protected boolean calculatingHeatMaps;
 
-	protected CardMaster cardMaster;
+	protected ServerCardMaster cardMaster;
 	protected VirtualTurn turn;
 	protected VirtualBoard virtualBoard;
-	protected Board realBoard;
+	protected ServerBoard realBoard;
 
 	private List<VirtualTurn> allTurns;
 
@@ -39,11 +39,11 @@ public class AI implements Runnable {
 
 	private static ExecutorService threadPool = Executors.newFixedThreadPool(MAX_AI_THREADS);
 
-	public AI(CardMaster cardMaster) {
+	public AI(ServerCardMaster cardMaster) {
 		this.cardMaster = cardMaster;
 	}
 
-	public void setBoard(Board board){
+	public void setBoard(ServerBoard board){
 		realBoard = board;
 		virtualBoard = new VirtualBoard(this, board.getWidth(), board.getHeight());
 
@@ -286,7 +286,7 @@ public class AI implements Runnable {
 	}
 
 	public void pickCard(){
-		List<CardItem> cards = cardMaster.getInventory().filter(CardItem.class, new TypeFilter(ItemTypes.CARD));
+		List<CardItem> cards = cardMaster.getInventory().filter(CardItem.class, new TypeFilter(ItemTypes.CREATURE_CARD));
 		if (realBoard.getPickedCards(cardMaster) != null)
 			cards.removeAll(realBoard.getPickedCards(cardMaster));
 

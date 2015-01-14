@@ -1,6 +1,8 @@
 package core.main;
 
 
+import shared.other.DataUtil;
+
 public class PathingMap {
 	public static final int CELL_SIZE = 16;
 

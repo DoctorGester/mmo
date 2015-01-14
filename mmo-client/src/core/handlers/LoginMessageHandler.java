@@ -5,7 +5,8 @@ import core.main.*;
 import core.ui.UI;
 import core.ui.menu.MenuUIState;
 import program.main.Program;
-import program.main.Util;
+import program.main.SceneUtil;
+import shared.other.DataUtil;
 
 import java.util.Arrays;
 import java.util.concurrent.Callable;
@@ -44,7 +45,7 @@ public class LoginMessageHandler extends PacketHandler{
 					program.getMainFrame().setUIState(UI.STATE_MAP_MAIN);
 					program.getMainFrame().setScene(Scenes.MAIN_MAP);
 				} else {
-					Util.getUI(UI.STATE_MAIN_MENU, MenuUIState.class).setMessage(responses[responseCode], true);
+					SceneUtil.getUI(UI.STATE_MAIN_MENU, MenuUIState.class).setMessage(responses[responseCode], true);
 				}
 
 				return null;

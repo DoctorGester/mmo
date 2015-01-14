@@ -1,29 +1,29 @@
 package core.ui;
 
-import core.board.Board;
-import core.board.Spell;
-import core.board.Unit;
+import core.board.ClientBoard;
+import core.board.ClientSpell;
+import core.board.ClientUnit;
 
 public class BattleState {
-	private Board board;
-	private Unit selectedUnit;
+	private ClientBoard board;
+	private ClientUnit selectedUnit;
 	private boolean isCastMode;
 	private int spellToCastNumber = -1;
-	private Spell spellToCast;
+	private ClientSpell spellToCast;
 
-	public Board getBoard() {
+	public ClientBoard getBoard() {
 		return board;
 	}
 
-	public void setBoard(Board board) {
+	public void setBoard(ClientBoard board) {
 		this.board = board;
 	}
 
-	public Unit getSelectedUnit() {
+	public ClientUnit getSelectedUnit() {
 		return selectedUnit;
 	}
 
-	public void setSelectedUnit(Unit selectedUnit) {
+	public void setSelectedUnit(ClientUnit selectedUnit) {
 		this.selectedUnit = selectedUnit;
 	}
 
@@ -43,13 +43,13 @@ public class BattleState {
 		this.spellToCastNumber = spellToCastNumber;
 	}
 
-	public Spell getSpellToCast() {
+	public ClientSpell getSpellToCast() {
 		if (!isCastMode)
 			return null;
 		return spellToCast;
 	}
 
-	public void setSpellToCast(Spell spellToCast) {
+	public void setSpellToCast(ClientSpell spellToCast) {
 		this.spellToCast = spellToCast;
 	}
 }

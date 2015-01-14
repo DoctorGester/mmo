@@ -1,12 +1,11 @@
 package core.handlers;
 
-import core.board.Board;
+import core.board.ClientBoard;
 import core.board.turns.Turn;
 import core.board.turns.TurnCastCardSpell;
 import core.graphics.scenes.BattleScene;
 import core.graphics.scenes.Scenes;
 import core.main.*;
-import core.main.inventory.items.SpellCardItem;
 import core.ui.UI;
 import core.ui.battle.SpellSelectorUIState;
 import program.datastore.DataKey;
@@ -14,7 +13,10 @@ import program.datastore.DataStore;
 import program.datastore.ExistenceCondition;
 import program.datastore.GameStateCondition;
 import program.main.Program;
-import program.main.Util;
+import program.main.SceneUtil;
+import shared.items.types.SpellCardItem;
+import shared.map.CardMaster;
+import shared.other.DataUtil;
 
 import java.io.DataInputStream;
 import java.io.IOException;
@@ -51,7 +53,7 @@ public class CastCardSpellMessageHandler extends PacketHandler {
 		int boardNumber = stream.readInt();
 		short turnNumber = stream.readShort();
 
-		Board board = program.getBattleController().getBattleState(boardNumber).getBoard();
+		ClientBoard board = program.getBattleController().getBattleState(boardNumber).getBoard();
 		CardMaster cardMaster = board.getCardMasters().get(stream.readByte());
 
 		final SpellCardItem item = new SpellCardItem();
@@ -61,14 +63,14 @@ public class CastCardSpellMessageHandler extends PacketHandler {
 
 			Program.getInstance().getMainFrame().enqueue(new Callable<Object>() {
 				public Object call() throws Exception {
-					Util.getUI(UI.STATE_SPELL_SELECTOR, SpellSelectorUIState.class).removeCard(item);
+					SceneUtil.getUI(UI.STATE_SPELL_SELECTOR, SpellSelectorUIState.class).removeCard(item);
 					return null;
 				}
 			});
 		}
 
 		Turn turn = new TurnCastCardSpell(board, cardMaster, item);
-		Util.getScene(Scenes.BATTLE, BattleScene.class).getTurnQueue().add(turnNumber, turn);
+		SceneUtil.getScene(Scenes.BATTLE, BattleScene.class).getTurnQueue().add(turnNumber, turn);
 	}
 
 }

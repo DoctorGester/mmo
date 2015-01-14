@@ -1,5 +1,8 @@
 package core.board;
 
+import shared.board.Board;
+import shared.board.Cell;
+
 import java.util.concurrent.ConcurrentHashMap;
 
 

@@ -4,7 +4,8 @@ import core.ui.UI
 import core.ui.map.MapUIState
 import core.ui.map.RequestsUIState
 import core.ui.map.requests.Request
-import program.main.Util
+import gui.core.V;
+import program.main.SceneUtil
 import tonegod.gui.controls.buttons.ButtonAdapter
 import tonegod.gui.controls.scrolling.ScrollArea
 import tonegod.gui.controls.scrolling.ScrollPanel
@@ -20,15 +21,15 @@ def fillOutgoing(RequestsUIState state, double heightFrom) {
 
 	synchronized (state.outgoingRequests) {
 		for (final Request request : state.outgoingRequests) {
-			def position = Util.v2(panelWidth * 0.03f, index * (state.ROW_HEIGHT * state.dimension.y) + panelHeight * heightFrom)
-			def size = Util.v2(panelWidth * 0.75f, state.ROW_HEIGHT * state.dimension.y)
+			def position = V.f(panelWidth * 0.03f, index * (state.ROW_HEIGHT * state.dimension.y) + panelHeight * heightFrom)
+			def size = V.f(panelWidth * 0.75f, state.ROW_HEIGHT * state.dimension.y)
 
 			def text = new Label(state.screen, position, size)
 			text.text = request.descriptionOutgoing
 			text.fontSize = state.screen.scaleFontSize(12f)
 
-			size = Util.v2(panelHeight * BUTTON_SIZE, panelHeight * BUTTON_SIZE)
-			position = Util.v2(panelWidth * 0.97f - (size.x + size.x * 0.03f), position.y + size.y / 4f)
+			size = V.f(panelHeight * BUTTON_SIZE, panelHeight * BUTTON_SIZE)
+			position = V.f(panelWidth * 0.97f - (size.x + size.x * 0.03f), position.y + size.y / 4f)
 
 			def cancel = new ButtonAdapter(state.screen, position, size) {
 				void onButtonMouseLeftUp(MouseButtonEvent evt, boolean toggled) {
@@ -56,8 +57,8 @@ def fillIncoming(RequestsUIState state, double startFrom, double height) {
 	synchronized (state.incomingRequests) {
 		def scrollPanel = new ScrollPanel(
 				state.screen,
-				Util.v2(panelWidth * 0.03f, panelHeight * startFrom),
-				Util.v2(panelWidth * 0.94f, panelHeight * height),
+				V.f(panelWidth * 0.03f, panelHeight * startFrom),
+				V.f(panelWidth * 0.94f, panelHeight * height),
 				Vector4f.ZERO,
 				null
 		)
@@ -67,16 +68,16 @@ def fillIncoming(RequestsUIState state, double startFrom, double height) {
 		def lst = new ArrayList<Request>(state.incomingRequests);
 		lst.addAll(lst); lst.addAll(lst); lst.addAll(lst);
 		for (final Request request : lst) {
-			def position = Util.v2(panelWidth * 0.03f, index * (ROW_HEIGHT * panelHeight))
-			def size = Util.v2(panelWidth * 0.5f, ROW_HEIGHT * panelHeight)
+			def position = V.f(panelWidth * 0.03f, index * (ROW_HEIGHT * panelHeight))
+			def size = V.f(panelWidth * 0.5f, ROW_HEIGHT * panelHeight)
 
 			def text = new Label(state.screen, position, size)
 
 			text.text = request.descriptionIncoming
 			text.fontSize = state.screen.scaleFontSize(12)
 
-			size = Util.v2(panelHeight * BUTTON_SIZE, panelHeight * BUTTON_SIZE)
-			position = Util.v2(scrollPanel.width * 0.97f - (size.x * 2 + size.x * 0.06f), position.y + size.y / 4f)
+			size = V.f(panelHeight * BUTTON_SIZE, panelHeight * BUTTON_SIZE)
+			position = V.f(scrollPanel.width * 0.97f - (size.x * 2 + size.x * 0.06f), position.y + size.y / 4f)
 
 			def accept = new ButtonAdapter(state.screen, position, size) {
 				public void onButtonMouseLeftUp(MouseButtonEvent evt, boolean toggled) {
@@ -85,7 +86,7 @@ def fillIncoming(RequestsUIState state, double startFrom, double height) {
 			}
 			accept.setButtonIcon((size.x * 0.7f) as float, (size.y * 0.7f) as float, "res/textures/interface/accept.png")
 
-			position = Util.v2(scrollPanel.width * 0.97f - (size.x + size.x * 0.03f), position.y)
+			position = V.f(scrollPanel.width * 0.97f - (size.x + size.x * 0.03f), position.y)
 
 			def reject = new ButtonAdapter(state.screen, position, size) {
 				public void onButtonMouseLeftUp(MouseButtonEvent evt, boolean toggled) {
@@ -106,8 +107,8 @@ def fillIncoming(RequestsUIState state, double startFrom, double height) {
 }
 
 def createHeader(RequestsUIState state, double height){
-	def position = Util.v2(state.panel.width * 0.03f, state.panel.height * 0.03f)
-	def size = Util.v2(state.panel.width, state.panel.height * height)
+	def position = V.f(state.panel.width * 0.03f, state.panel.height * 0.03f)
+	def size = V.f(state.panel.width, state.panel.height * height)
 
 	def text = new Label(state.screen, position, size)
 	text.text = "Requests and notifications"
@@ -124,8 +125,8 @@ def create(RequestsUIState state) {
 	final float HEADER_HEIGHT = 0.08;
 	final float OUTGOING_HEIGHT = 0.4;
 
-	def panelSize = Util.v2(state.dimension.x * PANEL_WIDTH, state.dimension.y * PANEL_HEIGHT)
-	def panelPosition = Util.v2(state.dimension.x * 0.03f, state.dimension.y * 0.5f)
+	def panelSize = V.f(state.dimension.x * PANEL_WIDTH, state.dimension.y * PANEL_HEIGHT)
+	def panelPosition = V.f(state.dimension.x * 0.03f, state.dimension.y * 0.5f)
 
 	state.panel.position = panelPosition
 	state.panel.dimensions = panelSize
@@ -138,7 +139,7 @@ def create(RequestsUIState state) {
 	// To hide child components
 	state.panel.isVisible = state.panel.isVisible
 
-	Util.getUI(UI.STATE_MAP_MAIN, MapUIState.class).updateLeftSide()
+	SceneUtil.getUI(UI.STATE_MAP_MAIN, MapUIState.class).updateLeftSide()
 }
 
 

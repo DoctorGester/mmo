@@ -4,7 +4,7 @@ import com.jme3.input.event.MouseButtonEvent;
 import core.ui.UI;
 import core.ui.UnitCardElement;
 import program.main.Program;
-import program.main.Util;
+import program.main.SceneUtil;
 import tonegod.gui.core.Screen;
 import tonegod.gui.listeners.MouseButtonListener;
 
@@ -18,7 +18,7 @@ public class UnitCardClickDispatcher implements MouseButtonListener{
 	}
 
 	public void onMouseLeftPressed(MouseButtonEvent mouseButtonEvent) {
-		Util.getUI(UI.STATE_BATTLE, BattleUIState.class).updateUnitUI(cardElement.getUnitData());
+		SceneUtil.getUI(UI.STATE_BATTLE, BattleUIState.class).updateUnitUI(cardElement.getUnitData());
 	}
 
 	public void onMouseLeftReleased(MouseButtonEvent mouseButtonEvent) {

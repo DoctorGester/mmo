@@ -1,11 +1,11 @@
 package core.board.turns;
 
-import core.board.Board;
 import core.board.CardSpell;
-import core.board.CardSpellData;
-import core.main.CardMaster;
-import core.main.inventory.items.SpellCardItem;
 import program.main.Program;
+import shared.board.Board;
+import shared.board.data.CardSpellData;
+import shared.items.types.SpellCardItem;
+import shared.map.CardMaster;
 
 /**
  * @author doc

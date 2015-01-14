@@ -6,7 +6,7 @@ import com.jme3.app.state.AppStateManager;
 import com.jme3.font.BitmapFont;
 import com.jme3.math.Vector2f;
 import core.graphics.MainFrame;
-import core.main.DataUtil;
+import gui.core.V;
 import tonegod.gui.controls.buttons.Button;
 import tonegod.gui.controls.windows.Panel;
 import tonegod.gui.core.Screen;
@@ -41,8 +41,8 @@ public class ServerSelectionUIState extends AbstractAppState {
 	public void initialize(AppStateManager stateManager, Application app) {
 		super.initialize(stateManager, app);
 
-		Vector2f panelPosition = DataUtil.parseVector2f("65%, 30%", dimension),
-				 panelSize = DataUtil.parseVector2f("30%, 60%", dimension);
+		Vector2f panelPosition = V.f(dimension.x * 0.65f, dimension.y * 0.3f),
+				 panelSize = V.f(dimension.x * 0.3f, dimension.y * 0.6f);
 		panel = new Panel(screen, panelPosition, panelSize);
 		panel.setIgnoreMouse(true);
 		panel.setText("Select a server");
@@ -51,9 +51,9 @@ public class ServerSelectionUIState extends AbstractAppState {
 
 		int index = 0;
 		for (Map.Entry<String, InetSocketAddress> entry: serverList.entrySet()){
-			int y = 15 + index * 12;
-			Vector2f buttonPosition = DataUtil.parseVector2f("10%," + y + "%", panelSize),
-					 buttonSize = DataUtil.parseVector2f("80%, 10%", panelSize);
+			float y = 0.15f + index * 0.12f;
+			Vector2f buttonPosition = V.f(panelSize.x * 0.1f, panelSize.y * y),
+					 buttonSize = V.f(panelSize.x * 0.8f, panelSize.y * 0.1f);
 			Button button = new ServerSelectionButton(screen, buttonPosition, buttonSize, entry.getValue());
 			button.setText(entry.getKey());
 

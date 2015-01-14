@@ -10,8 +10,8 @@ import com.jme3.math.ColorRGBA;
 import com.jme3.math.Vector2f;
 import core.exceptions.IncorrectHeaderException;
 import core.graphics.MainFrame;
-import core.main.DataUtil;
 import core.main.Packet;
+import gui.core.V;
 import program.main.Program;
 import tonegod.gui.controls.buttons.Button;
 import tonegod.gui.controls.buttons.ButtonAdapter;
@@ -49,8 +49,8 @@ public class MenuUIState extends AbstractAppState {
 	public void initialize(AppStateManager stateManager, Application app) {
 		super.initialize(stateManager, app);
 
-		Vector2f panelPosition = DataUtil.parseVector2f("65%, 30%", dimension),
-				panelSize = DataUtil.parseVector2f("30%, 60%", dimension);
+		Vector2f panelPosition = V.f(dimension.x * 0.65f, dimension.y * 0.3f),
+				 panelSize = V.f(dimension.x * 0.3f, dimension.y * 0.6f);
 		panel = new Panel(screen, panelPosition, panelSize);
 		panel.setIgnoreMouse(true);
 

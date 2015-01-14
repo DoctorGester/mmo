@@ -1,9 +1,11 @@
 package core.board.turns;
 
-import core.board.Board;
-import core.board.Cell;
-import core.board.Spell;
-import core.board.Unit;
+import core.board.ClientCell;
+import core.board.ClientUnit;
+import shared.board.Board;
+import shared.board.Cell;
+import shared.board.Spell;
+import shared.board.Unit;
 
 /**
  * @author doc
@@ -11,15 +13,15 @@ import core.board.Unit;
 public class TurnCast implements Turn {
 
 	private final Board board;
-	private final Cell from;
+	private final ClientCell from;
 	private final Cell to;
 	private final int spell;
-	private Unit ordered;
+	private ClientUnit ordered;
 
 	private boolean finished = false;
 	private float waitForCastTime;
 
-	public TurnCast(Board board, Cell from, Cell to, int spell){
+	public TurnCast(Board board, ClientCell from, Cell to, int spell){
 		this.board = board;
 		this.from = from;
 		this.to = to;

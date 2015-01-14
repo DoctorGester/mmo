@@ -9,10 +9,7 @@ import core.graphics.FloatingText;
 import core.graphics.MainFrame;
 import core.graphics.scenes.BattleScene;
 import core.graphics.scenes.Scenes;
-import core.main.CardMaster;
-import core.main.DataUtil;
 import core.main.Packet;
-import core.main.inventory.items.SpellCardItem;
 import core.ui.battle.BattleLogUIState;
 import core.ui.battle.BattlePickUIState;
 import core.ui.battle.BattleUIState;
@@ -21,7 +18,11 @@ import program.datastore.DataKey;
 import program.datastore.DataStore;
 import program.datastore.ExistenceCondition;
 import program.main.Program;
-import program.main.Util;
+import program.main.SceneUtil;
+import shared.board.*;
+import shared.items.types.SpellCardItem;
+import shared.map.CardMaster;
+import shared.other.DataUtil;
 
 import java.util.Collection;
 import java.util.HashMap;
@@ -56,14 +57,14 @@ public class BattleController {
 		}
 	}
 
-	public void onPickStageEnd(Board board){
-		Util.getScene(Scenes.BATTLE, BattleScene.class).loadFromBoard(board);
+	public void onPickStageEnd(ClientBoard board){
+		SceneUtil.getScene(Scenes.BATTLE, BattleScene.class).loadFromBoard(board);
 		program.getMainFrame().removeUIState(UI.STATE_BATTLE_PICK_INTERFACE);
 		program.getMainFrame().addUIState(UI.STATE_BATTLE_PLACEMENT_INTERFACE);
 	}
 
 	private void logResults(TurnResults results){
-		BattleLogUIState ui = Util.getUI(UI.STATE_BATTLE_LOG, BattleLogUIState.class);
+		BattleLogUIState ui = SceneUtil.getUI(UI.STATE_BATTLE_LOG, BattleLogUIState.class);
 
 		String name = results.getUnit().getUnitData().getName();
 		String str = null;
@@ -85,7 +86,7 @@ public class BattleController {
 
 			if (result.getDamageTaken() > 0){
 				FloatingText text = new FloatingText();
-				BattleScene scene = Util.getScene(Scenes.BATTLE, BattleScene.class);
+				BattleScene scene = SceneUtil.getScene(Scenes.BATTLE, BattleScene.class);
 				text.setLocation(scene.getSpatialByUnit(result.getUnit()).getNode().getLocalTranslation().add(0, 8f, 0))
 					.setText("-" + String.valueOf(result.getDamageTaken()))
 					.setVelocity(new Vector3f(0, 2.0f, 0))
@@ -98,7 +99,7 @@ public class BattleController {
 
 			if (result.getHealDone() > 0){
 				FloatingText text = new FloatingText();
-				BattleScene scene = Util.getScene(Scenes.BATTLE, BattleScene.class);
+				BattleScene scene = SceneUtil.getScene(Scenes.BATTLE, BattleScene.class);
 				text.setLocation(scene.getSpatialByUnit(result.getUnit()).getNode().getLocalTranslation().add(0, 6f, 0))
 						.setText("+" + String.valueOf(result.getHealDone()))
 						.setVelocity(new Vector3f(0, 2.0f, 0))
@@ -112,7 +113,7 @@ public class BattleController {
 
 		program.getMainFrame().enqueue(new Callable<Object>() {
 			public Object call() throws Exception {
-				Util.getUI(UI.STATE_BATTLE, BattleUIState.class).updateFromBoard();
+				SceneUtil.getUI(UI.STATE_BATTLE, BattleUIState.class).updateFromBoard();
 				updateUnitUI(state);
 				return null;
 			}
@@ -122,7 +123,7 @@ public class BattleController {
 	public void initBattle(final int boardId, final BoardSetup setup, final CardMaster... cardMasters){
 		Runnable runnable = new Runnable() {
 			public void run() {
-				Board board = new Board(setup.getWidth(), setup.getHeight());
+				ClientBoard board = new ClientBoard(setup.getWidth(), setup.getHeight());
 				board.setId(boardId);
 				board.setPlacementArea(setup.getPlacementAreas());
 				program.getMainFrame().setScene(Scenes.BATTLE);
@@ -154,9 +155,9 @@ public class BattleController {
 				BattleState state = new BattleState();
 				state.setBoard(board);
 
-				Util.getScene(Scenes.BATTLE, BattleScene.class).setBattleState(state);
-				Util.getUI(UI.STATE_BATTLE, BattleUIState.class).setBattleState(state);
-				Util.getUI(UI.STATE_BATTLE_PICK_INTERFACE, BattlePickUIState.class).setBattleState(state);
+				SceneUtil.getScene(Scenes.BATTLE, BattleScene.class).setBattleState(state);
+				SceneUtil.getUI(UI.STATE_BATTLE, BattleUIState.class).setBattleState(state);
+				SceneUtil.getUI(UI.STATE_BATTLE_PICK_INTERFACE, BattlePickUIState.class).setBattleState(state);
 
 				battleStates.put(boardId, state);
 			}
@@ -170,7 +171,7 @@ public class BattleController {
 	public void endBattle(BattleState battleState){
 		Board board = battleState.getBoard();
 
-		Util.getScene(Scenes.BATTLE, BattleScene.class).getTurnQueue().clear();
+		SceneUtil.getScene(Scenes.BATTLE, BattleScene.class).getTurnQueue().clear();
 		program.setClientState(Program.STATE_GLOBAL_MAP);
 		program.getMainFrame().setScene(Scenes.MAIN_MAP);
 
@@ -262,8 +263,8 @@ public class BattleController {
 		MainFrame mainFrame = program.getMainFrame();
 		updateUnitUI(state);
 
-		Unit selectedUnit = state.getSelectedUnit();
-		Spell spell = selectedUnit.getSpells().get(number);
+		ClientUnit selectedUnit = state.getSelectedUnit();
+		ClientSpell spell = selectedUnit.getSpells().get(number);
 
 		if (spell.getSpellData().onlyAllowed(SpellTarget.SELF)){
 			battleCast(selectedUnit, selectedUnit.getPosition(), number);
@@ -277,7 +278,7 @@ public class BattleController {
 	}
 
 	public void updateUnitUI(BattleState state) {
-		Util.getUI(UI.STATE_BATTLE, BattleUIState.class).updateUnitUI(state.getSelectedUnit());
+		SceneUtil.getUI(UI.STATE_BATTLE, BattleUIState.class).updateUnitUI(state.getSelectedUnit());
 	}
 
 	public void endCast(BattleState state){

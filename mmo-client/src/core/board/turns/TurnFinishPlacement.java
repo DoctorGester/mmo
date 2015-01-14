@@ -1,10 +1,13 @@
 package core.board.turns;
 
-import core.board.Board;
-import core.board.Cell;
-import core.board.Unit;
+import core.board.ClientBoard;
+import core.board.ClientCell;
+import core.board.ClientUnit;
 import core.ui.BattleState;
 import program.main.Program;
+import shared.board.Board;
+import shared.board.Cell;
+import shared.board.Unit;
 
 /**
  * @author doc
@@ -24,15 +27,15 @@ public class TurnFinishPlacement implements Turn {
 
 		Program program = Program.getInstance();
 
-		Board board = battleState.getBoard();
+		ClientBoard board = battleState.getBoard();
 		for (int i = 0; i < data.length; i += 2){
 			int x = data[i],
 				y = data[i + 1],
 				number = i / 2;
 
-			Unit unit = board.getUnits().get(number);
+			ClientUnit unit = board.getUnits().get(number);
 
-			Cell position = board.getCell(x, y);
+			ClientCell position = board.getCell(x, y);
 
 			if (position.getContentsType() == Cell.CONTENTS_UNIT){
 				// If cell is occupied, swap places

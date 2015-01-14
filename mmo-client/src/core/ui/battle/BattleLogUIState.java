@@ -5,10 +5,10 @@ import com.jme3.app.state.AbstractAppState;
 import com.jme3.app.state.AppStateManager;
 import com.jme3.math.Vector2f;
 import core.graphics.MainFrame;
-import core.main.DataUtil;
 import core.ui.UI;
 import core.ui.map.MapUIState;
-import program.main.Util;
+import gui.core.V;
+import program.main.SceneUtil;
 import tonegod.gui.core.Screen;
 
 import java.util.concurrent.Callable;
@@ -28,7 +28,7 @@ public class BattleLogUIState extends AbstractAppState {
 		screen = frame.getGuiScreen();
 		dimension = new Vector2f(screen.getWidth(), screen.getHeight());
 
-		log = new BattleLog(screen, Vector2f.ZERO, DataUtil.parseVector2f("30%, 25%", dimension));
+		log = new BattleLog(screen, Vector2f.ZERO, V.f(dimension.x * 0.3f, dimension.y * 0.25f));
 		log.setInitialized();
 	}
 
@@ -37,8 +37,8 @@ public class BattleLogUIState extends AbstractAppState {
 
 		screen.addElement(log);
 
-		if (Util.getUI(UI.STATE_CHAT, MapUIState.class) != null)
-			Util.getUI(UI.STATE_CHAT, MapUIState.class).updateLeftSide();
+		if (SceneUtil.getUI(UI.STATE_CHAT, MapUIState.class) != null)
+			SceneUtil.getUI(UI.STATE_CHAT, MapUIState.class).updateLeftSide();
 	}
 
 	public BattleLog getLog(){

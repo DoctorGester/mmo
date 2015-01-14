@@ -1,11 +1,12 @@
 package core.main;
 
 import core.exceptions.IncorrectHeaderException;
-import core.main.inventory.Inventory;
-import core.main.inventory.Item;
 import program.datastore.DataStore;
 import program.datastore.Subscriber;
 import program.main.Program;
+import shared.items.Inventory;
+import shared.items.Item;
+import shared.other.DataUtil;
 
 import java.io.DataInputStream;
 import java.util.*;
@@ -45,7 +46,7 @@ public class ItemDatabase {
 			Class<? extends Item> itemClass = Class.forName(className).asSubclass(Item.class);
 
 			Item item = getOrCreateItem(id, itemClass);
-			item.fromBytes(stream);
+			item.fromBytes(stream, true);
 
 			DataStore.getInstance().put(DATA_STORE_KEY + id, item);
 

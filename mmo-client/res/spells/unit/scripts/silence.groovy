@@ -1,29 +1,32 @@
-import core.board.Board
-import core.board.Cell
-import core.board.Spell
-import core.board.Unit
+import core.board.ClientBoard
+import core.board.ClientCell
+import core.board.ClientSpell
+import program.main.SceneUtil
+import shared.board.Board
+import shared.board.Cell
+import shared.board.Spell
 import core.graphics.scenes.BattleScene
 import core.graphics.scenes.Scenes
-import program.main.Util
+import shared.other.DataUtil
 
 def onCheck(Spell spell, Board board, Cell target){
-    Util.distance(spell.caster.position, target) <= 5
+    DataUtil.distance(spell.caster.position, target) <= 5
 }
 
 def onCheckAOE(Spell spell, Board board, Cell from, Cell to){
-    Util.distance(from, to) <= 3
+    DataUtil.distance(from, to) <= 3
 }
 
-def onCastBegin(Spell spell, Board board, Cell target){
+def onCastBegin(ClientSpell spell, Board board, ClientCell target){
 	spell.caster.setFacing(target);
 	1.0F
 }
 
-def onCastEnd(Spell spell, Board board, Cell target){
-    def units = board.units.findAll { it != spell.caster && Util.distance(it.position, target) <= 3 }
+def onCastEnd(Spell spell, ClientBoard board, Cell target){
+    def units = board.units.findAll { it != spell.caster && DataUtil.distance(it.position, target) <= 3 }
 
     units.each {
-        def to = Util.getScene(Scenes.BATTLE, BattleScene.class).getSpatialByUnit(it).node;
+        def to = SceneUtil.getScene(Scenes.BATTLE, BattleScene.class).getSpatialByUnit(it).node;
         board.addEffect("heal-effect", to)
     }
 

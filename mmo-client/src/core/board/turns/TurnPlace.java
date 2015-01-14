@@ -1,6 +1,6 @@
 package core.board.turns;
 
-import core.board.Cell;
+import shared.board.Cell;
 
 /**
  * @author doc

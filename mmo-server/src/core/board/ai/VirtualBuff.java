@@ -1,9 +1,10 @@
 package core.board.ai;
 
-import core.board.BuffData;
-import core.board.interfaces.Buff;
 import groovy.lang.Binding;
 import groovy.lang.GroovyObject;
+import program.main.Program;
+import shared.board.Buff;
+import shared.board.data.BuffData;
 
 public class VirtualBuff implements Buff {
 	private VirtualBoard board;
@@ -47,7 +48,7 @@ public class VirtualBuff implements Buff {
 	private void initScope(){
 		scope = new Binding();
 
-		script = buffData.compileScript(scope);
+		script = buffData.compileScript(Program.getInstance().getScriptEngine(), scope);
 
 		functionInit = "onInit";
 		functionTick = "onTick";

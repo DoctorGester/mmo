@@ -3,13 +3,13 @@ package core.handlers;
 import core.main.*;
 import program.main.Program;
 import program.main.ReliablePacketManager;
+import shared.map.CardMaster;
+import shared.map.Hero;
+import shared.other.DataUtil;
 
 import java.io.ByteArrayOutputStream;
 import java.io.DataInputStream;
-import java.io.IOException;
-import java.util.Arrays;
 import java.util.Set;
-import java.util.concurrent.CopyOnWriteArraySet;
 
 public class OrderUpdateMessageHandler extends PacketHandler{
 
@@ -31,7 +31,7 @@ public class OrderUpdateMessageHandler extends PacketHandler{
 			if (gameClient == null)
 				return;
 
-			CardMaster cardMaster = gameClient.getCardMaster();
+			ServerCardMaster cardMaster = gameClient.getCardMaster();
 
 			if (cardMaster.getState() != CardMaster.STATE_IN_GLOBAL_MAP)
 				return;

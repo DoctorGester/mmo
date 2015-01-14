@@ -3,23 +3,14 @@ package core.graphics.scenes;
 import com.jme3.animation.*;
 import com.jme3.app.SimpleApplication;
 import com.jme3.input.ChaseCamera;
-import com.jme3.input.KeyInput;
-import com.jme3.input.controls.KeyTrigger;
 import com.jme3.light.DirectionalLight;
-import com.jme3.material.Material;
-import com.jme3.material.RenderState;
 import com.jme3.math.ColorRGBA;
 import com.jme3.math.Vector3f;
 import com.jme3.renderer.Camera;
-import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
-import com.jme3.scene.Spatial;
-import com.jme3.scene.control.BillboardControl;
 import com.jme3.shadow.DirectionalLightShadowRenderer;
-import core.graphics.MaterialDebugAppState;
-import core.graphics.PlaneShape;
 import program.main.Program;
-import program.main.data.DataLoader;
+import program.main.data.ClientDataLoader;
 
 /**
  * @author doc
@@ -50,7 +41,7 @@ public class MenuScene extends AbstractScene {
 	@Override
 	public void loadScene(SimpleApplication app) {
 		if (!created){
-			DataLoader dataLoader = Program.getInstance().getDataLoader();
+			ClientDataLoader dataLoader = Program.getInstance().getDataLoader();
 
 			try {
 				Node spatial = dataLoader.loadAnimatedModelAlt("res/models/angel/angel_m00");

@@ -1,6 +1,8 @@
 package core.main;
 
 import program.main.Program;
+import shared.map.CardMaster;
+import shared.other.DataUtil;
 
 import java.util.Arrays;
 import java.util.HashSet;
@@ -22,9 +24,9 @@ public class GameClient {
 	private int id;
 
 	// Client data
-	private CardMaster cardMaster;
+	private ServerCardMaster cardMaster;
 
-	private Set<CardMaster> playersInSight;
+	private Set<ServerCardMaster> playersInSight;
 	private Set<ChatChannel> chatChannels;
 
 	public GameClient(Client client) {
@@ -32,10 +34,10 @@ public class GameClient {
 		this.program = Program.getInstance();
 		timeOnlineLeft = MAX_TIME_ONLINE;
 
-		cardMaster = new CardMaster();
+		cardMaster = new ServerCardMaster();
 		cardMaster.setType(CardMaster.TYPE_PLAYER);
 
-		playersInSight = new HashSet<CardMaster>();
+		playersInSight = new HashSet<ServerCardMaster>();
 		chatChannels = new HashSet<ChatChannel>();
 	}
 
@@ -56,7 +58,7 @@ public class GameClient {
 		return stillOnline;
 	}
 
-	public Set<CardMaster> getPlayersInSight() {
+	public Set<ServerCardMaster> getPlayersInSight() {
 		return playersInSight;
 	}
 
@@ -79,11 +81,11 @@ public class GameClient {
 	public void updatePlayersInSight() {
 		// Update list of visible players
 		// Complete list of all cardMasters in sight
-		List<CardMaster> cmsInSight = program.getClusterGrid().getHeroesInRadiusOf(cardMaster, 1000);
+		List<ServerCardMaster> cmsInSight = program.getClusterGrid().getHeroesInRadiusOf(cardMaster, 1000);
 
 		// First, remove players who had gone out of sight
 		if (cmsInSight.size() > 0)
-			for (CardMaster cardMasterInSight: playersInSight)
+			for (ServerCardMaster cardMasterInSight: playersInSight)
 				if (!cmsInSight.contains(cardMasterInSight))
 					cardMasterInSight.getWhoCanSeeMe().remove(this);
 
@@ -91,7 +93,7 @@ public class GameClient {
 		playersInSight.clear();
 		playersInSight.addAll(cmsInSight);
 
-		for (CardMaster cardMasterInSight: cmsInSight)
+		for (ServerCardMaster cardMasterInSight: cmsInSight)
 			cardMasterInSight.getWhoCanSeeMe().add(this);
 
 		// Fill array of ids, if it was changed, update playersInSightByte
@@ -112,7 +114,7 @@ public class GameClient {
 			playersInSightByte = DataUtil.intToVarInt(idArray);
 	}
 
-	public CardMaster getCardMaster() {
+	public ServerCardMaster getCardMaster() {
 		return cardMaster;
 	}
 
