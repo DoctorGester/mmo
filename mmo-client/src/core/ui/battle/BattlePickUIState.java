@@ -75,7 +75,7 @@ public class BattlePickUIState extends AbstractAppState {
 
 		screen.addElement(panel);
 
-		Vector2f pickedPanelPosition = V.f(dimension.x, dimension.y * PANEL_HEIGHT_PERCENT);
+		Vector2f pickedPanelPosition = V.f(0, dimension.y * PANEL_HEIGHT_PERCENT);
 		pickedPanelSize = V.f(dimension.x, dimension.y * PICKED_PANEL_HEIGHT_PERCENT);
 
 		pickedPanel = new Panel(screen, pickedPanelPosition, pickedPanelSize);

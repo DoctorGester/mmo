@@ -16,4 +16,8 @@ public class V {
 	public static Vector4f f(float x, float y, float z, float w){
 		return new Vector4f(x, y, z, w);
 	}
+
+	public static Vector2f f(double x, double y){
+		return new Vector2f((float) x, (float) y);
+	}
 }

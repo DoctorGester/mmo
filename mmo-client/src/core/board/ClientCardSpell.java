@@ -4,14 +4,12 @@ import groovy.lang.Binding;
 import groovy.lang.Script;
 import program.main.Program;
 import shared.board.Board;
+import shared.board.CardSpell;
 import shared.board.Cell;
 import shared.board.data.CardSpellData;
 import shared.map.CardMaster;
 
-public class CardSpell {
-	public static final int SCRIPT_EVENT_CAST_BEGIN = 0x00,
-							SCRIPT_EVENT_CAST_END = 0x01;
-
+public class ClientCardSpell implements CardSpell {
 	private CardSpellData spellData;
 	private CardMaster caster;
 	private Board board;
@@ -21,7 +19,7 @@ public class CardSpell {
 
 	private String functionCheck, functionCastBegin, functionCastEnd;
 
-	public CardSpell(CardSpellData spellData, CardMaster caster, Board board) {
+	public ClientCardSpell(CardSpellData spellData, CardMaster caster, Board board) {
 		this.spellData = spellData;
 		this.caster = caster;
 		this.board = board;

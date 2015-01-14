@@ -475,8 +475,8 @@ public class ServerBoard implements Board {
 		if (data == null)
 			return false;
 
-		CardSpell spell = new CardSpell(data, caster, this);
-		spell.invokeScript();
+		CardSpell spell = new ServerCardSpell(data, caster, this);
+		spell.callEvent(CardSpell.SCRIPT_EVENT_CAST_BEGIN);
 
 		addCastCard(caster, spellCard);
 		incTurn();

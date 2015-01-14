@@ -4,10 +4,11 @@ import groovy.lang.Binding;
 import groovy.lang.Script;
 import program.main.Program;
 import shared.board.Board;
+import shared.board.CardSpell;
 import shared.board.data.CardSpellData;
 import shared.map.CardMaster;
 
-public class CardSpell {
+public class ServerCardSpell implements CardSpell {
 	private CardSpellData spellData;
 	private CardMaster caster;
 	private Board board;
@@ -17,7 +18,7 @@ public class CardSpell {
 
 	private static final String function = "onCast";
 
-	public CardSpell(CardSpellData spellData, CardMaster caster, Board board) {
+	public ServerCardSpell(CardSpellData spellData, CardMaster caster, Board board) {
 		this.spellData = spellData;
 		this.caster = caster;
 		this.board = board;
@@ -25,10 +26,18 @@ public class CardSpell {
 		initScope();
 	}
 
-	public void invokeScript(){
+	private void invokeScript(){
 		if (script.getMetaClass().respondsTo(script, function).isEmpty())
 			return;
 		script.invokeMethod(function, new Object[] { this, board, caster });
+	}
+
+	@Override
+	public Object callEvent(int event) {
+		if (event == SCRIPT_EVENT_CAST_BEGIN)
+			invokeScript();
+
+		return null;
 	}
 
 	public CardSpellData getSpellData(){

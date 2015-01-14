@@ -10,6 +10,7 @@ import program.main.database.Database;
 import program.main.Program;
 import program.main.database.entities.CardMasterEntity;
 import program.main.database.entities.GameClientEntity;
+import shared.items.types.SpellCardItem;
 import shared.map.CardMaster;
 
 import java.io.UnsupportedEncodingException;
@@ -150,6 +151,14 @@ public class RegisterMessageHandler extends PacketHandler{
 		customItem = new CardItem();
 		customItem.setUnitId(4);
 		items.add(customItem);
+
+		SpellCardItem spellCardItem = new SpellCardItem();
+		spellCardItem.setSpellId("purge");
+		items.add(spellCardItem);
+
+		spellCardItem = new SpellCardItem();
+		spellCardItem.setSpellId("pressTheAttack");
+		items.add(spellCardItem);
 
 		for(Item item: items){
 			item.setOwner(cardMaster);

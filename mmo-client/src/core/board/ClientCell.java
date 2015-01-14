@@ -1,7 +1,7 @@
 package core.board;
 
-import shared.board.Board;
 import shared.board.Cell;
+import shared.board.Doodad;
 import shared.board.Unit;
 
 public class ClientCell implements Cell {

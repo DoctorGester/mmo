@@ -1,5 +1,5 @@
-import core.board.CardSpell
 import shared.board.Board
+import shared.board.CardSpell
 import shared.board.Unit
 import shared.map.CardMaster
 

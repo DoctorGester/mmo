@@ -1,4 +1,4 @@
-import core.board.CardSpell
+import shared.board.CardSpell
 import shared.board.Board
 import shared.board.Cell
 import shared.board.Unit

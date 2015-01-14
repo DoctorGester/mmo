@@ -75,7 +75,7 @@ public class BattleScene extends AbstractScene implements ActionListener {
 	private ChaseCamera camera;
 	private ClientSpell focusedSpell;
 	private SpellCardItem focusedSpellCard;
-	private CardSpell focusedCardSpell;
+	private ClientCardSpell focusedCardSpell;
 	private float timePassedSinceQuadUpdate;
 
 	private static final float QUAD_UPDATE_PERIOD = 0.1f;
@@ -624,7 +624,7 @@ public class BattleScene extends AbstractScene implements ActionListener {
 	public void setFocusedSpellCard(SpellCardItem item){
 		if (item != focusedSpellCard && item != null){
 			CardSpellData spellData = Program.getInstance().getCardSpellDataById(item.getSpellId());
-			focusedCardSpell = new CardSpell(spellData, program.getMainPlayer(), battleState.getBoard());
+			focusedCardSpell = new ClientCardSpell(spellData, program.getMainPlayer(), battleState.getBoard());
 		}
 		this.focusedSpellCard = item;
 	}

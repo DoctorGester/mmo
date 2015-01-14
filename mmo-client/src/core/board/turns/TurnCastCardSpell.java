@@ -1,6 +1,7 @@
 package core.board.turns;
 
-import core.board.CardSpell;
+import core.board.ClientCardSpell;
+import shared.board.CardSpell;
 import program.main.Program;
 import shared.board.Board;
 import shared.board.data.CardSpellData;
@@ -27,7 +28,7 @@ public class TurnCastCardSpell implements Turn {
 
 	public void execute(int mode) {
 		CardSpellData spellData = Program.getInstance().getCardSpellDataById(item.getSpellId());
-		CardSpell cardSpell = new CardSpell(spellData, caster, board);
+		CardSpell cardSpell = new ClientCardSpell(spellData, caster, board);
 		switch (mode){
 			case MODE_FIRST_STEP:{
 				waitForCastTime = ((Number) cardSpell.callEvent(CardSpell.SCRIPT_EVENT_CAST_BEGIN)).floatValue();
