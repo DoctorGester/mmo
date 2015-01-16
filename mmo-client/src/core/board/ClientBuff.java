@@ -73,8 +73,12 @@ public class ClientBuff implements Buff {
 		hasEnded = true;
 	}
 
-	public BuffData getBuffData() {
-		return buffData;
+	public int getTimesToRepeat() {
+		return timesToRepeat;
+	}
+
+	public int getPeriod() {
+		return period;
 	}
 
 	public boolean isEndless() {
@@ -89,6 +93,9 @@ public class ClientBuff implements Buff {
 		return data;
 	}
 
+	public BuffData getBuffData() {
+		return buffData;
+	}
 	public int getTimesToRepeatLeft() {
 		return timesToRepeat;
 	}

@@ -1,0 +1,8 @@
+id: contagion
+cooldown: 12
+target: UNIT
+target: SELF
+script: contagion.groovy
+icon: res/textures/icons/contagion-icon.png
+name: Contagion
+description: Spreads terrible disease on the target creature, dealing 1 poison damage per 2 turns 3 times. Every damage tick spreads the contagion in a small area around victim.

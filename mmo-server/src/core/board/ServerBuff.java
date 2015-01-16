@@ -59,15 +59,27 @@ public class ServerBuff implements Buff {
 	private void callFunction(String function){
 		if (script.getMetaClass().respondsTo(script, function).isEmpty())
 			return;
-		script.invokeMethod(function, new Object[] { this, board });
+		script.invokeMethod(function, new Object[]{this, board});
 	}
 
 	public boolean hasEnded() {
 		return hasEnded;
 	}
 
+	public int getTimesToRepeat() {
+		return timesToRepeat;
+	}
+
+	public int getPeriod() {
+		return period;
+	}
+
 	public Object getData() {
 		return data;
+	}
+
+	public BuffData getBuffData() {
+		return buffData;
 	}
 
 	public void end(){

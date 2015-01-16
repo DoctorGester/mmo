@@ -8,7 +8,7 @@ def onInit(Buff buff, Board board){
 }
 
 def onTick(Buff buff, Board board){
-    (buff.data as Unit).doDamage(1, DamageType.SPELL)
+    (buff.data as Unit).doDamage(1, DamageType.MAGIC)
 }
 
 def onEnd(Buff buff, Board board){

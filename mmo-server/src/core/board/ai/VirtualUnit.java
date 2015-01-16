@@ -232,6 +232,18 @@ public class VirtualUnit implements Unit {
 		return buffs;
 	}
 
+	public boolean hasBuff(String id) {
+		for (Buff buff: buffs)
+			if (buff.getBuffData().getId().equals(id))
+				return true;
+
+		return false;
+	}
+
+	public boolean hasBuff(Buff buff) {
+		return buffs.contains(buff);
+	}
+
 	public VirtualCell getPosition() {
 		return position;
 	}

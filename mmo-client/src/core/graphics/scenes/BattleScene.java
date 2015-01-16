@@ -477,7 +477,6 @@ public class BattleScene extends AbstractScene implements ActionListener {
 					currentAnimation = "";
 
 				if (!unitAnimation.equals(currentAnimation) && channel.getControl().getAnim(unitAnimation) != null){
-					System.out.println(unit.getUnitData().getName() + " " + unitAnimation + " " + speed + " " + unit.isAnimationLooped());
 					channel.setAnim(unitAnimation, 0.25f);
 					channel.setSpeed(speed);
 					if (unit.isAnimationLooped())

@@ -1,0 +1,4 @@
+id: contagionBuff
+script: contagionBuff.groovy
+icon: res/textures/icons/contagion-icon.png
+description: This creature is infected and will take damage every turn, spreading the disease around it

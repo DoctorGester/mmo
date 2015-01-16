@@ -120,6 +120,18 @@ public class ServerUnit implements Unit {
 		buffs.add(buff);
 	}
 
+	public boolean hasBuff(String id) {
+		for (Buff buff: buffs)
+			if (buff.getBuffData().getId().equals(id))
+				return true;
+
+		return false;
+	}
+
+	public boolean hasBuff(Buff buff) {
+		return buffs.contains(buff);
+	}
+
 	public boolean removeBuff(Buff buff){
 		appliedControl.remove(buff);
 		return buffs.remove(buff);

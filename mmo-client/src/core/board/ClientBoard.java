@@ -216,7 +216,8 @@ public class ClientBoard implements Board {
 	}
 
 	public void removeUnit(Unit u){
-		units.remove(u);
+		if (u instanceof ClientUnit)
+			units.remove(u);
 	}
 
 	@Override

@@ -7,3 +7,4 @@ restTime: 4
 script: kobold.groovy
 model: res/models/kobold/kobold_m00
 scale: 3.5
+spell: contagion

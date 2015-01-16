@@ -56,8 +56,10 @@ public interface Unit {
 	public int getHealDone();
 
 	public void addBuff(Buff buff);
-	public boolean removeBuff(Buff buff);
 	public void purgeBuffs();
+	public boolean hasBuff(String id);
+	public boolean hasBuff(Buff buff);
+	public boolean removeBuff(Buff buff);
 
 	public void setPosition(Cell cell);
 

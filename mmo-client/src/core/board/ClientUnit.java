@@ -2,6 +2,7 @@ package core.board;
 
 import com.jme3.math.FastMath;
 import com.jme3.math.Vector2f;
+import core.main.Client;
 import groovy.lang.Binding;
 import groovy.lang.Script;
 import program.main.Program;
@@ -142,13 +143,25 @@ public class ClientUnit implements Unit {
 			buff.end();
 	}
 
+	public boolean hasBuff(String id) {
+		for (Buff buff: buffs)
+			if (buff.getBuffData().getId().equals(id))
+				return true;
+
+		return false;
+	}
+
+	public boolean hasBuff(Buff buff) {
+		return buff instanceof ClientBuff && buffs.contains(buff);
+	}
+
 	public void addBuff(Buff buff){
 		buffs.add((ClientBuff) buff);
 	}
 
 	public boolean removeBuff(Buff buff){
 		appliedControl.remove(buff);
-		return buffs.remove(buff);
+		return buff instanceof ClientBuff && buffs.remove(buff);
 	}
 
 	public void applyControl(ControlType type, Buff buff){

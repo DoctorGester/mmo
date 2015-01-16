@@ -2,16 +2,19 @@ import core.board.ClientCell
 import core.board.ClientSpell
 import shared.board.Board
 import shared.board.Cell
-import shared.board.DamageType
 import shared.board.Spell
 import shared.board.Unit
+import shared.other.DataUtil
 
 def onCheck(Spell spell, Board board, Cell target){
-    target.getContentsType() == Cell.CONTENTS_UNIT && target.getUnit().getState() != Unit.STATE_DEAD
+    target.getContentsType() == Cell.CONTENTS_UNIT && target.getUnit().getState() != Unit.STATE_DEAD && DataUtil.distance(spell.caster, target.unit) <= 2
 }
 
 def onCheckAOE(Spell spell, Board board, Cell from, Cell to){
-    from == to
+	def x = Math.abs(from.x - to.x)
+	def y = Math.abs(from.y - to.y)
+
+	(x <= 1 && y <= 1)
 }
 
 def onCastBegin(ClientSpell spell, Board board, ClientCell target){
@@ -20,7 +23,7 @@ def onCastBegin(ClientSpell spell, Board board, ClientCell target){
 }
 
 def onCastEnd(Spell spell, Board board, Cell target){
-	target.unit.doDamage(2, DamageType.MAGIC)
+	board.addBuff("contagionBuff", 3, 2, target.unit)
 	board.nextTurn()
 	spell.putOnCoolDown()
 }

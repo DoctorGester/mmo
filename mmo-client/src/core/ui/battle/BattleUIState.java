@@ -42,6 +42,7 @@ public class BattleUIState extends AbstractAppState {
 							   ABILITY_ICON_SIZE_PERCENT = 0.4f,
 							   ABILITY_SECTION_START_PERCENT = 0.45f,
 							   BUFF_ICON_SIZE_PERCENT = 0.12f,
+							   PASSIVE_ICON_SIZE_PERCENT = 0.16f,
 							   ICON_SIDE_SIZE_PERCENT = 0.2f,
 							   ICON_SPACE_FOR_DATA_PERCENT = 0.1f,
 							   ICON_FONT_SIZE_PERCENT = 0.18f,

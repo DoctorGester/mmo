@@ -1,6 +1,7 @@
 package shared.other;
 
 import shared.board.Cell;
+import shared.board.Unit;
 
 import java.io.*;
 import java.lang.reflect.Array;
@@ -326,5 +327,9 @@ public class DataUtil {
 
 	public static int distance(Cell from, Cell to){
 		return Math.abs(from.getX() - to.getX()) + Math.abs(from.getY() - to.getY());
+	}
+
+	public static int distance(Unit from, Unit to){
+		return Math.abs(from.getPosition().getX() - to.getPosition().getX()) + Math.abs(from.getPosition().getY() - to.getPosition().getY());
 	}
 }
