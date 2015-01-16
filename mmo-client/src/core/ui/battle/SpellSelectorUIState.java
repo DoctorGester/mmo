@@ -92,10 +92,6 @@ public class SpellSelectorUIState extends AbstractAppState {
 			SpellCardElement element = new SpellCardElement(screen, new Vector2f(), panelSize.y * 0.9f, card);
 			element.setMouseButtonDispatcher(new SpellCardClickDispatcher(screen, element));
 			selectionArea.addCard(element);
-
-			// Initializing card description
-			String description = Program.getInstance().getCardSpellDataById(card.getSpellId()).getDescription();
-			SceneUtil.getUI(UI.STATE_BATTLE, BattleUIState.class).addDescriptionForElement(element, description);
 		}
 	}
 

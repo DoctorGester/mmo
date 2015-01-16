@@ -1,3 +1,4 @@
+import core.board.ClientBoard
 import core.board.ClientCell
 import core.board.ClientSpell
 import core.graphics.scenes.BattleScene
@@ -21,7 +22,7 @@ def onCastBegin(ClientSpell spell, Board board, ClientCell target){
 	1.0f
 }
 
-def onCastEnd(Spell spell, Board board, Cell target){
+def onCastEnd(Spell spell, ClientBoard board, Cell target){
     def attach = SceneUtil.getScene(Scenes.BATTLE, BattleScene.class).getSpatialByUnit(target.unit).node
 
 	target.unit.doHeal(6)

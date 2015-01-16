@@ -1,14 +1,15 @@
-import program.main.SceneUtil
+import core.board.ClientUnit
 import shared.board.Board
 import shared.board.Cell
 import shared.board.Unit
 import shared.board.DamageType
+import shared.other.DataUtil
 
-def animationStand(Unit unit){
+def animationStand(ClientUnit unit){
 	unit.setAnimation("stand", 1.2f, true)
 }
 
-def onInit(Unit unit, Board board){
+def onInit(ClientUnit unit, Board board){
 	animationStand(unit)
 }
 
@@ -33,7 +34,7 @@ def onCheckAttack(Unit unit, Board board, Unit target, Cell attackerPos){
 def onCheckAOE(Unit unit, Board board, Unit target, Cell toCheck){
     Cell pos = unit.getPosition()
     Cell tar = target.getPosition()
-    def dist = SceneUtil.distance(pos, toCheck);
+    def dist = DataUtil.distance(pos, toCheck);
 
     def tx = tar.getX()
     def px = pos.getX()
@@ -53,19 +54,19 @@ def onCheckAOE(Unit unit, Board board, Unit target, Cell toCheck){
          || (ty == cy && py == ty)))
 }
 
-def onWalkStart(Unit unit, Board board){
+def onWalkStart(ClientUnit unit, Board board){
 	unit.setAnimation("walk", 1.7f, true)
 }
 
-def onWalkEnd(Unit unit, Board board){
+def onWalkEnd(ClientUnit unit, Board board){
 	animationStand(unit);
 }
 
-def onDeath(Unit unit, Board board){
+def onDeath(ClientUnit unit, Board board){
 	unit.setAnimation("death", 1.2f, false)
 }
 
-def onAttackBegin(Unit unit, Board board, Unit target, int damage){
+def onAttackBegin(ClientUnit unit, Board board, ClientUnit target, int damage){
 	Cell attackerPos = unit.getPosition();
 	Cell targetPos = target.getPosition();
 	
@@ -99,7 +100,7 @@ def onAttackBegin(Unit unit, Board board, Unit target, int damage){
 	return 1.2f
 }
 
-def onAttackEnd(Unit unit, Board board, Unit target){
+def onAttackEnd(ClientUnit unit, Board board, Unit target){
 	animationStand(unit);
 	board.nextTurn();
 }

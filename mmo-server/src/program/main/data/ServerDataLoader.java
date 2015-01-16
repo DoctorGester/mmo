@@ -15,10 +15,10 @@ import java.util.regex.Pattern;
 /**
  * @author doc
  */
-public class DataLoader {
+public class ServerDataLoader {
 	private Program program;
 
-	public DataLoader(){
+	public ServerDataLoader(){
 		program = Program.getInstance();
 	}
 

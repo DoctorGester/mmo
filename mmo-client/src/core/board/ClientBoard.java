@@ -31,9 +31,6 @@ public class ClientBoard implements Board {
 			ColorRGBA.Orange
 	};
 
-	public static final int GAME_OVER_WIN = 0x00,
-							GAME_OVER_DRAW = 0x01;
-
 	public static final float DEFAULT_FACING[] = {
 		FastMath.HALF_PI,
 		-FastMath.HALF_PI,

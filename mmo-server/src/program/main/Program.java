@@ -1,6 +1,5 @@
 package program.main;
 
-import core.board.*;
 import core.filters.LoggedFilter;
 import core.handlers.*;
 import core.handlers.admin.AdminMessageHandler;
@@ -10,7 +9,7 @@ import core.main.*;
 import groovy.lang.Binding;
 import groovy.util.GroovyScriptEngine;
 import org.apache.commons.io.FileUtils;
-import program.main.data.DataLoader;
+import program.main.data.ServerDataLoader;
 import program.main.database.Database;
 import shared.board.data.*;
 import shared.map.CardMaster;
@@ -289,7 +288,7 @@ public class Program {
 		clusterGrid = new ClusterGrid(256, 256); // Just some test magic values
 
 		// Loading data
-		DataLoader dataLoader = new DataLoader();
+		ServerDataLoader dataLoader = new ServerDataLoader();
 
 		groovyScriptEngine = dataLoader.loadScriptEngine();
 

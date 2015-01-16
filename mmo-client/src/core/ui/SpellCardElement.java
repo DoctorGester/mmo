@@ -6,9 +6,11 @@ import com.jme3.input.event.MouseMotionEvent;
 import com.jme3.math.ColorRGBA;
 import com.jme3.math.Vector2f;
 import core.main.ItemDatabase;
+import core.ui.battle.BattleUIState;
 import program.datastore.Data;
 import program.datastore.Subscriber;
 import program.main.Program;
+import program.main.SceneUtil;
 import shared.board.data.CardSpellData;
 import shared.items.types.CardItem;
 import shared.items.types.SpellCardItem;
@@ -39,6 +41,10 @@ public class SpellCardElement extends ItemElement implements MouseFocusListener{
 					@Override
 					public Object call() throws Exception {
 						createElements();
+
+						String description = spellData.getDescription();
+						SceneUtil.getUI(UI.STATE_BATTLE, BattleUIState.class).addDescriptionForElement(SpellCardElement.this, description);
+
 						return null;
 					}
 				});

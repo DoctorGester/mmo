@@ -1,3 +1,4 @@
+import core.board.ClientBoard
 import shared.board.CardSpell
 import shared.board.Board
 import shared.board.Cell
@@ -8,7 +9,7 @@ def onCheck(CardSpell spell, Board board, CardMaster caster, Cell cell){
     cell.contentsType == Cell.CONTENTS_UNIT && board.areAllies(cell.unit.owner, caster) && cell.unit.state != Unit.STATE_DEAD
 }
 
-def onCastBegin(CardSpell spell, Board board, CardMaster caster){
+def onCastBegin(CardSpell spell, ClientBoard board, CardMaster caster){
     for (Unit unit: board.units)
         if (board.areAllies(unit.owner, caster) && unit.state != Unit.STATE_DEAD){
             board.addEffect("heal-effect", unit)

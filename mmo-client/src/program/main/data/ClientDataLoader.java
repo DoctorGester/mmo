@@ -18,6 +18,7 @@ import shared.board.data.UnitData;
 import shared.other.DataUtil;
 
 import java.io.*;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.StringTokenizer;
@@ -26,6 +27,7 @@ import java.util.StringTokenizer;
  * @author doc
  */
 public class ClientDataLoader {
+	private static Map<UnitData, Node> unitModels = new HashMap<UnitData, Node>();
 
 	public GroovyScriptEngine loadScriptEngine(){
 		try {
@@ -62,11 +64,17 @@ public class ClientDataLoader {
 
 	public static Node getUnitModel(UnitData data){
 		try {
-			Node model = loadAnimatedModelAlt(data.getModelPath());
-			model.setLocalScale((float) data.getScale());
-			model.setShadowMode(RenderQueue.ShadowMode.CastAndReceive);
 
-			return model;
+			Node model = unitModels.get(data);
+
+			if (model == null) {
+				model = loadAnimatedModelAlt(data.getModelPath());
+				model.setLocalScale((float) data.getScale());
+				model.setShadowMode(RenderQueue.ShadowMode.CastAndReceive);
+				unitModels.put(data, model);
+			}
+
+			return model.clone(false);
 		} catch (IOException e) {
 			e.printStackTrace();
 			return new Node();

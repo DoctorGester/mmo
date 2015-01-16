@@ -1,3 +1,4 @@
+import core.board.ClientUnit
 import shared.board.Board
 import shared.board.Cell
 import shared.board.Unit
@@ -16,7 +17,7 @@ def onCheckAOE(Unit unit, Board board, Unit target, Cell toCheck){
     target.getPosition() == toCheck
 }
 
-def onAttackBegin(Unit unit, Board board, Unit target, int damage){
+def onAttackBegin(ClientUnit unit, Board board, ClientUnit target, int damage){
 	target.doDamage(damage, DamageType.ATTACK)
 
 	unit.setFacing(target)
@@ -25,28 +26,28 @@ def onAttackBegin(Unit unit, Board board, Unit target, int damage){
 	1.0f
 }
 
-def animationStand(Unit unit){
+def animationStand(ClientUnit unit){
 	unit.setAnimation("stand", 1f, true)
 }
 
-def onAttackEnd(Unit unit, Board board, Unit target){
+def onAttackEnd(ClientUnit unit, Board board, Unit target){
 	animationStand(unit)
 	board.nextTurn()
 }
 
-def onInit(Unit unit, Board board){
+def onInit(ClientUnit unit, Board board){
 	animationStand(unit)
 }
 
-def onWalkStart(Unit unit, Board board){
+def onWalkStart(ClientUnit unit, Board board){
 	unit.setAnimation("walk", 1.7f, true)
 }
 
-def onWalkEnd(Unit unit, Board board){
+def onWalkEnd(ClientUnit unit, Board board){
 	animationStand(unit)
 }
 
-def onDeath(Unit unit, Board board){
+def onDeath(ClientUnit unit, Board board){
 	unit.setAnimation("death", 1.2f, false)
 }
 

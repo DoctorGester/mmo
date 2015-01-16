@@ -26,7 +26,7 @@ def onCastEnd(Spell spell, ClientBoard board, Cell target){
     def from = SceneUtil.getScene(Scenes.BATTLE, BattleScene.class).getSpatialByUnit(spell.caster).node,
         to = SceneUtil.getScene(Scenes.BATTLE, BattleScene.class).getSpatialByUnit(target.unit).node;
 
-    board.addBuff("poisonBuff", 1, 6, target.unit)
+    board.addBuff("poisonBuff", 4, 1, target.unit)
 	board.nextTurn()
 	spell.putOnCoolDown()
 
