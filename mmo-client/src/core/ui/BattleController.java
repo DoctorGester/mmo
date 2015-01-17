@@ -126,7 +126,6 @@ public class BattleController {
 				ClientBoard board = new ClientBoard(setup.getWidth(), setup.getHeight());
 				board.setId(boardId);
 				board.setPlacementArea(setup.getPlacementAreas());
-				program.getMainFrame().setScene(Scenes.BATTLE);
 
 				for(CardMaster cm: cardMasters){
 					board.addCardMaster(cm);
@@ -160,6 +159,8 @@ public class BattleController {
 				SceneUtil.getUI(UI.STATE_BATTLE_PICK_INTERFACE, BattlePickUIState.class).setBattleState(state);
 
 				battleStates.put(boardId, state);
+
+				program.getMainFrame().setScene(Scenes.BATTLE);
 			}
 		};
 

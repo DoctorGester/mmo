@@ -9,7 +9,7 @@ import shared.board.data.BuffData;
 public class VirtualBuff implements Buff {
 	private VirtualBoard board;
 	private BuffData buffData;
-	private int timesToRepeat, period;
+	private int timesToRepeat, timesToRepeatLeft, period;
 	private Object data;
 
 	private int time;
@@ -26,6 +26,7 @@ public class VirtualBuff implements Buff {
 		this.board = board;
 		this.buffData = buffData;
 		this.timesToRepeat = timesToRepeat;
+		this.timesToRepeatLeft = timesToRepeat;
 		this.period = period;
 		this.data = data;
 
@@ -83,7 +84,6 @@ public class VirtualBuff implements Buff {
 
 	public void end(){
 		callFunction(functionEnd);
-		hasEnded = true;
 	}
 
 	public void update(){
@@ -100,9 +100,9 @@ public class VirtualBuff implements Buff {
 				time = period;
 
 				if (!endless) {
-					timesToRepeat--;
-					if (timesToRepeat <= 0)
-						end();
+					timesToRepeatLeft--;
+					if (timesToRepeatLeft <= 0)
+						hasEnded = true;
 				}
 			}
 		}

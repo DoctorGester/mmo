@@ -84,11 +84,20 @@ public class VirtualBoard implements Board {
 	}
 
 	public void nextTurn(){
+		// The following loop is used to avoid concurrent modification exception,
+		// since buffs might be added in the process of updating
+		// noinspection ForLoopReplaceableByForEach
+		for (int i = 0; i < buffs.size(); i++) {
+			Buff buff = buffs.get(i);
+			buff.update();
+		}
+
 		for(Iterator<VirtualBuff> iterator = buffs.iterator(); iterator.hasNext(); ){
 			VirtualBuff buff = iterator.next();
-			buff.update();
-			if (buff.hasEnded())
+			if (buff.hasEnded()) {
+				buff.end();
 				iterator.remove();
+			}
 		}
 
 		for (VirtualUnit u: units){

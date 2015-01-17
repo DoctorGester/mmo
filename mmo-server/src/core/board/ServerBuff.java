@@ -10,7 +10,7 @@ import shared.board.data.BuffData;
 public class ServerBuff implements Buff {
 	private Board board;
 	private BuffData buffData;
-	private int timesToRepeat, period;
+	private int timesToRepeat, timesToRepeatLeft, period;
 	private Object data;
 
 	private int time;
@@ -27,6 +27,7 @@ public class ServerBuff implements Buff {
 		this.board = board;
 		this.buffData = buffData;
 		this.timesToRepeat = timesToRepeat;
+		this.timesToRepeatLeft = timesToRepeat;
 		this.period = period;
 		this.data = data;
 
@@ -59,7 +60,7 @@ public class ServerBuff implements Buff {
 	private void callFunction(String function){
 		if (script.getMetaClass().respondsTo(script, function).isEmpty())
 			return;
-		script.invokeMethod(function, new Object[]{this, board});
+		script.invokeMethod(function, new Object[] { this, board });
 	}
 
 	public boolean hasEnded() {
@@ -84,7 +85,6 @@ public class ServerBuff implements Buff {
 
 	public void end(){
 		callFunction(functionEnd);
-		hasEnded = true;
 	}
 
 	public void update(){
@@ -101,9 +101,9 @@ public class ServerBuff implements Buff {
 				time = period;
 
 				if (!endless) {
-					timesToRepeat--;
-					if (timesToRepeat <= 0)
-						end();
+					timesToRepeatLeft--;
+					if (timesToRepeatLeft <= 0)
+						hasEnded = true;
 				}
 			}
 		}

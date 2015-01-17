@@ -10,7 +10,7 @@ import shared.board.data.BuffData;
 public class ClientBuff implements Buff {
 	private Board board;
 	private BuffData buffData;
-	private int timesToRepeat, period;
+	private int timesToRepeat, timesToRepeatLeft, period;
 	private Object data;
 
 	private int time;
@@ -28,6 +28,7 @@ public class ClientBuff implements Buff {
 		this.board = board;
 		this.buffData = buffData;
 		this.timesToRepeat = timesToRepeat;
+		this.timesToRepeatLeft = timesToRepeat;
 		this.period = period;
 		this.data = data;
 
@@ -70,7 +71,6 @@ public class ClientBuff implements Buff {
 
 	public void end(){
 		callFunction(functionEnd);
-		hasEnded = true;
 	}
 
 	public int getTimesToRepeat() {
@@ -96,8 +96,9 @@ public class ClientBuff implements Buff {
 	public BuffData getBuffData() {
 		return buffData;
 	}
+
 	public int getTimesToRepeatLeft() {
-		return timesToRepeat;
+		return timesToRepeatLeft;
 	}
 
 	public int getTimeLeft() {
@@ -118,11 +119,16 @@ public class ClientBuff implements Buff {
 				time = period;
 
 				if (!endless){
-					timesToRepeat--;
-					if (timesToRepeat <= 0)
-						end();
+					timesToRepeatLeft--;
+					if (timesToRepeatLeft <= 0)
+						hasEnded = true;
 				}
 			}
 		}
+	}
+
+	@Override
+	public String toString() {
+		return super.toString() + " " + buffData.getName();
 	}
 }

@@ -4,7 +4,7 @@ import shared.board.DamageType
 import shared.board.Unit
 
 def onInit(Buff buff, Board board){
-    (buff.data as Unit).addBuff(buff)
+    // Buff has to be added in the spell
 }
 
 def onTick(Buff buff, Board board){
@@ -14,11 +14,11 @@ def onTick(Buff buff, Board board){
         def x = Math.abs(it.position.x - holder.position.x)
         def y = Math.abs(it.position.y - holder.position.y)
 
-        (x <= 1 && y <= 1) && !it.hasBuff(buff.buffData.id)
+        (x <= 1 && y <= 1) && it.state != Unit.STATE_DEAD && !it.hasBuff(buff.buffData.id)
     }
 
     neighbours.each {
-        board.addBuff(buff.buffData.id, buff.timesToRepeat, buff.period)
+        it.addBuff(board.addBuff(buff.buffData.id, buff.timesToRepeat, buff.period, it))
     }
 
     holder.doDamage(1, DamageType.POISON)

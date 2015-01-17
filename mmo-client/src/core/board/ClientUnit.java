@@ -134,7 +134,7 @@ public class ClientUnit implements Unit {
 	}
 
 	public List<ClientBuff> getBuffs() {
-		return buffs;
+		return new ArrayList<ClientBuff>(buffs);
 	}
 
 	public void purgeBuffs(){

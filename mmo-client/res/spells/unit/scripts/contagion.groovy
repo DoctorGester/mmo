@@ -1,6 +1,7 @@
 import core.board.ClientCell
 import core.board.ClientSpell
 import shared.board.Board
+import shared.board.Buff
 import shared.board.Cell
 import shared.board.Spell
 import shared.board.Unit
@@ -23,7 +24,8 @@ def onCastBegin(ClientSpell spell, Board board, ClientCell target){
 }
 
 def onCastEnd(Spell spell, Board board, Cell target){
-	board.addBuff("contagionBuff", 3, 2, target.unit)
+	Buff buff = board.addBuff("contagionBuff", 3, 2, target.unit)
+	target.unit.addBuff(buff)
 	board.nextTurn()
 	spell.putOnCoolDown()
 }

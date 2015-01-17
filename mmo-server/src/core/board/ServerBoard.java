@@ -543,11 +543,20 @@ public class ServerBoard implements Board {
 		if (currentTurning.getUsedUnit() != null)
 			currentTurning.getUsedUnit().setState(Unit.STATE_REST);
 
+		// The following loop is used to avoid concurrent modification exception,
+		// since buffs might be added in the process of updating
+		// noinspection ForLoopReplaceableByForEach
+		for (int i = 0; i < buffs.size(); i++) {
+			Buff buff = buffs.get(i);
+			buff.update();
+		}
+
 		for(Iterator<Buff> iterator = buffs.iterator(); iterator.hasNext(); ){
 			Buff buff = iterator.next();
-			buff.update();
-			if (buff.hasEnded())
+			if (buff.hasEnded()) {
+				buff.end();
 				iterator.remove();
+			}
 		}
 
 		endTurnForCardMaster(currentTurning);
