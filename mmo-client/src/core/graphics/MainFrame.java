@@ -10,29 +10,43 @@ import com.jme3.font.BitmapFont;
 import com.jme3.input.ChaseCamera;
 import com.jme3.input.KeyInput;
 import com.jme3.input.controls.KeyTrigger;
+import com.jme3.math.ColorRGBA;
+import com.jme3.math.Vector3f;
 import com.jme3.post.FilterPostProcessor;
 import com.jme3.post.filters.BloomFilter;
 import com.jme3.shadow.DirectionalLightShadowRenderer;
 import com.jme3.system.AppSettings;
+import com.simsilica.lemur.*;
+import com.simsilica.lemur.component.DynamicInsetsComponent;
+import com.simsilica.lemur.component.QuadBackgroundComponent;
+import com.simsilica.lemur.component.TbtQuadBackgroundComponent;
+import com.simsilica.lemur.core.VersionedReference;
+import com.simsilica.lemur.event.CursorEventControl;
+import com.simsilica.lemur.event.DragHandler;
+import com.simsilica.lemur.style.BaseStyles;
+import com.simsilica.lemur.style.ElementId;
+import com.simsilica.lemur.style.Styles;
 import core.graphics.scenes.*;
 import core.ui.ChatUIState;
 import core.ui.UI;
 import core.ui.battle.*;
 import core.ui.map.CardMasterProfileUIState;
 import core.ui.map.CardbookUIState;
-import core.ui.map.RequestsUIState;
 import core.ui.map.MapUIState;
+import core.ui.map.RequestsUIState;
 import core.ui.menu.MenuUIState;
 import core.ui.menu.ServerSelectionUIState;
 import program.main.Program;
 import program.main.data.TextLoader;
 import tonegod.gui.core.Screen;
 
-import java.text.SimpleDateFormat;
+import java.io.File;
+import java.io.IOException;
+import java.net.URL;
 import java.util.*;
 import java.util.concurrent.Callable;
-import java.util.logging.*;
-import java.util.logging.Formatter;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class MainFrame extends SimpleApplication {
 	private Screen guiScreen;
@@ -152,6 +166,88 @@ public class MainFrame extends SimpleApplication {
 		addScene(Scenes.MENU, new MenuScene());
 	}
 
+	private VersionedReference<Double> redRef;
+	private VersionedReference<Double> greenRef;
+	private VersionedReference<Double> blueRef;
+	private VersionedReference<Double> alphaRef;
+	private VersionedReference<Boolean> showStatsRef;
+	private VersionedReference<Boolean> showFpsRef;
+
+	private void initUI(){
+		GuiGlobals.initialize(this);
+
+		StyleLoader loader = new StyleLoader("res/ui/scripts/api.ui.groovy");
+		loader.loadStyle("res/ui/scripts/style.ui.groovy");
+
+		Container hudPanel = new Container("glass");
+		hudPanel.setLocalTranslation(5, cam.getHeight() - 50, 0);
+		guiNode.attachChild(hudPanel);
+
+		// Create a top panel for some stats toggles.
+		Container panel = new Container("glass");
+		hudPanel.addChild(panel);
+
+		panel.setBackground(new QuadBackgroundComponent(new ColorRGBA(0, 0.5f, 0.5f, 0.5f), 5, 5, 0.02f, false));
+		panel.addChild(new Label("Stats Settings", new ElementId("header"), "glass"));
+		panel.addChild(new Panel(2, 2, ColorRGBA.Cyan, "glass")).setUserData(LayerComparator.LAYER, 2);
+
+		// Adding components returns the component so we can set other things
+		// if we want.
+		Checkbox temp = panel.addChild(new Checkbox("Show Stats"));
+		temp.setChecked(true);
+		showStatsRef = temp.getModel().createReference();
+
+		temp = panel.addChild(new Checkbox("Show FPS"));
+		temp.setChecked(true);
+		showFpsRef = temp.getModel().createReference();
+
+
+		// Custom "spacer" element type
+		hudPanel.addChild(new Panel(10f, 10f, new ElementId("spacer"), "glass"));
+
+		// Create a second panel in the same overall HUD panel
+		// that lets us tweak things about the cube.
+		panel = new Container("glass");
+		panel.setBackground(new QuadBackgroundComponent(new ColorRGBA(0, 0.5f, 0.5f, 0.5f), 5, 5, 0.02f, false));
+		// Custom "header" element type.
+		panel.addChild(new Label("Cube Settings", new ElementId("header"), "glass"));
+		panel.addChild(new Panel(2, 2, ColorRGBA.Cyan, "glass")).setUserData(LayerComparator.LAYER, 2);
+		panel.addChild(new Label("Red:"));
+		redRef = panel.addChild(new Slider("glass")).getModel().createReference();
+		panel.addChild(new Label("Green:"));
+		greenRef = panel.addChild(new Slider("glass")).getModel().createReference();
+		panel.addChild(new Label("Blue:"));
+		blueRef = panel.addChild(new Slider(new DefaultRangedValueModel(0, 100, 100), "glass")).getModel().createReference();
+		panel.addChild(new Label("Alpha:"));
+		alphaRef = panel.addChild(new Slider(new DefaultRangedValueModel(0, 100, 100), "glass")).getModel().createReference();
+
+		hudPanel.addChild(panel);
+		guiNode.attachChild(hudPanel);
+
+		// Increase the default size of the hud to be a little wider
+		// if it would otherwise be smaller.  Height is unaffected.
+		Vector3f hudSize = new Vector3f(200, 0, 0);
+		hudSize.maxLocal(hudPanel.getPreferredSize());
+		hudPanel.setPreferredSize(hudSize);
+
+		// Note: after next nightly, this will also work:
+		hudPanel.setPreferredSize(new Vector3f(200, 0, 0).maxLocal(hudPanel.getPreferredSize()));
+
+		// A draggable bordered panel
+		Container testPanel = new Container();
+		testPanel.setPreferredSize(new Vector3f(200, 200, 0));
+		testPanel.setBackground(TbtQuadBackgroundComponent.create("/com/simsilica/lemur/icons/border.png",
+				1, 2, 2, 3, 3, 0, false));
+		Label test = testPanel.addChild(new Label("Border Test"));
+
+		// Center the text in the box.
+		test.setInsetsComponent(new DynamicInsetsComponent(0.5f, 0.5f, 0.5f, 0.5f));
+		testPanel.setLocalTranslation(400, 400, 0);
+
+		CursorEventControl.addListenersToSpatial(testPanel, new DragHandler());
+		guiNode.attachChild(testPanel);
+	}
+
 	public void simpleInitApp() {
 		getAssetManager().registerLocator("", FileLocator.class);
 		//getAssetManager().registerLocator("tonegod-gui", FileLocator.class);
@@ -191,6 +287,7 @@ public class MainFrame extends SimpleApplication {
 		stateManager.attach(screenShotState);
 
 		initData();
+		initUI();
 
 		Program.getInstance().endGraphicsInit();
 	}
