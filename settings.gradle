@@ -1,0 +1,4 @@
+rootProject.name = 'mmo'
+
+include 'mmo-shared', 'mmo-admin', 'mmo-client', 'mmo-server', 'mmo-editor'
+

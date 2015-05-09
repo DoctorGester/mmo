@@ -60,7 +60,7 @@ public class Run extends SimpleApplication {
 		panel.addElement(new Label(guiScreen, "test bolshoi", 20, V.f(0, 0), V.f(120, 20)));
 		panel.addElement(new Label(guiScreen, "test malish", 20, V.f(0, 0), V.f(120, 20)));
 		panel.addElement(new Button(guiScreen, V.f(20, 20), V.f(128, 32)));
-		panel.addElement(new Label(guiScreen, "test текст", 20, V.f(0, 0), V.f(120, 20)));*/
+		panel.addElement(new Label(guiScreen, "test text", 20, V.f(0, 0), V.f(120, 20)));*/
 
 		//panel.addElement(new Label(guiScreen, "Menu", 20, new CC().alignX("center").growX().height("32!")));
 

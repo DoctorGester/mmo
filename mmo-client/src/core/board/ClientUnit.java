@@ -12,7 +12,6 @@ import shared.board.data.SpellData;
 import shared.board.data.UnitData;
 import shared.board.events.*;
 import shared.map.CardMaster;
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -418,7 +417,7 @@ public class ClientUnit implements Unit {
 
 	// TODO look carefully into that
 	public boolean castSpell(int number, Cell target) {
-		throw new NotImplementedException();
+		throw new UnsupportedOperationException();
 	}
 
 	private Object callFunction(String function, Object ... args){

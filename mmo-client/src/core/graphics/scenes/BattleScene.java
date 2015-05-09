@@ -371,8 +371,8 @@ public class BattleScene extends AbstractScene implements ActionListener {
 			return null;
 
 		Geometry clicked = results.getCollision(0).getGeometry();
-		int x = clicked.getUserData("x"),
-				y = clicked.getUserData("y");
+		int x = clicked.<Integer>getUserData("x"),
+			y = clicked.<Integer>getUserData("y");
 
 		return board.getCellChecked(x, y);
 	}
@@ -513,8 +513,8 @@ public class BattleScene extends AbstractScene implements ActionListener {
 		ClientSpell toCast = battleState.getSpellToCast();
 
 		for(Spatial spatial: spatialList){
-			int x = spatial.getUserData("x"),
-				y = spatial.getUserData("y");
+			int x = spatial.<Integer>getUserData("x"),
+				y = spatial.<Integer>getUserData("y");
 
 			Material toSet = materialNone;
 			Cell thisCell = board.getCell(x, y);

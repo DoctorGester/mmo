@@ -255,7 +255,7 @@ public class MainFrame extends SimpleApplication {
 
 		setPauseOnLostFocus(false);
 
-		guiScreen = new Screen(this, "style/style_map.gui.xml");
+		guiScreen = new Screen(this, "res/other/style/style_map.gui.xml");
 		guiNode.addControl(guiScreen);
 
 		flyCam.setEnabled(false);
@@ -287,7 +287,7 @@ public class MainFrame extends SimpleApplication {
 		stateManager.attach(screenShotState);
 
 		initData();
-		initUI();
+		//initUI();
 
 		Program.getInstance().endGraphicsInit();
 	}

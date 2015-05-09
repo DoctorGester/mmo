@@ -54,7 +54,7 @@ public class ClientDataLoader {
 			fis.read(data);
 			fis.close();
 			Program.getInstance().setMapData(DataUtil.byteToBool(data));
-			Program.getInstance().updateMap();
+			//Program.getInstance().updateMap();
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		} catch (IOException e) {

@@ -6,7 +6,6 @@ import com.jme3.input.controls.ActionListener;
 import com.jme3.math.Ray;
 import com.jme3.math.Vector2f;
 import com.jme3.math.Vector3f;
-import com.sun.xml.internal.messaging.saaj.util.ByteOutputStream;
 import core.exceptions.IncorrectHeaderException;
 import core.exceptions.IncorrectPacketException;
 import core.graphics.MainFrame;
@@ -20,6 +19,7 @@ import shared.map.CardMaster;
 import shared.map.Hero;
 import shared.other.DataUtil;
 
+import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
 import java.util.*;
 import java.util.concurrent.Executors;
@@ -128,14 +128,14 @@ public class MapController implements ActionListener {
 			Vector2f orderPosition = new Vector2f(collisionPoint.x, collisionPoint.z).multLocal(10f);
 
 			try {
-				ByteOutputStream bytes = new ByteOutputStream();
+				ByteArrayOutputStream bytes = new ByteArrayOutputStream();
 				DataOutputStream stream = new DataOutputStream(bytes);
 
 				stream.write(Hero.ORDER_MOVE);
 				stream.writeInt((int) orderPosition.x);
 				stream.writeInt((int) orderPosition.y);
 
-				localClient.send(new Packet(Program.HEADER_ORDER_UPDATE, bytes.getBytes()));
+				localClient.send(new Packet(Program.HEADER_ORDER_UPDATE, bytes.toByteArray()));
 			} catch (Exception e) {
 				e.printStackTrace();
 			}

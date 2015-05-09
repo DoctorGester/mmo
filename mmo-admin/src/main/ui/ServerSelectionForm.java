@@ -10,7 +10,7 @@ import javax.swing.*;
 public class ServerSelectionForm {
 	private JTextField usernameField;
 	private JPasswordField passwordField;
-	private JComboBox<ServerConnectionConfiguration> configurationComboBox;
+	private JComboBox configurationComboBox;
 	private JButton loginButton;
 	private JPanel basePanel;
 	private JTextField ipField;
@@ -40,7 +40,7 @@ public class ServerSelectionForm {
 		return passwordField;
 	}
 
-	public JComboBox<ServerConnectionConfiguration> getConfigurationComboBox() {
+	public JComboBox getConfigurationComboBox() {
 		return configurationComboBox;
 	}
 }

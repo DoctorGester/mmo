@@ -68,7 +68,7 @@ public class ServerSelectionDialog {
 
 	public void setConfigurations(List<ServerConnectionConfiguration> configurationList) {
 		ServerConnectionConfiguration[] configurations = configurationList.toArray(new ServerConnectionConfiguration[configurationList.size()]);
-		serverSelectionForm.getConfigurationComboBox().setModel(new DefaultComboBoxModel<ServerConnectionConfiguration>(configurations));
+		serverSelectionForm.getConfigurationComboBox().setModel(new DefaultComboBoxModel(configurations));
 
 		onConfigurationUpdate();
 	}

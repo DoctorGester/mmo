@@ -6,7 +6,6 @@ import shared.items.Inventory;
 import shared.map.*;
 import shared.map.Faction;
 import shared.other.Vector2;
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import java.io.DataInputStream;
 import java.io.IOException;
@@ -48,7 +47,7 @@ public class ClientCardMaster implements CardMaster {
 
 	@Override
 	public Inventory getInventory() {
-		throw new NotImplementedException();
+		throw new UnsupportedOperationException();
 	}
 
 	@Override

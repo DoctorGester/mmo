@@ -98,7 +98,7 @@ public class PlayerForm {
 		Collections.sort(rows, new Comparator<Vector<Object>>() {
 			@Override
 			public int compare(Vector<Object> first, Vector<Object> second) {
-				return Integer.compare((Integer) first.get(0), (Integer) second.get(0));
+				return ((Integer) first.get(0)).compareTo((Integer) second.get(0));
 			}
 		});
 

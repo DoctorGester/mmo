@@ -12,7 +12,6 @@ import shared.board.*;
 import shared.board.data.BuffData;
 import shared.items.types.CardItem;
 import shared.map.CardMaster;
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import java.awt.*;
 import java.util.*;
@@ -208,7 +207,7 @@ public class ClientBoard implements Board {
 
 	@Override
 	public void playerFinishedPlacement(CardMaster cardMaster) {
-		throw new NotImplementedException();
+		throw new UnsupportedOperationException();
 	}
 
 	public void addUnit(Unit u) {
@@ -222,7 +221,7 @@ public class ClientBoard implements Board {
 
 	@Override
 	public void skipTurn() {
-		throw new NotImplementedException();
+		throw new UnsupportedOperationException();
 	}
 
 	// This function is dangerous but fast, contains no checks
@@ -242,7 +241,7 @@ public class ClientBoard implements Board {
 
 	@Override
 	public List<? extends CardItem> getPickedCards(CardMaster cardMaster) {
-		throw new NotImplementedException();
+		throw new UnsupportedOperationException();
 	}
 
 	public List<ClientUnit> getUnits(){

@@ -338,7 +338,7 @@ public class Program {
 		map = new PathingMap(DataUtil.boolToByte(mapData), 1024, 1024);
 		
 		try {
-			FileOutputStream fos = new FileOutputStream("map.map");
+			FileOutputStream fos = new FileOutputStream("res/map.map");
 			fos.write(DataUtil.boolToByte(mapData));
 			fos.close();
 		} catch (IOException e) {
