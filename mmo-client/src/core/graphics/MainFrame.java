@@ -1,5 +1,6 @@
 package core.graphics;
 
+import com.jme3.app.Application;
 import com.jme3.app.SimpleApplication;
 import com.jme3.app.state.AbstractAppState;
 import com.jme3.app.state.AppState;
@@ -42,6 +43,8 @@ import tonegod.gui.core.Screen;
 
 import java.io.File;
 import java.io.IOException;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.Field;
 import java.net.URL;
 import java.util.*;
 import java.util.concurrent.Callable;
@@ -174,7 +177,17 @@ public class MainFrame extends SimpleApplication {
 	private VersionedReference<Boolean> showFpsRef;
 
 	private void initUI(){
-		GuiGlobals.initialize(this);
+		// GuiGlobals hack
+		try {
+			Constructor<GuiGlobals> constructor = GuiGlobals.class.getDeclaredConstructor(Application.class);
+			constructor.setAccessible(true);
+
+			Field instance = GuiGlobals.class.getDeclaredField("instance");
+			instance.setAccessible(true);
+			instance.set(null, constructor.newInstance(this));
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 
 		StyleLoader loader = new StyleLoader("res/ui/scripts/api.ui.groovy");
 		loader.loadStyle("res/ui/scripts/style.ui.groovy");
@@ -287,7 +300,7 @@ public class MainFrame extends SimpleApplication {
 		stateManager.attach(screenShotState);
 
 		initData();
-		//initUI();
+		initUI();
 
 		Program.getInstance().endGraphicsInit();
 	}

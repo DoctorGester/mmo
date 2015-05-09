@@ -1,6 +1,84 @@
+import com.jme3.font.BitmapFont
+import com.jme3.math.ColorRGBA
+import com.jme3.math.Vector2f
+import com.jme3.math.Vector3f
+import com.jme3.texture.Texture
 import com.simsilica.lemur.*;
 import com.simsilica.lemur.Button.ButtonAction;
-import com.simsilica.lemur.component.*;
+import com.simsilica.lemur.component.*
+import com.simsilica.lemur.style.Attributes;
+
+Attributes.metaClass {
+	configure { Closure c ->
+
+		if (c != null) {
+			// If we don't set things up this way then
+			// we end up with statements like:
+			//         foo=3
+			// Setting a higher up property instead of the
+			// current object we are configuring.
+			c.setResolveStrategy(DELEGATE_FIRST);
+			c.setDelegate(delegate);
+			c();
+		}
+		return delegate;
+	}
+}
+
+Attributes selector(String style, Closure c) {
+	def attrs = styles.getSelector(style);
+	attrs.configure(c)
+	return attrs;
+}
+
+Attributes selector(String id, String style, Closure c) {
+	def attrs = styles.getSelector(id, style);
+	attrs.configure(c)
+	return attrs;
+}
+
+Attributes selector(String parent, String child, String style, Closure c) {
+	def attrs = styles.getSelector(parent, child, style);
+	attrs.configure(c)
+	return attrs;
+}
+
+BitmapFont font(String name) {
+	return gui.loadFont(name)
+}
+
+ColorRGBA color(Number r, Number g, Number b, Number a) {
+	return new ColorRGBA(r.floatValue(), g.floatValue(), b.floatValue(), a.floatValue())
+}
+
+Texture texture(String name) {
+	return gui.loadTexture(name, true, true);
+}
+
+Texture texture(Map args) {
+	String name = args.name;
+	if (name == null) {
+		throw new IllegalArgumentException("Texture name not specified.");
+	}
+
+	boolean generateMips = args.generateMips != Boolean.FALSE
+	Texture t = gui.loadTexture(name, true, generateMips)
+	for (Map.Entry e : args) {
+		if (e.key == "name" || e.key == "generateMips")
+			continue;
+		t[e.key] = e.value
+	}
+
+	return t;
+}
+
+Vector3f vec3(Number x, Number y, Number z) {
+	return new Vector3f(x.floatValue(), y.floatValue(), z.floatValue());
+}
+
+Vector2f vec2(Number x, Number y) {
+	return new Vector2f(x.floatValue(), y.floatValue());
+}
 
 def gradient = TbtQuadBackgroundComponent.create(
 		texture(name: "/com/simsilica/lemur/icons/bordered-gradient.png",
