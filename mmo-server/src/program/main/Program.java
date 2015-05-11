@@ -16,6 +16,9 @@ import shared.map.CardMaster;
 import shared.other.DataUtil;
 
 import java.io.File;
+import java.net.DatagramPacket;
+import java.net.DatagramSocket;
+import java.net.InetAddress;
 import java.net.SocketException;
 import java.nio.charset.Charset;
 import java.util.HashMap;
@@ -117,9 +120,26 @@ public class Program {
 		return instance;
 	}
 
+	private void sendExitMessageAndWait(){
+		try {
+			DatagramSocket socket = new DatagramSocket();
+			InetAddress target = InetAddress.getByName("127.0.0.1");
+			DatagramPacket packet = new DatagramPacket(HEADER_EXIT, HEADER_EXIT.length, target, 3637);
+
+			socket.send(packet);
+
+			Thread.sleep(1500);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
 	public LocalServer startServer() throws SocketException{
+		sendExitMessageAndWait();
+
 		Client.setStrictEquals(false);
 		LocalServer server = new LocalServer(3637);
+
 		server.addPacketHandler(new ExitMessageHandler(HEADER_EXIT));
 		server.addPacketHandler(new LoginMessageHandler(HEADER_LOGIN));
 		server.addPacketHandler(new SayMessageHandler(HEADER_SAY));
