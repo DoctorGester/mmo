@@ -11,18 +11,25 @@ import com.jme3.font.BitmapFont;
 import com.jme3.input.ChaseCamera;
 import com.jme3.input.KeyInput;
 import com.jme3.input.controls.KeyTrigger;
+import com.jme3.material.Material;
+import com.jme3.material.RenderState;
 import com.jme3.math.ColorRGBA;
 import com.jme3.math.Vector3f;
 import com.jme3.post.FilterPostProcessor;
 import com.jme3.post.filters.BloomFilter;
+import com.jme3.scene.Geometry;
+import com.jme3.scene.Node;
+import com.jme3.scene.shape.Box;
 import com.jme3.shadow.DirectionalLightShadowRenderer;
 import com.jme3.system.AppSettings;
 import com.simsilica.lemur.*;
 import com.simsilica.lemur.component.DynamicInsetsComponent;
 import com.simsilica.lemur.component.QuadBackgroundComponent;
 import com.simsilica.lemur.component.TbtQuadBackgroundComponent;
+import com.simsilica.lemur.core.GuiControl;
 import com.simsilica.lemur.core.VersionedReference;
 import com.simsilica.lemur.event.CursorEventControl;
+import com.simsilica.lemur.event.DefaultCursorListener;
 import com.simsilica.lemur.event.DragHandler;
 import com.simsilica.lemur.style.BaseStyles;
 import com.simsilica.lemur.style.ElementId;
@@ -259,6 +266,25 @@ public class MainFrame extends SimpleApplication {
 
 		CursorEventControl.addListenersToSpatial(testPanel, new DragHandler());
 		guiNode.attachChild(testPanel);
+
+		ColorRGBA boxColor = ColorRGBA.Blue.clone();
+
+		Box box = new Box(1, 1, 1);
+		Geometry geom = new Geometry( "Box", box );
+		Material mat = new Material( assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
+		mat.setColor( "Color", boxColor );
+		mat.getAdditionalRenderState().setBlendMode( RenderState.BlendMode.Alpha );
+		geom.setMaterial(mat);
+
+		Node node = new Node();
+		node.attachChild(geom);
+		node.addControl(new GuiControl());
+
+		CursorEventControl.addListenersToSpatial(node, new DragHandler());
+		CursorEventControl.addListenersToSpatial(node, new DefaultCursorListener());
+
+		//testPanel.addChild(node);
+		rootNode.attachChild(node);
 	}
 
 	public void simpleInitApp() {
@@ -300,7 +326,7 @@ public class MainFrame extends SimpleApplication {
 		stateManager.attach(screenShotState);
 
 		initData();
-		initUI();
+		//initUI();
 
 		Program.getInstance().endGraphicsInit();
 	}
