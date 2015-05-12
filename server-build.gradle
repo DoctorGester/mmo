@@ -139,7 +139,7 @@ project(':mmo-client'){
             attributes 'Main-Class': 'program.main.Program'
         }
         baseName = project.name + '-all'
-        from { configurations.compile.collect { it.isDirectory() ? it ls: zipTree(it) } }
+        from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
         with jar
     }
 
@@ -148,7 +148,7 @@ project(':mmo-client'){
 
         doLast {
             def archive = file('build/distributions/' + project.name + '-' + project.version + '.zip')
-            FileUtils.copyFile(archive, new File("/usr/local/screenserver/sites/dg-pic.tk/other/" + archive.name))
+            FileUtils.copyFile(archive, new File("/usr/local/screenserver/sites/dg-lab.com/other/" + archive.name))
         }
     }
 }
