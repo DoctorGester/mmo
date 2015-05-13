@@ -1,5 +1,3 @@
-precision highp float;
-
 #if defined(HAS_GLOWMAP) || defined(HAS_COLORMAP) || (defined(HAS_LIGHTMAP) && !defined(SEPARATE_TEXCOORD))
     #define NEED_TEXCOORD1
 #endif
@@ -34,7 +32,7 @@ void main(){
     if (abs(cos(texCoord1.x * M_PI * amount)) > 1.0 - (width * amount)){
         discard;
     } else if (texCoord1.x > m_Value / m_MaxValue) {
-        color.rgb = vec4(0.55);
+        color.rgb = vec3(0.55);
     }
 
     #if defined(DISCARD_ALPHA)

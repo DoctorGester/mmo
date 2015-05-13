@@ -224,7 +224,7 @@ public class BattleScene extends AbstractScene implements ActionListener {
 	}
 
 	private void loadTerrain(SimpleApplication app){
-		Texture texture = app.getAssetManager().loadTexture("res/map/map-0-7.png");
+		Texture texture = app.getAssetManager().loadTexture("res/map/map_123.png");
 		HeightMap heightMap = new ImageBasedHeightMap(texture.getImage());
 		heightMap.load();
 
