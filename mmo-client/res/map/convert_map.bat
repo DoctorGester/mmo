@@ -1,0 +1,1 @@
+convert map.png -crop 16x16+1+1@ +repage +adjoin map_%d.png

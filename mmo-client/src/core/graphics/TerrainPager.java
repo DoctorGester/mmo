@@ -13,8 +13,17 @@ import com.jme3.renderer.queue.RenderQueue;
 import com.jme3.scene.Node;
 import com.jme3.scene.control.UpdateControl;
 import com.jme3.terrain.geomipmap.TerrainQuad;
+import com.jme3.terrain.geomipmap.grid.FractalTileLoader;
 import com.jme3.terrain.heightmap.HeightMap;
 import com.jme3.terrain.heightmap.ImageBasedHeightMap;
+import com.jme3.terrain.noise.ShaderUtils;
+import com.jme3.terrain.noise.basis.FilteredBasis;
+import com.jme3.terrain.noise.filter.IterativeFilter;
+import com.jme3.terrain.noise.filter.OptimizedErode;
+import com.jme3.terrain.noise.filter.PerturbFilter;
+import com.jme3.terrain.noise.filter.SmoothFilter;
+import com.jme3.terrain.noise.fractal.FractalSum;
+import com.jme3.terrain.noise.modulator.NoiseModulator;
 import com.jme3.texture.Texture;
 
 import java.util.concurrent.*;
@@ -57,12 +66,12 @@ public class TerrainPager extends Node {
 	}
 
 	private Vector2f locationToSector(Vector3f location){
-		Vector3f divided = location.divide(size);
+		Vector3f divided = location.divide(size - 1);
 		return new Vector2f((int) FastMath.floor(divided.x + 0.5f), (int) FastMath.floor(divided.z + 0.5f));
 	}
 
 	public float getHeight(Vector2f at){
-		Vector2f divided = at.divide(size);
+		Vector2f divided = at.divide(size - 1);
 		Vector2f sector = new Vector2f(FastMath.floor(divided.x + 0.5f), FastMath.floor(divided.y + 0.5f));
 
 		TerrainQuad quad = cache.get(sector);
@@ -79,7 +88,8 @@ public class TerrainPager extends Node {
 	}
 
 	private TerrainQuad getTerrainAt(Vector2f position){
-		String name = "res/map/map-" + (int) position.y + "-" + (int) position.x + ".png";
+		//String name = "res/map/map-" + (int) position.y + "-" + (int) position.x + ".png";
+		String name = "res/map/map_" + ((int) position.y * 16 + (int) position.x) + ".png";
 		HeightMap heightMapAt = null;
 		try {
 			Texture texture = assetManager.loadTexture(new TextureKey(name));
@@ -139,7 +149,7 @@ public class TerrainPager extends Node {
 			if (quad != null)
 				return null;
 
-			Vector2f m = at.mult(size - 2);
+			Vector2f m = at.mult(size - 1);
 			quad = getTerrainAt(at);
 			quad.setMaterial(material);
 			quad.setLocalTranslation(new Vector3f(m.x, 0, m.y));
