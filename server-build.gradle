@@ -1,5 +1,5 @@
 import org.ajoberstar.grgit.*
-import org.apache.commons.io.FileUtils 
+import org.apache.commons.io.FileUtils
 
 buildscript {
     repositories {
@@ -8,7 +8,7 @@ buildscript {
 
     dependencies {
         classpath 'org.ajoberstar:gradle-git:1.0.0'
-        classpath "commons-io:commons-io:2.4" 
+        classpath "commons-io:commons-io:2.4"
     }
 }
 
@@ -42,6 +42,8 @@ dir.listFiles().each {
 
 subprojects {
     apply plugin: 'java'
+    sourceCompatibility = 1.6
+    targetCompatibility = 1.6
     group = 'org.gradle.sample'
     version = '1.0'
 
@@ -143,12 +145,12 @@ project(':mmo-client'){
         with jar
     }
 
-    task publish(type: Zip, dependsOn: bigJlsar) {
+    task publish(type: Zip, dependsOn: bigJar) {
         from 'build/libs'
 
         doLast {
             def archive = file('build/distributions/' + project.name + '-' + project.version + '.zip')
-            FileUtils.copyFile(archive, new File("/usr/local/screenserver/sites/dg-lab.com/other/" + archive.name))
+            FileUtils.copyFile(archive, new File("/usr/local/screenserver/sites/dg-pic.tk/other/" + archive.name))
         }
     }
 }
@@ -194,7 +196,11 @@ project(':mmo-server'){
                 FileUtils.copyDirectory(newDb, old)
             }
 
-            ant.java(jar: 'build/libs/' + project.name + '-all-' + project.version + '.jar', fork: true, spawn: true)
+            ProcessBuilder builder = new ProcessBuilder('java', '-jar', 'build/libs/' + project.name + '-all-' + project.version + '.jar')
+            builder.directory(new File(root, project.name))
+            builder.redirectOutput(new File(root, project.name + "-log"))
+            builder.redirectError(new File(root, project.name + "-log"))
+            builder.start()
         }
     }
 }
