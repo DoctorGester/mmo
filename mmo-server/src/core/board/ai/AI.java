@@ -47,7 +47,7 @@ public class AI implements Runnable {
 		realBoard = board;
 		virtualBoard = new VirtualBoard(this, board.getWidth(), board.getHeight());
 
-		createFrame();
+		//createFrame();
 	}
 
 	private void checkBuffs(){
@@ -250,7 +250,7 @@ public class AI implements Runnable {
 			unitHeatMaps.put(unit, heatMap);
 		}
 
-		setHeatMaps(unitHeatMaps);
+		//setHeatMaps(unitHeatMaps);
 
 		calculatingHeatMaps = false;
 
