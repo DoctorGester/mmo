@@ -14,7 +14,7 @@ import core.ui.CloseablePanel;
 import core.ui.UI;
 import core.ui.UnitCardElement;
 import program.main.Program;
-import shared.items.types.CardItem;
+import shared.items.types.UnitCardItem;
 import tonegod.gui.controls.lists.Slider;
 import tonegod.gui.controls.text.Label;
 import tonegod.gui.controls.text.TextField;
@@ -158,11 +158,11 @@ public class CardbookUIState  extends AbstractAppState {
 	}
 
 	public void reloadFromDeck(){
-		List<CardItem> cards = Program.getInstance().getMainInventory().filter(CardItem.class, new TypeFilter(ItemTypes.CREATURE_CARD));
+		List<UnitCardItem> cards = Program.getInstance().getMainInventory().filter(UnitCardItem.class, new TypeFilter(ItemTypes.CREATURE_CARD));
 
 		cardElements = new ArrayList<UnitCardElement>();
 
-		for (CardItem card: cards){
+		for (UnitCardItem card: cards){
 			float height = mainPanelSize.y * RELATIVE_CARD_HEIGHT;
 			UnitCardElement element = new UnitCardElement(screen, getCardPosition(0, height * 0.67f, height), height, card);
 			element.setInitialized();

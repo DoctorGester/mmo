@@ -265,9 +265,9 @@ public class BattleController {
 		updateUnitUI(state);
 
 		ClientUnit selectedUnit = state.getSelectedUnit();
-		ClientSpell spell = selectedUnit.getSpells().get(number);
+		ClientAbility spell = selectedUnit.getAbilities().get(number);
 
-		if (spell.getSpellData().onlyAllowed(SpellTarget.SELF)){
+		if (spell.getAbilityData().onlyAllowed(AbilityTarget.SELF)){
 			battleCast(selectedUnit, selectedUnit.getPosition(), number);
 		} else {
 			state.setIsCastMode(true);

@@ -7,7 +7,7 @@ import shared.board.Cell;
 import shared.board.Unit;
 import shared.items.ItemTypes;
 import shared.items.filters.TypeFilter;
-import shared.items.types.CardItem;
+import shared.items.types.UnitCardItem;
 
 import javax.swing.*;
 import java.awt.*;
@@ -218,7 +218,7 @@ public class AI implements Runnable {
 			}
 
 			for (VirtualCell castTo: virtualBoard.cells){
-				for (VirtualSpell spell: unit.spells){
+				for (VirtualAbility spell: unit.spells){
 					turn = new VirtualTurn(virtualBoard, unit);
 					turn.setMoveToExecute(cell);
 					turn.setTarget(castTo);
@@ -286,7 +286,7 @@ public class AI implements Runnable {
 	}
 
 	public void pickCard(){
-		List<CardItem> cards = cardMaster.getInventory().filter(CardItem.class, new TypeFilter(ItemTypes.CREATURE_CARD));
+		List<UnitCardItem> cards = cardMaster.getInventory().filter(UnitCardItem.class, new TypeFilter(ItemTypes.CREATURE_CARD));
 		if (realBoard.getPickedCards(cardMaster) != null)
 			cards.removeAll(realBoard.getPickedCards(cardMaster));
 
@@ -301,14 +301,6 @@ public class AI implements Runnable {
 	private JMenu unitMenu;
 	private TestPanel panel;
 	private Map<VirtualUnit, Map<VirtualCell, Float>> maps;
-
-	private String[] names = new String[] {
-			"ang",
-			"mino",
-			"kob",
-			"eye",
-			"liz"
-	};
 
 	private class TestPanel extends JPanel {
 		public static final int CELL = 64;
@@ -357,7 +349,7 @@ public class AI implements Runnable {
 				int x = unit.getPosition().getX() * CELL;
 				int y = unit.getPosition().getY() * CELL;
 
-				drawXCenteredString(g, names[unit.getUnitData().getId()], x, y + h, CELL);
+				drawXCenteredString(g, unit.getUnitData().getId(), x, y + h, CELL);
 				drawXCenteredString(g, String.valueOf(unit.importance), x, y + h * 2, CELL);
 				drawXCenteredString(g, String.valueOf(unit.getState()), x, y + h * 3, CELL);
 			}
@@ -410,7 +402,7 @@ public class AI implements Runnable {
 			final VirtualUnit unit = entry.getKey();
 			final Map<VirtualCell, Float> map = entry.getValue();
 
-			JMenuItem item = new JMenuItem(names[unit.getUnitData().getId()] + " (" + unit.getUnitData().getId() + ")");
+			JMenuItem item = new JMenuItem(unit.getUnitData().getId() + " (" + unit.getUnitData().getId() + ")");
 
 			item.addActionListener(new ActionListener() {
 				@Override

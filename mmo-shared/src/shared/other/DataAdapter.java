@@ -189,6 +189,11 @@ public class DataAdapter<T extends DataElement> extends TypeAdapter<Map<String, 
 
 	private void putTypedObject(JsonWriter out, Object value, DataLoaderKey dataLoaderKey) {
 		try {
+			if (value == null){
+				out.nullValue();
+				return;
+			}
+
 			Class<?> type = value.getClass();
 
 			if (type == Integer.class) {

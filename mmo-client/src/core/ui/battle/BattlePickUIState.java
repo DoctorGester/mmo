@@ -17,7 +17,7 @@ import core.ui.BattleState;
 import core.ui.ItemElement;
 import core.ui.UnitCardElement;
 import program.main.Program;
-import shared.items.types.CardItem;
+import shared.items.types.UnitCardItem;
 import shared.map.CardMaster;
 import tonegod.gui.controls.text.Label;
 import tonegod.gui.controls.windows.Panel;
@@ -93,8 +93,8 @@ public class BattlePickUIState extends AbstractAppState {
 	}
 
 	private void updateFromDeck(){
-		List<CardItem> cards = Program.getInstance().getMainInventory().filter(CardItem.class, new TypeFilter(ItemTypes.CREATURE_CARD));
-		for (CardItem card: cards){
+		List<UnitCardItem> cards = Program.getInstance().getMainInventory().filter(UnitCardItem.class, new TypeFilter(ItemTypes.CREATURE_CARD));
+		for (UnitCardItem card: cards){
 			UnitCardElement element = new UnitCardElement(screen, new Vector2f(), panelSize.y * 0.9f, card);
 			element.setMouseButtonDispatcher(new UnitCardClickDispatcher(screen, element));
 			selectionArea.addCard(element);
@@ -168,7 +168,7 @@ public class BattlePickUIState extends AbstractAppState {
 									rowOffset * itemElement.getHeight() * 1.5f);
 	}
 
-	public void addPickedCard(final CardItem card){
+	public void addPickedCard(final UnitCardItem card){
 		frame.enqueue(new Callable<Object>() {
 			public Object call() throws Exception {
 				UnitCardElement cardElement = null;

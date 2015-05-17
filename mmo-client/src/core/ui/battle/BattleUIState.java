@@ -19,7 +19,7 @@ import gui.core.V;
 import program.main.Program;
 import program.main.SceneUtil;
 import shared.board.*;
-import shared.board.data.SpellData;
+import shared.board.data.AbilityData;
 import shared.board.data.UnitData;
 import tonegod.gui.controls.buttons.Button;
 import tonegod.gui.controls.buttons.ButtonAdapter;
@@ -190,8 +190,8 @@ public class BattleUIState extends AbstractAppState {
 		updateFromBoard();
 	}
 
-	private AbilityButton getAbilityButton(SpellData spellData){
-		String icon = spellData.getIcon();
+	private AbilityButton getAbilityButton(AbilityData abilityData){
+		String icon = abilityData.getIcon();
 		AbilityButton button = buttonCache.get(icon);
 		if (button == null){
 			float side = rightPanelSize.y * ABILITY_ICON_SIZE_PERCENT;
@@ -200,7 +200,7 @@ public class BattleUIState extends AbstractAppState {
 			button.setInitialized();
 			buttonCache.put(icon, button);
 
-			addDescriptionForElement(button, spellData.getDescription());
+			addDescriptionForElement(button, abilityData.getDescription());
 		}
 
 		return button;
@@ -259,15 +259,15 @@ public class BattleUIState extends AbstractAppState {
 
 		int xIndex = 0;
 		int yIndex = 0;
-		for (Spell spell: unit.getSpells()){
+		for (Ability ability : unit.getAbilities()){
 			float yPos = rightPanelSize.y - (side * 1.1f * yIndex + side + yOffset);
 			float xPos = rightPanelSize.x * ABILITY_SECTION_START_PERCENT + xOffset + side * 1.1f * xIndex;
-			AbilityButton button = getAbilityButton(spell.getSpellData());
+			AbilityButton button = getAbilityButton(ability.getAbilityData());
 			button.setPosition(xPos, yPos);
 			button.setUserData(AbilityButton.SPELL_KEY, yIndex * ABILITIES_IN_A_ROW + xIndex);
 
-			int cd = spell.getSpellData().getCoolDown();
-			int remaining = spell.getCoolDownLeft();
+			int cd = ability.getAbilityData().getCoolDown();
+			int remaining = ability.getCoolDownLeft();
 
 			float progress = (float) remaining / cd;
 
@@ -283,7 +283,7 @@ public class BattleUIState extends AbstractAppState {
 			boolean turning = unit.getBoard().getCurrentTurningPlayer() == unit.getOwner();
 			boolean used = usedUnit == unit || usedUnit == null;
 			boolean state = unit.getBoard().getState() == Board.STATE_WAIT_FOR_ORDER;
-			boolean casting = battleState.getSpellToCast() == spell;
+			boolean casting = battleState.getSpellToCast() == ability;
 			boolean wait = unit.getState() == Unit.STATE_WAIT;
 			boolean disabled = unit.controlApplied(ControlType.STUN) || unit.controlApplied(ControlType.SILENCE);
 
@@ -445,9 +445,9 @@ public class BattleUIState extends AbstractAppState {
 		if (lastUpdated == null)
 			return;
 
-		ClientSpell focused = null;
-		for (ClientSpell spell: lastUpdated.getSpells()){
-			AbilityButton button = getAbilityButton(spell.getSpellData());
+		ClientAbility focused = null;
+		for (ClientAbility spell: lastUpdated.getAbilities()){
+			AbilityButton button = getAbilityButton(spell.getAbilityData());
 			button.updateCooldownProgress();
 			if (button.getHasFocus())
 				focused = spell;

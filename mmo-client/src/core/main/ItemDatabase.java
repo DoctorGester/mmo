@@ -64,6 +64,11 @@ public class ItemDatabase {
 		}
 	}
 
+	public void requestItem(Item item, Subscriber subscriber){
+		subscribe(item.getId(), subscriber);
+		requestItem(item);
+	}
+
 	public Item getItem(int id){
 		return cache.get(id);
 	}

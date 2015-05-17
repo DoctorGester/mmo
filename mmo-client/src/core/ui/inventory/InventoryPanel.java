@@ -20,7 +20,7 @@ import program.datastore.Data;
 import program.datastore.DataKey;
 import program.datastore.DataStore;
 import program.main.Program;
-import shared.items.types.CardItem;
+import shared.items.types.UnitCardItem;
 import shared.items.types.SpellCardItem;
 import tonegod.gui.core.Element;
 import tonegod.gui.core.ElementManager;
@@ -215,8 +215,8 @@ public class InventoryPanel extends Element implements Control {
 
 		ItemElement element;
 
-		if (item instanceof CardItem){
-			element = new UnitCardElement(screen, Vector2f.ZERO, panelSize.y * RELATIVE_CARD_HEIGHT, (CardItem) item);
+		if (item instanceof UnitCardItem){
+			element = new UnitCardElement(screen, Vector2f.ZERO, panelSize.y * RELATIVE_CARD_HEIGHT, (UnitCardItem) item);
 		} else if (item instanceof SpellCardItem) {
 			element = new SpellCardElement(screen, Vector2f.ZERO, panelSize.y * RELATIVE_CARD_HEIGHT, (SpellCardItem) item);
 		} else {

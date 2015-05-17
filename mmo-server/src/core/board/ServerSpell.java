@@ -4,24 +4,21 @@ import groovy.lang.Binding;
 import groovy.lang.Script;
 import program.main.Program;
 import shared.board.Board;
-import shared.board.Cell;
 import shared.board.Spell;
-import shared.board.Unit;
 import shared.board.data.SpellData;
+import shared.map.CardMaster;
 
 public class ServerSpell implements Spell {
 	private SpellData spellData;
-	private Unit caster;
+	private CardMaster caster;
 	private Board board;
 
 	private Script script;
 	private Binding scope;
 
-	private String functionCheck, functionCast;
+	private static final String function = "onCast";
 
-	private int coolDownLeft;
-
-	public ServerSpell(SpellData spellData, Unit caster, Board board) {
+	public ServerSpell(SpellData spellData, CardMaster caster, Board board) {
 		this.spellData = spellData;
 		this.caster = caster;
 		this.board = board;
@@ -29,45 +26,22 @@ public class ServerSpell implements Spell {
 		initScope();
 	}
 
-	private Object callFunction(String function, Cell target){
+	private void invokeScript(){
 		if (script.getMetaClass().respondsTo(script, function).isEmpty())
-			return null;
-		return script.invokeMethod(function, new Object[] { this, board, target });
+			return;
+		script.invokeMethod(function, new Object[] { this, board, caster });
 	}
 
-	public Object callEvent(int event, Cell target){
-		switch (event){
-			case SCRIPT_EVENT_CHECK:
-				return callFunction(functionCheck, target);
-			case SCRIPT_EVENT_CAST:
-				return callFunction(functionCast, target);
-		}
+	@Override
+	public Object callEvent(int event) {
+		if (event == SCRIPT_EVENT_CAST_BEGIN)
+			invokeScript();
+
 		return null;
-	}
-
-	public Unit getCaster(){
-		return caster;
 	}
 
 	public SpellData getSpellData(){
 		return spellData;
-	}
-
-	public void putOnCoolDown(){
-		coolDownLeft = spellData.getCoolDown();
-	}
-
-	public boolean onCoolDown(){
-		return coolDownLeft > 0;
-	}
-
-	public void updateCoolDown(){
-		if (coolDownLeft > 0)
-			coolDownLeft--;
-	}
-
-	public int getCoolDownLeft(){
-		return coolDownLeft;
 	}
 
 	public Binding getScope() {
@@ -82,8 +56,5 @@ public class ServerSpell implements Spell {
 		scope = new Binding();
 
 		script = spellData.compileScript(Program.getInstance().getScriptEngine(), scope);
-
-		functionCheck = "onCheck";
-		functionCast = "onCast";
 	}
 }

@@ -8,7 +8,7 @@ import core.main.*;
 import program.datastore.*;
 import program.main.Program;
 import program.main.SceneUtil;
-import shared.items.types.CardItem;
+import shared.items.types.UnitCardItem;
 import shared.map.CardMaster;
 import shared.other.DataUtil;
 
@@ -52,9 +52,9 @@ public class BattlePickMessageHandler extends PacketHandler {
 		final CardMaster cardMaster = board.getCardMasters().get(id);
 
 		int cardId = stream.readInt();
-		final CardItem pickedCard = ItemDatabase.getInstance().getOrCreateItem(cardId, CardItem.class);
+		final UnitCardItem pickedCard = ItemDatabase.getInstance().getOrCreateItem(cardId, UnitCardItem.class);
 
-		ItemDatabase.getInstance().subscribe(cardId, new Subscriber() {
+		ItemDatabase.getInstance().requestItem(pickedCard, new Subscriber() {
 			@Override
 			public void receive(String key, Data subscription) {
 				TurnPick turn = new TurnPick(board, cardMaster, pickedCard);
@@ -62,7 +62,6 @@ public class BattlePickMessageHandler extends PacketHandler {
 				SceneUtil.getScene(Scenes.BATTLE, BattleScene.class).getTurnQueue().add(turnNumber, turn);
 			}
 		});
-		ItemDatabase.getInstance().requestItem(pickedCard);
 	}
 
 }

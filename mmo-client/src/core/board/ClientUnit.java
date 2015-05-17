@@ -2,13 +2,12 @@ package core.board;
 
 import com.jme3.math.FastMath;
 import com.jme3.math.Vector2f;
-import core.main.Client;
 import groovy.lang.Binding;
 import groovy.lang.Script;
 import program.main.Program;
 import shared.board.*;
 import shared.board.data.PassiveData;
-import shared.board.data.SpellData;
+import shared.board.data.AbilityData;
 import shared.board.data.UnitData;
 import shared.board.events.*;
 import shared.map.CardMaster;
@@ -69,7 +68,7 @@ public class ClientUnit implements Unit {
 
 	private int state = STATE_WAIT;
 
-	private List<ClientSpell> spells;
+	private List<ClientAbility> spells;
 	private List<Passive> passives;
 	private List<ClientBuff> buffs = new ArrayList<ClientBuff>();
 	private Map<Buff, List<ControlType>> appliedControl = new HashMap<Buff, List<ControlType>>();
@@ -186,7 +185,7 @@ public class ClientUnit implements Unit {
 		return script;
 	}
 
-	public List<ClientSpell> getSpells() {
+	public List<ClientAbility> getAbilities() {
 		return spells;
 	}
 
@@ -195,11 +194,11 @@ public class ClientUnit implements Unit {
 	}
 
 	private void loadSpells(){
-		spells = new ArrayList<ClientSpell>();
+		spells = new ArrayList<ClientAbility>();
 
 		for(String id: unitData.getSpells()){
-			SpellData data = Program.getInstance().getSpellDataById(id);
-			spells.add(new ClientSpell(data, this, board));
+			AbilityData data = Program.getInstance().getSpellDataById(id);
+			spells.add(new ClientAbility(data, this, board));
 		}
 	}
 
@@ -235,8 +234,8 @@ public class ClientUnit implements Unit {
 			callEvent(SCRIPT_EVENT_DEATH);
 		}
 
-		for (Spell spell: spells)
-			spell.updateCoolDown();
+		for (Ability ability : spells)
+			ability.updateCoolDown();
 	}
 
 	public TurnResults getTurnResults(){
@@ -527,8 +526,8 @@ public class ClientUnit implements Unit {
 	}
 
 
-	public void fireCastEvent(Cell target, Spell spell) {
-		CastEventContext context = new CastEventContext(this, target, spell);
+	public void fireCastEvent(Cell target, Ability ability) {
+		CastEventContext context = new CastEventContext(this, target, ability);
 
 		for (CastEventListener listener: castEventListeners)
 			listener.onCast(context);

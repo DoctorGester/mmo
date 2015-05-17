@@ -1,7 +1,7 @@
 package core.ui;
 
 import core.board.ClientBoard;
-import core.board.ClientSpell;
+import core.board.ClientAbility;
 import core.board.ClientUnit;
 
 public class BattleState {
@@ -9,7 +9,7 @@ public class BattleState {
 	private ClientUnit selectedUnit;
 	private boolean isCastMode;
 	private int spellToCastNumber = -1;
-	private ClientSpell spellToCast;
+	private ClientAbility spellToCast;
 
 	public ClientBoard getBoard() {
 		return board;
@@ -43,13 +43,13 @@ public class BattleState {
 		this.spellToCastNumber = spellToCastNumber;
 	}
 
-	public ClientSpell getSpellToCast() {
+	public ClientAbility getSpellToCast() {
 		if (!isCastMode)
 			return null;
 		return spellToCast;
 	}
 
-	public void setSpellToCast(ClientSpell spellToCast) {
+	public void setSpellToCast(ClientAbility spellToCast) {
 		this.spellToCast = spellToCast;
 	}
 }

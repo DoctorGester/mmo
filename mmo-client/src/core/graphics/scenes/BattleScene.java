@@ -40,8 +40,8 @@ import core.ui.UI;
 import program.main.Program;
 import program.main.data.ClientDataLoader;
 import shared.board.*;
-import shared.board.data.CardSpellData;
 import shared.board.data.SpellData;
+import shared.board.data.AbilityData;
 import shared.items.types.SpellCardItem;
 import shared.map.CardMaster;
 
@@ -73,9 +73,9 @@ public class BattleScene extends AbstractScene implements ActionListener {
 	private Program program;
 
 	private ChaseCamera camera;
-	private ClientSpell focusedSpell;
+	private ClientAbility focusedSpell;
 	private SpellCardItem focusedSpellCard;
-	private ClientCardSpell focusedCardSpell;
+	private ClientSpell focusedCardSpell;
 	private float timePassedSinceQuadUpdate;
 
 	private static final float QUAD_UPDATE_PERIOD = 0.1f;
@@ -427,19 +427,19 @@ public class BattleScene extends AbstractScene implements ActionListener {
 		defaultCursor();
 	}
 
-	private static boolean checkTargets(Spell spell, Cell cell){
-		SpellData spellData = spell.getSpellData();
-		Unit unit = spell.getCaster();
+	private static boolean checkTargets(Ability ability, Cell cell){
+		AbilityData abilityData = ability.getAbilityData();
+		Unit unit = ability.getCaster();
 
-		boolean unitTarget = (spellData.targetAllowed(SpellTarget.UNIT) &&
+		boolean unitTarget = (abilityData.targetAllowed(AbilityTarget.UNIT) &&
 				cell.getContentsType() == Cell.CONTENTS_UNIT) &&
-				!(!spellData.targetAllowed(SpellTarget.SELF) &&
+				!(!abilityData.targetAllowed(AbilityTarget.SELF) &&
 						cell == unit.getPosition());
 
-		boolean selfTarget = spellData.targetAllowed(SpellTarget.SELF) &&
+		boolean selfTarget = abilityData.targetAllowed(AbilityTarget.SELF) &&
 				cell == unit.getPosition();
 
-		boolean groundTarget = spellData.targetAllowed(SpellTarget.GROUND) &&
+		boolean groundTarget = abilityData.targetAllowed(AbilityTarget.GROUND) &&
 				cell.getContentsType() == Cell.CONTENTS_EMPTY;
 
 		return (unitTarget || selfTarget || groundTarget);
@@ -510,7 +510,7 @@ public class BattleScene extends AbstractScene implements ActionListener {
 
 		ClientBoard board = battleState.getBoard();
 		Cell hover = getCellAtCursor(board, app.getInputManager().getCursorPosition());
-		ClientSpell toCast = battleState.getSpellToCast();
+		ClientAbility toCast = battleState.getSpellToCast();
 
 		for(Spatial spatial: spatialList){
 			int x = spatial.<Integer>getUserData("x"),
@@ -531,14 +531,14 @@ public class BattleScene extends AbstractScene implements ActionListener {
 				}
 			}
 
-			Spell aoeSpell = toCast == null ? focusedSpell : toCast;
+			Ability aoeAbility = toCast == null ? focusedSpell : toCast;
 
-			if (aoeSpell != null && selectedUnit != null
+			if (aoeAbility != null && selectedUnit != null
 				&& selectedUnit.getState() != Unit.STATE_DEAD
-				&& !aoeSpell.getSpellData().onlyAllowed(SpellTarget.SELF)
-				&& (Boolean) aoeSpell.callEvent(Spell.SCRIPT_EVENT_CHECK, thisCell)){
+				&& !aoeAbility.getAbilityData().onlyAllowed(AbilityTarget.SELF)
+				&& (Boolean) aoeAbility.callEvent(Ability.SCRIPT_EVENT_CHECK, thisCell)){
 
-				if (checkTargets(aoeSpell, thisCell))
+				if (checkTargets(aoeAbility, thisCell))
 					toSet = materialStripedBlue;
 			}
 
@@ -546,20 +546,20 @@ public class BattleScene extends AbstractScene implements ActionListener {
 				toSet = materialStripedBlue;
 
 			Cell aoePointer = null;
-			ClientSpell spell = null;
+			ClientAbility spell = null;
 			if (toCast != null && focusedSpell == null && focusedSpellCard == null) {
 				aoePointer = hover;
 				spell = toCast;
 			}
 			if (toCast == null && focusedSpell != null && focusedSpellCard == null && selectedUnit != null
-					&& focusedSpell.getSpellData().onlyAllowed(SpellTarget.SELF)) {
+					&& focusedSpell.getAbilityData().onlyAllowed(AbilityTarget.SELF)) {
 				aoePointer = selectedUnit.getPosition();
 				spell = focusedSpell;
 			}
 
 			if (aoePointer != null
 					&& spell.checkAOE(aoePointer, thisCell)
-					&& (Boolean) spell.callEvent(Spell.SCRIPT_EVENT_CHECK, aoePointer)
+					&& (Boolean) spell.callEvent(Ability.SCRIPT_EVENT_CHECK, aoePointer)
 					&& checkTargets(spell, aoePointer))
 				toSet = materialStripedRed;
 
@@ -617,14 +617,14 @@ public class BattleScene extends AbstractScene implements ActionListener {
 		});
 	}
 
-	public void setFocusedSpell(ClientSpell focusedSpell) {
+	public void setFocusedSpell(ClientAbility focusedSpell) {
 		this.focusedSpell = focusedSpell;
 	}
 
 	public void setFocusedSpellCard(SpellCardItem item){
 		if (item != focusedSpellCard && item != null){
-			CardSpellData spellData = Program.getInstance().getCardSpellDataById(item.getSpellId());
-			focusedCardSpell = new ClientCardSpell(spellData, program.getMainPlayer(), battleState.getBoard());
+			SpellData spellData = Program.getInstance().getCardSpellDataById(item.getSpellId());
+			focusedCardSpell = new ClientSpell(spellData, program.getMainPlayer(), battleState.getBoard());
 		}
 		this.focusedSpellCard = item;
 	}

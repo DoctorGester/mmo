@@ -3,8 +3,7 @@ package core.handlers;
 import core.board.ServerBoard;
 import core.board.TurnManager;
 import core.main.*;
-import shared.board.Board;
-import shared.items.types.CardItem;
+import shared.items.types.UnitCardItem;
 import program.main.Program;
 import shared.map.CardMaster;
 import shared.other.DataUtil;
@@ -34,7 +33,7 @@ public class BattlePickMessageHandler extends PacketHandler {
 		ServerBoard board = cm.getCurrentBoard();
 
 		int id = DataUtil.byteToInt(data);
-		CardItem pickedCard = cm.getInventory().findById(id, CardItem.class);
+		UnitCardItem pickedCard = cm.getInventory().findById(id, UnitCardItem.class);
 
 		if (pickedCard == null)
 			return;

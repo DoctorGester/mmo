@@ -3,18 +3,18 @@ package core.board.ai;
 import groovy.lang.Binding;
 import groovy.lang.Script;
 import shared.board.Cell;
-import shared.board.Spell;
+import shared.board.Ability;
 import shared.board.Unit;
-import shared.board.data.SpellData;
+import shared.board.data.AbilityData;
 
 import java.util.HashMap;
 
-public class VirtualSpell implements Spell {
-	private SpellData spellData;
+public class VirtualAbility implements Ability {
+	private AbilityData abilityData;
 	private VirtualUnit caster;
 	private VirtualBoard board;
 
-	private Spell spell;
+	private Ability ability;
 	private Script script;
 	private Binding scope;
 
@@ -22,12 +22,12 @@ public class VirtualSpell implements Spell {
 
 	private int coolDownLeft;
 
-	public VirtualSpell(Spell spell, VirtualUnit caster, VirtualBoard board) {
-		this.spell = spell;
-		this.spellData = spell.getSpellData();
+	public VirtualAbility(Ability ability, VirtualUnit caster, VirtualBoard board) {
+		this.ability = ability;
+		this.abilityData = ability.getAbilityData();
 		this.caster = caster;
 		this.board = board;
-		this.coolDownLeft = spell.getCoolDownLeft();
+		this.coolDownLeft = ability.getCoolDownLeft();
 
 		initScope();
 	}
@@ -42,16 +42,16 @@ public class VirtualSpell implements Spell {
 
 	public Object callEvent(int event, VirtualCell target){
 		switch (event){
-			case Spell.SCRIPT_EVENT_CHECK:
+			case Ability.SCRIPT_EVENT_CHECK:
 				return callFunction(functionCheck, target);
-			case Spell.SCRIPT_EVENT_CAST:
+			case Ability.SCRIPT_EVENT_CAST:
 				return callFunction(functionCast, target);
 		}
 		return null;
 	}
 
-	public SpellData getSpellData(){
-		return spellData;
+	public AbilityData getAbilityData(){
+		return abilityData;
 	}
 
 	public Binding getScope() {
@@ -67,7 +67,7 @@ public class VirtualSpell implements Spell {
 	}
 
 	public void putOnCoolDown(){
-		coolDownLeft = spellData.getCoolDown();
+		coolDownLeft = abilityData.getCoolDown();
 	}
 
 	public boolean onCoolDown(){
@@ -88,15 +88,15 @@ public class VirtualSpell implements Spell {
 	}
 
 	private void initScope(){
-		scope = new Binding(new HashMap<Object, Object>(spell.getScope().getVariables()));
+		scope = new Binding(new HashMap<Object, Object>(ability.getScope().getVariables()));
 
-		script = spell.getScript();
+		script = ability.getScript();
 
 		functionCheck = "onCheck";
 		functionCast = "onCast";
 	}
 
 	public boolean equals(Object object){
-		return (object instanceof VirtualSpell && ((VirtualSpell) object).spell == spell);
+		return (object instanceof VirtualAbility && ((VirtualAbility) object).ability == ability);
 	}
 }

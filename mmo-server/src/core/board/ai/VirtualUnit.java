@@ -3,7 +3,7 @@ package core.board.ai;
 import groovy.lang.Binding;
 import groovy.lang.Script;
 import shared.board.*;
-import shared.board.data.SpellData;
+import shared.board.data.AbilityData;
 import shared.board.data.UnitData;
 import shared.map.CardMaster;
 
@@ -33,7 +33,7 @@ public class VirtualUnit implements Unit {
 				restTime,
 				restLeft;
 
-	protected List<VirtualSpell> spells;
+	protected List<VirtualAbility> spells;
 	private List<Buff> buffs = new LinkedList<Buff>();
 
 	public VirtualUnit(VirtualBoard board){
@@ -53,7 +53,7 @@ public class VirtualUnit implements Unit {
 		restLeft = unit.getRestLeft();
 	}
 
-	public int getSpellNumber(VirtualSpell spell){
+	public int getSpellNumber(VirtualAbility spell){
 		return spells.indexOf(spell);
 	}
 
@@ -163,7 +163,7 @@ public class VirtualUnit implements Unit {
 		wave.calculate();
 	}
 
-	public boolean cast(VirtualSpell toCast, VirtualCell target){
+	public boolean cast(VirtualAbility toCast, VirtualCell target){
 		if (toCast.onCoolDown())
 			return false;
 
@@ -171,27 +171,27 @@ public class VirtualUnit implements Unit {
 			return false;
 
 		// Checking targets
-		SpellData spellData = toCast.getSpellData();
+		AbilityData abilityData = toCast.getAbilityData();
 
 		switch (target.getContentsType()){
 			case Cell.CONTENTS_DOODAD:
 				return false;
 			case Cell.CONTENTS_EMPTY:{
-				if (!spellData.targetAllowed(SpellTarget.GROUND))
+				if (!abilityData.targetAllowed(AbilityTarget.GROUND))
 					return false;
 			}
 			case Cell.CONTENTS_UNIT:{
-				if (target == position && !spellData.targetAllowed(SpellTarget.SELF))
+				if (target == position && !abilityData.targetAllowed(AbilityTarget.SELF))
 					return false;
-				else if (target != position && !spellData.targetAllowed(SpellTarget.UNIT))
+				else if (target != position && !abilityData.targetAllowed(AbilityTarget.UNIT))
 					return false;
 			}
 		}
 
 		// Checking spell through script and executing it if possible
-		boolean result = (Boolean) toCast.callEvent(Spell.SCRIPT_EVENT_CHECK, target);
+		boolean result = (Boolean) toCast.callEvent(Ability.SCRIPT_EVENT_CHECK, target);
 		if (result)
-			toCast.callEvent(Spell.SCRIPT_EVENT_CAST, target);
+			toCast.callEvent(Ability.SCRIPT_EVENT_CAST, target);
 
 		return result;
 	}
@@ -224,7 +224,7 @@ public class VirtualUnit implements Unit {
 		return canAttack;
 	}
 
-	public List<VirtualSpell> getSpells(){
+	public List<VirtualAbility> getAbilities(){
 		return spells;
 	}
 
@@ -275,9 +275,9 @@ public class VirtualUnit implements Unit {
 		scope.setVariable("unit", this);
 		scope.setVariable("board", virtualBoard);
 
-		spells = new ArrayList<VirtualSpell>();
-		for(Spell spell: unit.getSpells()){
-			spells.add(new VirtualSpell(spell, this, virtualBoard));
+		spells = new ArrayList<VirtualAbility>();
+		for(Ability ability : unit.getAbilities()){
+			spells.add(new VirtualAbility(ability, this, virtualBoard));
 		}
 
 		this.unitData = unitData;

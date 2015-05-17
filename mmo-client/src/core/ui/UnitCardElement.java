@@ -10,7 +10,7 @@ import program.datastore.Subscriber;
 import program.main.Program;
 import program.main.data.ClientDataLoader;
 import shared.board.data.UnitData;
-import shared.items.types.CardItem;
+import shared.items.types.UnitCardItem;
 import tonegod.gui.controls.text.Label;
 import tonegod.gui.core.ElementManager;
 
@@ -22,21 +22,21 @@ import java.util.concurrent.Callable;
 public class UnitCardElement extends ItemElement {
 	private UnitData unitData;
 
-	private CardItem card;
+	private UnitCardItem card;
 	private int cardId;
 	private PortraitElement portrait;
 	private Label name;
 
-	public UnitCardElement(ElementManager screen, Vector2f position, float height, CardItem card) {
+	public UnitCardElement(ElementManager screen, Vector2f position, float height, UnitCardItem card) {
 		super(screen, position, height);
 
 		this.card = card;
 		this.cardId = card.getId();
 
-		ItemDatabase.getInstance().subscribe(card.getId(), new Subscriber() {
+		ItemDatabase.getInstance().requestItem(card, new Subscriber() {
 			@Override
 			public void receive(String key, Data subscription) {
-				CardItem card = subscription.getObject(CardItem.class);
+				UnitCardItem card = subscription.getObject(UnitCardItem.class);
 				unitData = Program.getInstance().getUnitDataById(card.getUnitId());
 
 				Program.getInstance().getMainFrame().enqueue(new Callable<Object>() {
@@ -51,7 +51,6 @@ public class UnitCardElement extends ItemElement {
 				});
 			}
 		});
-		ItemDatabase.getInstance().requestItem(card);
 	}
 
 	public UnitCardElement(ElementManager screen, Vector2f position, float height, UnitData unitData) {
@@ -75,7 +74,7 @@ public class UnitCardElement extends ItemElement {
 		return cardId;
 	}
 
-	public CardItem getCard() {
+	public UnitCardItem getCard() {
 		return card;
 	}
 

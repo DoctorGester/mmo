@@ -8,18 +8,18 @@ import shared.other.DataUtil;
 /**
  * @author doc
  */
-public class CardItem extends Item {
-	private short unitId;
+public class UnitCardItem extends Item {
+	private String unitId;
 
-	public CardItem() {
+	public UnitCardItem() {
 		setType(ItemTypes.CREATURE_CARD);
 	}
 
-	public void setUnitId(int unitId) {
-		this.unitId = (short) unitId;
+	public void setUnitId(String unitId) {
+		this.unitId = unitId;
 	}
 
-	public short getUnitId() {
+	public String getUnitId() {
 		return unitId;
 	}
 
@@ -36,11 +36,11 @@ public class CardItem extends Item {
 
 	@Override
 	public byte[] getStats() {
-		return DataUtil.shortToByte(unitId);
+		return unitId.getBytes(DataUtil.UTF_8);
 	}
 
 	@Override
 	public void setStats(byte[] data) {
-		unitId = DataUtil.byteToShort(data);
+		unitId = new String(data, DataUtil.UTF_8);
 	}
 }

@@ -5,8 +5,8 @@ import core.board.TurnManager;
 import core.main.*;
 import program.main.Program;
 import shared.board.Board;
-import shared.board.Cell;
 import shared.map.CardMaster;
+import shared.other.DataUtil;
 
 public class CastSpellMessageHandler extends PacketHandler {
 	private Program program;
@@ -25,19 +25,17 @@ public class CastSpellMessageHandler extends PacketHandler {
 
 		byte data[] = packet.getData();
 
-		if (data.length != 5) // 1 byte for spell number, 4 bytes for cords
+		if (data.length != 4)
 			return;
 
 		ServerCardMaster cm = gameClient.getCardMaster();
 		ServerBoard board = cm.getCurrentBoard();
+
 		// Board has to be in the wait for order state
 		if (board.getState() != Board.STATE_WAIT_FOR_ORDER)
 			return;
 
-		Cell selected = board.getCellChecked(data[1], data[2]),
-			 target = board.getCellChecked(data[3], data[4]);
-
-		TurnManager.getInstance().cast(board, cm, data[0], selected, target);
+		TurnManager.getInstance().castCard(board, cm, DataUtil.byteToInt(data));
 	}
 
 	public void handle(LocalClient localClient, Packet data) {

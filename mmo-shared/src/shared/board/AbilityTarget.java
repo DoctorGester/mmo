@@ -1,6 +1,6 @@
 package shared.board;
 
-public enum SpellTarget {
+public enum AbilityTarget {
     GROUND,
     UNIT,
 	SELF

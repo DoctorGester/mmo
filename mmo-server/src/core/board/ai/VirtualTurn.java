@@ -2,7 +2,6 @@ package core.board.ai;
 
 import core.board.ServerBoard;
 import core.board.TurnManager;
-import shared.board.Board;
 import shared.board.Cell;
 import shared.map.CardMaster;
 
@@ -21,7 +20,7 @@ public class VirtualTurn implements Comparable<VirtualTurn> {
 	private VirtualUnit executor;
 	private VirtualCell moveToExecute;
 	private VirtualCell target;
-	private VirtualSpell spell;
+	private VirtualAbility spell;
 
 	public VirtualTurn(VirtualBoard board, VirtualUnit executor) {
 		this.board = board;
@@ -68,7 +67,7 @@ public class VirtualTurn implements Comparable<VirtualTurn> {
 		this.moveToExecute = moveToExecute;
 	}
 
-	public void setSpell(VirtualSpell spell) {
+	public void setSpell(VirtualAbility spell) {
 		this.spell = spell;
 	}
 

@@ -98,11 +98,11 @@ public class Program {
 	protected Map<Integer, ServerCardMaster> idCardMasterMap;
 	protected Map<Integer, GameClient> idGameClientMap;
 	protected Map<Integer, Npc> idNpcMap;
-	protected Map<Integer, UnitData> unitDataMap;
+	protected Map<String, UnitData> unitDataMap;
 	protected Map<String, BuffData> buffDataMap;
-	protected Map<String, SpellData> spellDataMap;
+	protected Map<String, AbilityData> spellDataMap;
 	protected Map<String, PassiveData> passiveDataMap;
-	protected Map<String, CardSpellData> cardSpellDataMap;
+	protected Map<String, SpellData> cardSpellDataMap;
 	protected Map<Client, GameClient> clientGameClientMap;
 
 	private static Program instance;
@@ -153,7 +153,7 @@ public class Program {
 		server.addPacketHandler(new SkipTurnMessageHandler(HEADER_BATTLE_SKIP_TURN));
 		server.addPacketHandler(new GetInventoryMessageHandler(HEADER_GET_INVENTORY));
 		server.addPacketHandler(new PlacementFinishedMessageHandler(HEADER_PLACEMENT_FINISHED));
-		server.addPacketHandler(new CastSpellMessageHandler(HEADER_SPELL_CAST_ORDER));
+		server.addPacketHandler(new CastAbilityMessageHandler(HEADER_SPELL_CAST_ORDER));
 		server.addPacketHandler(new ServerStatusRequestMessageHandler(HEADER_SERVER_STATUS_REQUEST));
 		server.addPacketHandler(new GetProfileInfoMessageHandler(HEADER_GET_PROFILE_INFO));
 		server.addPacketHandler(new AttackPlayerMessageHandler(HEADER_ATTACK_PLAYER));
@@ -161,7 +161,7 @@ public class Program {
 		server.addPacketHandler(new AcceptDuelMessageHandler(HEADER_ACCEPT_DUEL));
 		server.addPacketHandler(new RejectDuelMessageHandler(HEADER_REJECT_DUEL));
 		server.addPacketHandler(new CancelDuelMessageHandler(HEADER_CANCEL_DUEL));
-		server.addPacketHandler(new CastCardSpellMessageHandler(HEADER_CARD_CAST_ORDER));
+		server.addPacketHandler(new CastSpellMessageHandler(HEADER_CARD_CAST_ORDER));
 		server.addPacketHandler(new RequestTradeMessageHandler(HEADER_REQUEST_TRADE));
 		server.addPacketHandler(new AcceptTradeMessageHandler(HEADER_ACCEPT_TRADE));
 		server.addPacketHandler(new RejectTradeMessageHandler(HEADER_REJECT_TRADE));
@@ -197,7 +197,7 @@ public class Program {
 		return pathingMap;
 	}
 
-	public SpellData getSpellDataById(String id){
+	public AbilityData getSpellDataById(String id){
 		return spellDataMap.get(id);
 	}
 
@@ -205,7 +205,7 @@ public class Program {
 		return passiveDataMap.get(id);
 	}
 
-	public CardSpellData getCardSpellDataById(String id){
+	public SpellData getCardSpellDataById(String id){
 		return cardSpellDataMap.get(id);
 	}
 
@@ -256,7 +256,7 @@ public class Program {
 		mapController.sendWorldInfo(client);
 	}
 
-	public UnitData getUnitDataById(int id){
+	public UnitData getUnitDataById(String id){
 		return unitDataMap.get(id);
 	}
 
@@ -288,10 +288,10 @@ public class Program {
 		cardMasterNpcMap = new ConcurrentHashMap<CardMaster, Npc>();
 		clientGameClientMap = new ConcurrentHashMap<Client, GameClient>();
 		buffDataMap = new HashMap<String, BuffData>();
-		spellDataMap = new HashMap<String, SpellData>();
+		spellDataMap = new HashMap<String, AbilityData>();
 		passiveDataMap = new HashMap<String, PassiveData>();
-		cardSpellDataMap = new HashMap<String, CardSpellData>();
-		unitDataMap = new HashMap<Integer, UnitData>();
+		cardSpellDataMap = new HashMap<String, SpellData>();
+		unitDataMap = new HashMap<String, UnitData>();
 
 		gameClients = new LinkedList<GameClient>();
 	}
@@ -312,9 +312,9 @@ public class Program {
 
 		groovyScriptEngine = dataLoader.loadScriptEngine();
 
-		DataUtil.loadDataList("res/units/datalist", Integer.class, UnitData.class, unitDataMap);
-		DataUtil.loadDataList("res/spells/unit/datalist", String.class, SpellData.class, spellDataMap);
-		DataUtil.loadDataList("res/spells/hero/datalist", String.class, CardSpellData.class, cardSpellDataMap);
+		DataUtil.loadDataList("res/units/datalist", String.class, UnitData.class, unitDataMap);
+		DataUtil.loadDataList("res/spells/unit/datalist", String.class, AbilityData.class, spellDataMap);
+		DataUtil.loadDataList("res/spells/hero/datalist", String.class, SpellData.class, cardSpellDataMap);
 		DataUtil.loadDataList("res/buffs/datalist", String.class, BuffData.class, buffDataMap);
 
 		dataLoader.loadPathingMapFromFileSystem();
@@ -382,7 +382,7 @@ public class Program {
 		for (String key: buffDataMap.keySet())
 			getBuffScriptById(key).compileScript(groovyScriptEngine, new Binding());
 
-		for (int key: unitDataMap.keySet())
+		for (String key: unitDataMap.keySet())
 			getUnitDataById(key).compileScript(groovyScriptEngine, new Binding());
 	}
 

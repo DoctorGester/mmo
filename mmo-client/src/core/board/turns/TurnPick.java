@@ -9,7 +9,7 @@ import program.main.SceneUtil;
 import shared.board.Board;
 import shared.board.Cell;
 import shared.board.data.UnitData;
-import shared.items.types.CardItem;
+import shared.items.types.UnitCardItem;
 import shared.map.CardMaster;
 
 import java.awt.*;
@@ -22,11 +22,11 @@ public class TurnPick implements Turn {
 
 	private ClientBoard board;
 	private CardMaster cardMaster;
-	private CardItem card;
+	private UnitCardItem card;
 
 	private float timePassed = 0f;
 
-	public TurnPick(ClientBoard board, CardMaster cardMaster, CardItem card) {
+	public TurnPick(ClientBoard board, CardMaster cardMaster, UnitCardItem card) {
 		this.board = board;
 		this.cardMaster = cardMaster;
 		this.card = card;

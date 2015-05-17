@@ -4,8 +4,7 @@ import core.board.ClientCell;
 import core.board.ClientUnit;
 import shared.board.Board;
 import shared.board.Cell;
-import shared.board.Spell;
-import shared.board.Unit;
+import shared.board.Ability;
 
 /**
  * @author doc
@@ -30,16 +29,16 @@ public class TurnCast implements Turn {
 
 	public void execute(int mode) {
 		ordered = from.getUnit();
-		Spell toCast = ordered.getSpells().get(spell);
+		Ability toCast = ordered.getAbilities().get(spell);
 		switch (mode){
 			case MODE_FIRST_STEP:{
-				waitForCastTime = ((Number) toCast.callEvent(Spell.SCRIPT_EVENT_CAST_BEGIN, to)).floatValue();
+				waitForCastTime = ((Number) toCast.callEvent(Ability.SCRIPT_EVENT_CAST_BEGIN, to)).floatValue();
 				board.getCurrentTurningPlayer().setUsedUnit(ordered);
 				break;
 			}
 			case MODE_LAST_STEP:{
 				ordered.fireCastEvent(to, toCast);
-				toCast.callEvent(Spell.SCRIPT_EVENT_CAST_END, to);
+				toCast.callEvent(Ability.SCRIPT_EVENT_CAST_END, to);
 				break;
 			}
 		}
@@ -73,7 +72,7 @@ public class TurnCast implements Turn {
 				" uses " +
 				ordered.getUnitData().getName() +
 				" to cast " +
-				ordered.getSpells().get(spell).getSpellData().getId() +
+				ordered.getAbilities().get(spell).getAbilityData().getId() +
 				" on " +
 				to;
 	}

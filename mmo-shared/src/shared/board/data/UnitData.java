@@ -3,15 +3,18 @@ package shared.board.data;
 import groovy.lang.Binding;
 import groovy.lang.Script;
 import groovy.util.GroovyScriptEngine;
+import shared.other.DataElement;
 import shared.other.DataLoaderKey;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class UnitData {
+public class UnitData implements DataElement {
 	@DataLoaderKey
-	private int id,
-				health,
+	private String id;
+
+	@DataLoaderKey
+	private int health,
 				damage,
 				actionPoints,
 				restTime;
@@ -43,11 +46,11 @@ public class UnitData {
 		return passives;
 	}
 
-	public int getId() {
+	public String getId() {
 		return id;
 	}
 
-	public void setId(int id) {
+	public void setId(String id) {
 		this.id = id;
 	}
 

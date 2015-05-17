@@ -5,7 +5,7 @@ import groovy.lang.Script;
 import program.main.Program;
 import shared.board.*;
 import shared.board.data.PassiveData;
-import shared.board.data.SpellData;
+import shared.board.data.AbilityData;
 import shared.board.data.UnitData;
 import shared.board.events.*;
 import shared.map.CardMaster;
@@ -47,7 +47,7 @@ public class ServerUnit implements Unit {
 
 	private int state = STATE_WAIT;
 
-	private List<Spell> spells;
+	private List<Ability> abilities;
 	private List<Passive> passives;
 	private List<Buff> buffs = new ArrayList<Buff>();
 
@@ -160,8 +160,8 @@ public class ServerUnit implements Unit {
 		return script;
 	}
 
-	public List<Spell> getSpells() {
-		return spells;
+	public List<Ability> getAbilities() {
+		return abilities;
 	}
 
 	public Binding getUnitScope() {
@@ -169,11 +169,11 @@ public class ServerUnit implements Unit {
 	}
 
 	private void loadSpells(){
-		spells = new ArrayList<Spell>();
+		abilities = new ArrayList<Ability>();
 
 		for(String id: unitData.getSpells()){
-			SpellData data = Program.getInstance().getSpellDataById(id);
-			spells.add(new ServerSpell(data, this, board));
+			AbilityData data = Program.getInstance().getSpellDataById(id);
+			abilities.add(new ServerAbility(data, this, board));
 		}
 	}
 
@@ -210,8 +210,8 @@ public class ServerUnit implements Unit {
 			board.unitDies(this);
 		}
 
-		for (Spell spell: spells)
-			spell.updateCoolDown();
+		for (Ability ability : abilities)
+			ability.updateCoolDown();
 
 		for (Passive passive: passives)
 			passive.update();
@@ -276,36 +276,36 @@ public class ServerUnit implements Unit {
 	}
 
 	public boolean castSpell(int number, Cell target){
-		if (number > spells.size() || number < 0)
+		if (number > abilities.size() || number < 0)
 			return false;
 
-		Spell toCast = spells.get(number);
+		Ability toCast = abilities.get(number);
 
 		if (toCast.onCoolDown())
 			return false;
 
 		// Checking targets
-		SpellData spellData = toCast.getSpellData();
+		AbilityData abilityData = toCast.getAbilityData();
 		switch (target.getContentsType()){
 			case Cell.CONTENTS_DOODAD:
 				return false;
 			case Cell.CONTENTS_EMPTY:{
-				if (!spellData.targetAllowed(SpellTarget.GROUND))
+				if (!abilityData.targetAllowed(AbilityTarget.GROUND))
 					return false;
 			}
 			case Cell.CONTENTS_UNIT:{
-				if (target == position && !spellData.targetAllowed(SpellTarget.SELF))
+				if (target == position && !abilityData.targetAllowed(AbilityTarget.SELF))
 					return false;
-				else if (target != position && !spellData.targetAllowed(SpellTarget.UNIT))
+				else if (target != position && !abilityData.targetAllowed(AbilityTarget.UNIT))
 					return false;
 			}
 		}
 
 		// Checking spell through script and executing it if possible
-		boolean result = (Boolean) toCast.callEvent(Spell.SCRIPT_EVENT_CHECK, target);
+		boolean result = (Boolean) toCast.callEvent(Ability.SCRIPT_EVENT_CHECK, target);
 		if (result){
 			owner.setUsedUnit(this);
-			toCast.callEvent(Spell.SCRIPT_EVENT_CAST, target);
+			toCast.callEvent(Ability.SCRIPT_EVENT_CAST, target);
 		}
 		return result;
 	}

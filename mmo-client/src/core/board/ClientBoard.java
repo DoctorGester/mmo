@@ -10,7 +10,7 @@ import program.main.Program;
 import program.main.SceneUtil;
 import shared.board.*;
 import shared.board.data.BuffData;
-import shared.items.types.CardItem;
+import shared.items.types.UnitCardItem;
 import shared.map.CardMaster;
 
 import java.awt.*;
@@ -240,7 +240,7 @@ public class ClientBoard implements Board {
 	}
 
 	@Override
-	public List<? extends CardItem> getPickedCards(CardMaster cardMaster) {
+	public List<? extends UnitCardItem> getPickedCards(CardMaster cardMaster) {
 		throw new UnsupportedOperationException();
 	}
 
@@ -328,7 +328,7 @@ public class ClientBoard implements Board {
 					+ u.getAttackDamage()
 					+ u.getOwner().getBattleId()
 					+ u.getCurrentActionPoints()
-					+ u.getUnitData().getId()
+					+ u.getUnitData().getId().hashCode()
 					+ u.getPosition().getX()
 					+ u.getPosition().getY()
 					+ u.getBonusAttackDamage()

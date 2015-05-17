@@ -3,7 +3,7 @@ package core.board.ai;
 import shared.board.*;
 import shared.board.data.BuffData;
 import shared.board.data.UnitData;
-import shared.items.types.CardItem;
+import shared.items.types.UnitCardItem;
 import program.main.Program;
 import shared.map.CardMaster;
 
@@ -118,8 +118,8 @@ public class VirtualBoard implements Board {
 		return board.areAllies(cardMasters);
 	}
 
-	public List<CardItem> getPickedCards(CardMaster cardMaster) {
-		return new LinkedList<CardItem>();
+	public List<UnitCardItem> getPickedCards(CardMaster cardMaster) {
+		return new LinkedList<UnitCardItem>();
 	}
 
 	@Override
@@ -193,7 +193,7 @@ public class VirtualBoard implements Board {
 	public void checkGameOver() {}
 	public void skipTurn() {}
 
-	public Unit handlePickOrder(CardMaster cardMaster, CardItem card, UnitData unitData) {
+	public Unit handlePickOrder(CardMaster cardMaster, UnitCardItem card, UnitData unitData) {
 		return null;
 	}
 
@@ -222,16 +222,16 @@ public class VirtualBoard implements Board {
 					+ u.getAttackDamage()
 					+ u.getOwner().getBattleId()
 					+ u.getCurrentActionPoints()
-					+ u.getUnitData().getId()
+					+ u.getUnitData().getId().hashCode()
 					+ u.getPosition().getX()
 					+ u.getPosition().getY()
 					+ u.getBonusAttackDamage()
 					+ u.getDamageDealt()
 					+ u.getHealDone();
 
-			for (Spell spell: u.getSpells())
-				result += spell.getCoolDownLeft() +
-						spell.getSpellData().getId().hashCode();
+			for (Ability ability : u.getAbilities())
+				result += ability.getCoolDownLeft() +
+						ability.getAbilityData().getId().hashCode();
 		}
 
 		result +=  board.getCurrentTurningPlayer().getBattleId();

@@ -5,7 +5,7 @@ import core.exceptions.IncorrectHeaderException;
 import core.main.*;
 import shared.items.Item;
 import core.main.ItemDatabase;
-import shared.items.types.CardItem;
+import shared.items.types.UnitCardItem;
 import program.main.database.Database;
 import program.main.Program;
 import program.main.database.entities.CardMasterEntity;
@@ -135,21 +135,24 @@ public class RegisterMessageHandler extends PacketHandler{
 	public void createDefaultInventory(CardMaster cardMaster){
 		List<Item> items = new LinkedList<Item>();
 
-		CardItem customItem = new CardItem();
-		customItem.setUnitId(1);
-		items.add(new CardItem());
+		UnitCardItem customItem = new UnitCardItem();
+		customItem.setUnitId("angel");
 		items.add(customItem);
 
-		customItem = new CardItem();
-		customItem.setUnitId(2);
+		customItem = new UnitCardItem();
+		customItem.setUnitId("minotaur");
 		items.add(customItem);
 
-		customItem = new CardItem();
-		customItem.setUnitId(3);
+		customItem = new UnitCardItem();
+		customItem.setUnitId("evil_eye");
 		items.add(customItem);
 
-		customItem = new CardItem();
-		customItem.setUnitId(4);
+		customItem = new UnitCardItem();
+		customItem.setUnitId("kobold");
+		items.add(customItem);
+
+		customItem = new UnitCardItem();
+		customItem.setUnitId("lizardman");
 		items.add(customItem);
 
 		SpellCardItem spellCardItem = new SpellCardItem();

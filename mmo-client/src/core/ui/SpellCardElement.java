@@ -11,8 +11,7 @@ import program.datastore.Data;
 import program.datastore.Subscriber;
 import program.main.Program;
 import program.main.SceneUtil;
-import shared.board.data.CardSpellData;
-import shared.items.types.CardItem;
+import shared.board.data.SpellData;
 import shared.items.types.SpellCardItem;
 import tonegod.gui.controls.text.Label;
 import tonegod.gui.core.ElementManager;
@@ -25,13 +24,13 @@ import java.util.concurrent.Callable;
  */
 public class SpellCardElement extends ItemElement implements MouseFocusListener{
 	private SpellCardItem card;
-	private CardSpellData spellData;
+	private SpellData spellData;
 
 	public SpellCardElement(ElementManager screen, Vector2f position, float height, SpellCardItem card) {
 		super(screen, position, height);
 		this.card = card;
 
-		ItemDatabase.getInstance().subscribe(card.getId(), new Subscriber() {
+		ItemDatabase.getInstance().requestItem(card, new Subscriber() {
 			@Override
 			public void receive(String key, Data subscription) {
 				SpellCardItem card = subscription.getObject(SpellCardItem.class);
@@ -50,10 +49,9 @@ public class SpellCardElement extends ItemElement implements MouseFocusListener{
 				});
 			}
 		});
-		ItemDatabase.getInstance().requestItem(card);
 	}
 
-	public SpellCardElement(ElementManager screen, Vector2f position, float height, CardSpellData spellData) {
+	public SpellCardElement(ElementManager screen, Vector2f position, float height, SpellData spellData) {
 		super(screen, position, height);
 		this.spellData = spellData;
 		this.card = null;
@@ -83,7 +81,7 @@ public class SpellCardElement extends ItemElement implements MouseFocusListener{
 		return card;
 	}
 
-	public CardSpellData getSpellData() {
+	public SpellData getSpellData() {
 		return spellData;
 	}
 

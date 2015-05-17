@@ -7,7 +7,7 @@ import shared.board.Unit;
 import shared.map.CardMaster;
 import shared.other.DataUtil;
 import core.main.GameClient;
-import shared.items.types.CardItem;
+import shared.items.types.UnitCardItem;
 import shared.items.types.SpellCardItem;
 import program.main.Program;
 import program.main.ReliablePacketManager;
@@ -65,7 +65,7 @@ public class TurnManager {
 	}
 
 	public boolean pick(ServerBoard board, CardMaster owner, int cardItemId){
-		CardItem card = owner.getInventory().findById(cardItemId, CardItem.class);
+		UnitCardItem card = owner.getInventory().findById(cardItemId, UnitCardItem.class);
 		Unit picked = board.handlePickOrder(owner, card, Program.getInstance().getUnitDataById(card.getUnitId()));
 
 		if (picked != null){

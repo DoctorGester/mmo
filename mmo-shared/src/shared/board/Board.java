@@ -1,7 +1,6 @@
 package shared.board;
 
-import shared.board.data.UnitData;
-import shared.items.types.CardItem;
+import shared.items.types.UnitCardItem;
 import shared.map.CardMaster;
 
 import java.awt.*;
@@ -32,7 +31,7 @@ public interface Board {
 
 	public List<? extends Unit> getUnits();
 	public List<? extends CardMaster> getCardMasters();
-	public List<? extends CardItem> getPickedCards(CardMaster cardMaster);
+	public List<? extends UnitCardItem> getPickedCards(CardMaster cardMaster);
 
 	public void addCardMaster(CardMaster cardMaster);
 	public void playerFinishedPlacement(CardMaster cardMaster);

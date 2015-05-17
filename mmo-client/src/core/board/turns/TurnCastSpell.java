@@ -1,17 +1,17 @@
 package core.board.turns;
 
-import core.board.ClientCardSpell;
-import shared.board.CardSpell;
+import core.board.ClientSpell;
+import shared.board.Spell;
 import program.main.Program;
 import shared.board.Board;
-import shared.board.data.CardSpellData;
+import shared.board.data.SpellData;
 import shared.items.types.SpellCardItem;
 import shared.map.CardMaster;
 
 /**
  * @author doc
  */
-public class TurnCastCardSpell implements Turn {
+public class TurnCastSpell implements Turn {
 
 	private final Board board;
 	private CardMaster caster;
@@ -20,22 +20,22 @@ public class TurnCastCardSpell implements Turn {
 	private boolean finished = false;
 	private float waitForCastTime;
 
-	public TurnCastCardSpell(Board board, CardMaster caster, SpellCardItem item){
+	public TurnCastSpell(Board board, CardMaster caster, SpellCardItem item){
 		this.board = board;
 		this.caster = caster;
 		this.item = item;
 	}
 
 	public void execute(int mode) {
-		CardSpellData spellData = Program.getInstance().getCardSpellDataById(item.getSpellId());
-		CardSpell cardSpell = new ClientCardSpell(spellData, caster, board);
+		SpellData spellData = Program.getInstance().getCardSpellDataById(item.getSpellId());
+		Spell spell = new ClientSpell(spellData, caster, board);
 		switch (mode){
 			case MODE_FIRST_STEP:{
-				waitForCastTime = ((Number) cardSpell.callEvent(CardSpell.SCRIPT_EVENT_CAST_BEGIN)).floatValue();
+				waitForCastTime = ((Number) spell.callEvent(Spell.SCRIPT_EVENT_CAST_BEGIN)).floatValue();
 				break;
 			}
 			case MODE_LAST_STEP:{
-				cardSpell.callEvent(CardSpell.SCRIPT_EVENT_CAST_END);
+				spell.callEvent(Spell.SCRIPT_EVENT_CAST_END);
 				break;
 			}
 		}

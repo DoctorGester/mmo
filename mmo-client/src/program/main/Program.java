@@ -27,7 +27,6 @@ import shared.board.data.*;
 import shared.map.CardMaster;
 import shared.other.DataUtil;
 
-import javax.script.ScriptEngineManager;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.InetSocketAddress;
@@ -109,12 +108,12 @@ public class Program {
 
 	private Map<Integer, ClientCardMaster> playerMap;
     private Map<Integer, Faction> factions;
-    private Map<Integer, UnitData> unitDataMap;
+	protected Map<String, UnitData> unitDataMap;
 	protected Map<String, BuffData> buffDataMap;
-	protected Map<String, SpellData> spellDataMap;
+	protected Map<String, AbilityData> spellDataMap;
 	protected Map<String, PassiveData> passiveDataMap;
 	protected Map<String, String> effectScriptMap;
-	protected Map<String, CardSpellData> cardSpellDataMap;
+	protected Map<String, SpellData> cardSpellDataMap;
 
 	private MapController mapController;
 	private BattleController battleController;
@@ -154,11 +153,11 @@ public class Program {
         factions = new ConcurrentHashMap<Integer, Faction>();
 		playerMap = new ConcurrentHashMap<Integer, ClientCardMaster>();
 		buffDataMap = new HashMap<String, BuffData>();
-		spellDataMap = new HashMap<String, SpellData>();
+		spellDataMap = new HashMap<String, AbilityData>();
 		passiveDataMap = new HashMap<String, PassiveData>();
 		effectScriptMap = new HashMap<String, String>();
-		cardSpellDataMap = new HashMap<String, CardSpellData>();
-        unitDataMap = new HashMap<Integer, UnitData>();
+		cardSpellDataMap = new HashMap<String, SpellData>();
+        unitDataMap = new HashMap<String, UnitData>();
 	}
 
 	public void start(){
@@ -217,15 +216,27 @@ public class Program {
 		setClientState(STATE_MENU);
 		mainFrame.setScene(Scenes.MENU);
 
-		DataUtil.loadDataList("res/units/datalist", Integer.class, UnitData.class, unitDataMap);
-		DataUtil.loadDataList("res/spells/unit/datalist", String.class, SpellData.class, spellDataMap);
-		DataUtil.loadDataList("res/spells/hero/datalist", String.class, CardSpellData.class, cardSpellDataMap);
+		DataUtil.loadDataList("res/units/datalist", String.class, UnitData.class, unitDataMap);
+		DataUtil.loadDataList("res/spells/unit/datalist", String.class, AbilityData.class, spellDataMap);
+		DataUtil.loadDataList("res/spells/hero/datalist", String.class, SpellData.class, cardSpellDataMap);
 		DataUtil.loadDataList("res/spells/passive/datalist", String.class, PassiveData.class, passiveDataMap);
 		DataUtil.loadDataList("res/buffs/datalist", String.class, BuffData.class, buffDataMap);
 
 		dataLoader.loadSpecialEffectsFromFileSystem();
 
 		loadScripts();
+
+		new Cheats(this).init();
+
+		try {
+			DataUtil.saveDataList("res/units.json", unitDataMap, UnitData.class);
+			DataUtil.saveDataList("res/spells.json", spellDataMap, AbilityData.class);
+			DataUtil.saveDataList("res/cardSpells.json", cardSpellDataMap, SpellData.class);
+			DataUtil.saveDataList("res/passives.json", passiveDataMap, PassiveData.class);
+			DataUtil.saveDataList("res/buffs.json", buffDataMap, BuffData.class);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 
 	public void loadScripts(){
@@ -247,7 +258,7 @@ public class Program {
 				for (String key: buffDataMap.keySet())
 					getBuffScriptById(key).compileScript(groovyScriptEngine, new Binding());
 
-				for (int key: unitDataMap.keySet())
+				for (String key: unitDataMap.keySet())
 					getUnitDataById(key).compileScript(groovyScriptEngine, new Binding());
 
 				return null;
@@ -275,7 +286,7 @@ public class Program {
 		return battleController;
 	}
 
-	public SpellData getSpellDataById(String id){
+	public AbilityData getSpellDataById(String id){
 		return spellDataMap.get(id);
 	}
 
@@ -283,7 +294,7 @@ public class Program {
 		return passiveDataMap.get(id);
 	}
 
-	public CardSpellData getCardSpellDataById(String id){
+	public SpellData getCardSpellDataById(String id){
 		return cardSpellDataMap.get(id);
 	}
 
@@ -299,7 +310,7 @@ public class Program {
         factions.put(faction.getId(), faction);
     }
 
-	public UnitData getUnitDataById(int id){
+	public UnitData getUnitDataById(String id){
 		return unitDataMap.get(id);
 	}
 
@@ -398,7 +409,7 @@ public class Program {
 			localClient.addPacketHandler(new GetInventoryMessageHandler(HEADER_GET_INVENTORY));
 			localClient.addPacketHandler(new PlacementFinishedMessageHandler(HEADER_PLACEMENT_FINISHED));
             localClient.addPacketHandler(new GetFactionInfoMessageHandler(HEADER_GET_FACTION_INFO));
-			localClient.addPacketHandler(new CastSpellMessageHandler(HEADER_SPELL_CAST_ORDER));
+			localClient.addPacketHandler(new CastAbilityMessageHandler(HEADER_SPELL_CAST_ORDER));
 			localClient.addPacketHandler(new ServerStatusRequestMessageHandler(HEADER_SERVER_STATUS_REQUEST));
 			localClient.addPacketHandler(new BattleOverMessageHandler(HEADER_BATTLE_IS_OVER));
 			localClient.addPacketHandler(new InstantMoveMessageHandler(HEADER_INSTANT_MOVE));
@@ -412,7 +423,7 @@ public class Program {
 			localClient.addPacketHandler(new JoinChannelMessageHandler(HEADER_JOIN_CHANNEL));
 			localClient.addPacketHandler(new LeaveChannelMessageHandler(HEADER_LEAVE_CHANNEL));
 			localClient.addPacketHandler(new AllChannelsListMessageHandler(HEADER_ALL_CHANNELS_LIST));
-			localClient.addPacketHandler(new CastCardSpellMessageHandler(HEADER_CARD_CAST_ORDER));
+			localClient.addPacketHandler(new CastSpellMessageHandler(HEADER_CARD_CAST_ORDER));
 			localClient.addPacketHandler(new GetItemsMessageHandler(HEADER_GET_ITEMS));
 			localClient.addPacketHandler(new GetCharacterInfoMessageHandler(HEADER_GET_CHARACTER_INFO));
 

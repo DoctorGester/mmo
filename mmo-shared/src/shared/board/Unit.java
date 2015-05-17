@@ -38,7 +38,7 @@ public interface Unit {
 	public CardMaster getOwner();
 	public UnitData getUnitData();
 	public Binding getUnitScope();
-	public List<? extends Spell> getSpells();
+	public List<? extends Ability> getAbilities();
 	public List<? extends Buff> getBuffs();
 
 	public int getState();

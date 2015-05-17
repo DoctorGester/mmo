@@ -3,11 +3,11 @@ package core.board;
 import core.main.ChatChannel;
 import core.main.GameClient;
 import shared.board.data.BuffData;
-import shared.board.data.CardSpellData;
+import shared.board.data.SpellData;
 import shared.board.data.UnitData;
 import shared.items.ItemTypes;
 import shared.items.filters.TypeFilter;
-import shared.items.types.CardItem;
+import shared.items.types.UnitCardItem;
 import shared.items.types.SpellCardItem;
 import program.main.Program;
 import shared.board.*;
@@ -45,7 +45,7 @@ public class ServerBoard implements Board {
 	private List<Alliance> alliances;
 	private Map<CardMaster, Alliance> cardMasterAllianceMap;
 
-	private Map<CardMaster, List<CardItem>> pickedCards = new HashMap<CardMaster, List<CardItem>>();
+	private Map<CardMaster, List<UnitCardItem>> pickedCards = new HashMap<CardMaster, List<UnitCardItem>>();
 	private Map<CardMaster, List<SpellCardItem>> castCards = new HashMap<CardMaster, List<SpellCardItem>>();
 
 	private float timeRemaining;
@@ -266,11 +266,11 @@ public class ServerBoard implements Board {
 		cards.add(card);
 	}
 
-	private void addPickedCard(CardMaster master, CardItem card){
-		List<CardItem> cards = pickedCards.get(master);
+	private void addPickedCard(CardMaster master, UnitCardItem card){
+		List<UnitCardItem> cards = pickedCards.get(master);
 
 		if (cards == null){
-			cards = new ArrayList<CardItem>();
+			cards = new ArrayList<UnitCardItem>();
 			pickedCards.put(master, cards);
 		}
 
@@ -281,11 +281,11 @@ public class ServerBoard implements Board {
 		return castCards.get(master) != null && castCards.get(master).contains(card);
 	}
 
-	private boolean hasPickedCard(CardMaster master, CardItem card){
+	private boolean hasPickedCard(CardMaster master, UnitCardItem card){
 		return pickedCards.get(master) != null && pickedCards.get(master).contains(card);
 	}
 
-	public List<CardItem> getPickedCards(CardMaster cardMaster){
+	public List<UnitCardItem> getPickedCards(CardMaster cardMaster){
 		return pickedCards.get(cardMaster);
 	}
 
@@ -324,7 +324,7 @@ public class ServerBoard implements Board {
 		return true;
 	}
 
-	public synchronized Unit handlePickOrder(CardMaster cardMaster, CardItem card, UnitData unitData){
+	public synchronized Unit handlePickOrder(CardMaster cardMaster, UnitCardItem card, UnitData unitData){
 		// Exit if board is not in the picking stage
 		if (state != STATE_WAIT_FOR_PICK)
 			return null;
@@ -470,13 +470,13 @@ public class ServerBoard implements Board {
 		if (hasCastCard(caster, spellCard))
 			return false;
 
-		CardSpellData data = Program.getInstance().getCardSpellDataById(spellCard.getSpellId());
+		SpellData data = Program.getInstance().getCardSpellDataById(spellCard.getSpellId());
 
 		if (data == null)
 			return false;
 
-		CardSpell spell = new ServerCardSpell(data, caster, this);
-		spell.callEvent(CardSpell.SCRIPT_EVENT_CAST_BEGIN);
+		Spell spell = new ServerSpell(data, caster, this);
+		spell.callEvent(Spell.SCRIPT_EVENT_CAST_BEGIN);
 
 		addCastCard(caster, spellCard);
 		incTurn();
@@ -593,13 +593,13 @@ public class ServerBoard implements Board {
 						break;
 					case STATE_WAIT_FOR_PICK:
 						// Picking random card
-						List<CardItem> cards = currentTurning.getInventory().filter(CardItem.class, new TypeFilter(ItemTypes.CREATURE_CARD));
+						List<UnitCardItem> cards = currentTurning.getInventory().filter(UnitCardItem.class, new TypeFilter(ItemTypes.CREATURE_CARD));
 
 						if (pickedCards.get(currentTurning) != null)
 							cards.removeAll(pickedCards.get(currentTurning));
 
 						int random = (int) (Math.random() * cards.size());
-						CardItem card = cards.get(random);
+						UnitCardItem card = cards.get(random);
 
 						TurnManager.getInstance().pick(this, currentTurning, card.getId());
 						break;
@@ -616,16 +616,16 @@ public class ServerBoard implements Board {
 					+ u.getAttackDamage()
 					+ u.getOwner().getBattleId()
 					+ u.getCurrentActionPoints()
-					+ u.getUnitData().getId()
+					+ u.getUnitData().getId().hashCode()
 					+ u.getPosition().getX()
 					+ u.getPosition().getY()
 					+ u.getBonusAttackDamage()
 					+ u.getDamageDealt()
 					+ u.getHealDone();
 
-			for (Spell spell: u.getSpells())
-				result += spell.getCoolDownLeft() +
-						  spell.getSpellData().getId().hashCode();
+			for (Ability ability : u.getAbilities())
+				result += ability.getCoolDownLeft() +
+						  ability.getAbilityData().getId().hashCode();
 		}
 
 		result += currentTurning.getBattleId();
