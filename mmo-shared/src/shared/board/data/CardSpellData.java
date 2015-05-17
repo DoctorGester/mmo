@@ -3,9 +3,10 @@ package shared.board.data;
 import groovy.lang.Binding;
 import groovy.lang.Script;
 import groovy.util.GroovyScriptEngine;
+import shared.other.DataElement;
 import shared.other.DataLoaderKey;
 
-public class CardSpellData {
+public class CardSpellData implements DataElement {
 	@DataLoaderKey private String id;
 	@DataLoaderKey private String script;
 

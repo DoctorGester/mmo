@@ -4,12 +4,13 @@ import groovy.lang.Binding;
 import groovy.lang.Script;
 import groovy.util.GroovyScriptEngine;
 import shared.board.SpellTarget;
+import shared.other.DataElement;
 import shared.other.DataLoaderKey;
 
 import java.util.HashSet;
 import java.util.Set;
 
-public class SpellData {
+public class SpellData implements DataElement {
 	@DataLoaderKey(value = "target", function = "addTarget", dataEnum = SpellTarget.class)
 	private Set<SpellTarget> targets = new HashSet<SpellTarget>();
 

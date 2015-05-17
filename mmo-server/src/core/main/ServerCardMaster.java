@@ -20,7 +20,6 @@ import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class ServerCardMaster implements CardMaster {
-
 	private int state = STATE_IN_GLOBAL_MAP;
 
 	private String name;

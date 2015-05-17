@@ -3,9 +3,10 @@ package shared.board.data;
 import groovy.lang.Binding;
 import groovy.lang.GroovyObject;
 import groovy.util.GroovyScriptEngine;
+import shared.other.DataElement;
 import shared.other.DataLoaderKey;
 
-public class BuffData {
+public class BuffData implements DataElement {
 	@DataLoaderKey private String id;
 	@DataLoaderKey private String script;
 	@DataLoaderKey private String icon;

@@ -2,7 +2,6 @@ package core.main;
 
 import com.jme3.math.Vector2f;
 import program.main.Program;
-import shared.map.CardMaster;
 import shared.map.Hero;
 import shared.other.Vector2;
 
@@ -10,7 +9,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ClientHero implements Hero {
-
 	private float x, y;
 
 	private Vector2f facing = new Vector2f(0, 1),

@@ -3,9 +3,10 @@ package shared.board.data;
 import groovy.lang.Binding;
 import groovy.lang.Script;
 import groovy.util.GroovyScriptEngine;
+import shared.other.DataElement;
 import shared.other.DataLoaderKey;
 
-public class PassiveData {
+public class PassiveData implements DataElement {
 	@DataLoaderKey private String id;
 	@DataLoaderKey("script") private String scriptName;
 

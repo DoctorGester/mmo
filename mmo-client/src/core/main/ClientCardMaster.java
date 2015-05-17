@@ -13,12 +13,6 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class ClientCardMaster implements CardMaster {
-	public static final int TYPE_PLAYER = 0x00,
-							TYPE_NPC = 0x01;
-
-	public static final int STATE_IN_GLOBAL_MAP = 0x00,
-							STATE_IN_BATTLE = 0x01;
-
 	private int state = STATE_IN_GLOBAL_MAP;
 
 	private String name = "Undefined";

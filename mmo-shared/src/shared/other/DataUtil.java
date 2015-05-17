@@ -1,12 +1,20 @@
 package shared.other;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.reflect.TypeToken;
+import com.google.gson.stream.JsonReader;
+import com.google.gson.stream.JsonWriter;
+import org.apache.commons.io.FileUtils;
 import shared.board.Cell;
 import shared.board.Unit;
+import shared.board.data.*;
 
 import java.io.*;
 import java.lang.reflect.Array;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.lang.reflect.Type;
 import java.nio.charset.Charset;
 import java.util.Arrays;
 import java.util.Map;
@@ -323,6 +331,25 @@ public class DataUtil {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+	}
+
+	public static <T extends DataElement> Map<String, T> loadDataList(String file, Class<T> type) throws IOException {
+		String in = FileUtils.readFileToString(new File(file));
+		JsonReader reader = new JsonReader(new StringReader(in));
+
+		return new DataAdapter<T>(type).read(reader);
+	}
+
+	public static <T extends DataElement> void saveDataList(String file, Map<String, T> data, Class<T> type) throws IOException {
+		StringWriter out = new StringWriter();
+
+		JsonWriter writer = new JsonWriter(out);
+		writer.setSerializeNulls(true);
+		writer.setIndent("  ");
+
+		new DataAdapter<T>(type).write(writer, data);
+
+		FileUtils.writeStringToFile(new File(file), out.toString());
 	}
 
 	public static int distance(Cell from, Cell to){
