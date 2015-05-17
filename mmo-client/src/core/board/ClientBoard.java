@@ -257,20 +257,6 @@ public class ClientBoard implements Board {
 		cardMaster.setUsedUnit(null);
 	}
 
-	private void autoSkipTurnCheck(){
-		boolean skip = units.size() > 0;
-
-		for (Unit u: units){
-			if (u.getState() == STATE_WAIT_FOR_ORDER){
-				skip = false;
-				break;
-			}
-		}
-
-		if (skip)
-			nextTurn();
-	}
-
 	public synchronized void nextTurn(){
 		if (currentTurning.getUsedUnit() != null)
 			currentTurning.getUsedUnit().setState(Unit.STATE_REST);
@@ -307,10 +293,6 @@ public class ClientBoard implements Board {
 
 		BattleController controller = Program.getInstance().getBattleController();
 		controller.onNextTurn(controller.getBattleState(id), results);
-
-		// Check if turn can be skipped once more
-		// TODO add some delay there
-		autoSkipTurnCheck();
 
 		turnNumber++;
 	}

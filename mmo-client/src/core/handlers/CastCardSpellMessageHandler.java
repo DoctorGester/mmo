@@ -8,10 +8,7 @@ import core.graphics.scenes.Scenes;
 import core.main.*;
 import core.ui.UI;
 import core.ui.battle.SpellSelectorUIState;
-import program.datastore.DataKey;
-import program.datastore.DataStore;
-import program.datastore.ExistenceCondition;
-import program.datastore.GameStateCondition;
+import program.datastore.*;
 import program.main.Program;
 import program.main.SceneUtil;
 import shared.items.types.SpellCardItem;
@@ -51,13 +48,12 @@ public class CastCardSpellMessageHandler extends PacketHandler {
 		DataInputStream stream = DataUtil.stream(data);
 
 		int boardNumber = stream.readInt();
-		short turnNumber = stream.readShort();
+		final short turnNumber = stream.readShort();
 
-		ClientBoard board = program.getBattleController().getBattleState(boardNumber).getBoard();
-		CardMaster cardMaster = board.getCardMasters().get(stream.readByte());
+		final ClientBoard board = program.getBattleController().getBattleState(boardNumber).getBoard();
+		final CardMaster cardMaster = board.getCardMasters().get(stream.readByte());
 
-		final SpellCardItem item = new SpellCardItem();
-		item.setId(stream.readInt());
+		final SpellCardItem item = ItemDatabase.getInstance().getOrCreateItem(stream.readInt(), SpellCardItem.class);
 
 		if (cardMaster == Program.getInstance().getMainPlayer()){
 
@@ -69,8 +65,14 @@ public class CastCardSpellMessageHandler extends PacketHandler {
 			});
 		}
 
-		Turn turn = new TurnCastCardSpell(board, cardMaster, item);
-		SceneUtil.getScene(Scenes.BATTLE, BattleScene.class).getTurnQueue().add(turnNumber, turn);
+		ItemDatabase.getInstance().subscribe(item.getId(), new Subscriber() {
+			@Override
+			public void receive(String key, Data subscription) {
+				Turn turn = new TurnCastCardSpell(board, cardMaster, item);
+				SceneUtil.getScene(Scenes.BATTLE, BattleScene.class).getTurnQueue().add(turnNumber, turn);
+			}
+		});
+		ItemDatabase.getInstance().requestItem(item);
 	}
 
 }

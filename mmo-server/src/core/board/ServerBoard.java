@@ -516,20 +516,6 @@ public class ServerBoard implements Board {
 		return false;
 	}
 
-	private void autoSkipTurnCheck(){
-		boolean skip = units.size() > 0;
-
-		for (Unit u: units){
-			if (u.getState() == Unit.STATE_WAIT){
-				skip = false;
-				break;
-			}
-		}
-
-		if (skip)
-			nextTurn();
-	}
-
 	public void unitDies(Unit unit){
 		Alliance alliance = cardMasterAllianceMap.get(unit.getOwner());
 		if (alliance.killUnit())
@@ -567,10 +553,6 @@ public class ServerBoard implements Board {
 				u.calculateTurnParameters();
 				u.callEvent(Unit.SCRIPT_EVENT_TURN_END);
 			}
-
-		// Check if turn can be skipped once more
-		// TODO add some delay there
-		autoSkipTurnCheck();
 	}
 
 	public void checkGameOver(){
