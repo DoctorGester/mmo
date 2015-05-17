@@ -13,11 +13,9 @@ public class Npc {
         cardMaster = new ServerCardMaster();
         cardMaster.setName("Undefined");
 		cardMaster.setType(CardMaster.TYPE_NPC);
-
-		createDefaultInventory();
     }
 
-	private void createDefaultInventory(){
+	public void createDefaultInventory(){
 		ServerInventory inventory = cardMaster.getInventory();
 
 		UnitCardItem itemOne, itemTwo, itemThree;

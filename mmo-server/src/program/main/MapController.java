@@ -103,6 +103,7 @@ public class MapController {
 
 			npc.getCardMaster().setId(masterEntity.getId());
 			npc.getCardMaster().setName(name);
+			npc.createDefaultInventory();
 			return npc;
 		} catch (SQLException e) {
 			e.printStackTrace();
