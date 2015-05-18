@@ -17,23 +17,6 @@ import com.jme3.math.Vector2f;
 import com.jme3.math.Vector3f;
 import com.jme3.renderer.Camera;
 
-/**
- * <pre>
- * getStateManager().detach(getStateManager().getState(FlyCamAppState.class));
- * RtsCam rtsCam = new RtsCam(UpVector.Y_UP);
- * rtsCam.setCenter(new Vector3f(0, 0, 0));
- * rtsCam.setDistance(200);
- * rtsCam.setMaxSpeed(DoF.FWD, 100, 0.5f);
- * rtsCam.setMaxSpeed(DoF.SIDE, 100, 0.5f);
- * rtsCam.setMaxSpeed(DoF.DISTANCE, 100, 0.5f);
- * rtsCam.setHeightProvider(new HeightProvider() {
- *     public float getHeight(Vector2f coord) {
- *         return terrain.getHeight(coord)+10;
- *     }
- * });
- * getStateManager().attach(rtsCam);
- * </pre>
- */
 public class BoardCamera extends AbstractAppState {
 
 	/**
@@ -43,24 +26,9 @@ public class BoardCamera extends AbstractAppState {
 		SIDE,
 		FWD,
 		ROTATE,
-		TILT,
-		DISTANCE
 	}
 
-	public enum UpVector {
-
-		Y_UP(Vector3f.UNIT_Y),
-		Z_UP(Vector3f.UNIT_Z);
-
-		final Vector3f upVector;
-
-		UpVector(Vector3f upVector) {
-			this.upVector = upVector;
-		}
-
-	}
-
-	interface HeightProvider {
+	public interface HeightProvider {
 		public float getHeight(Vector2f coord);
 	}
 
@@ -84,8 +52,6 @@ public class BoardCamera extends AbstractAppState {
 
 	private final InternalListener listener = new InternalListener();
 
-	private final UpVector up;
-
 	private final Vector3f oldPosition = new Vector3f();
 	private final Vector3f oldCenter = new Vector3f();
 	private final Vector2f tempVec2 = new Vector2f();
@@ -106,29 +72,27 @@ public class BoardCamera extends AbstractAppState {
 	private static final int SIDE = DoF.SIDE.ordinal();
 	private static final int FWD = DoF.FWD.ordinal();
 	private static final int ROTATE = DoF.ROTATE.ordinal();
-	private static final int TILT = DoF.TILT.ordinal();
-	private static final int DISTANCE = DoF.DISTANCE.ordinal();
 
 	private static final float WHEEL_SPEED = 1f / 15;
 
 	private static String[] mappings = new String[]{
-			"+SIDE", "+FWD", "+ROTATE", "+TILT", "+DISTANCE", "-SIDE", "-FWD", "-ROTATE", "-TILT", "-DISTANCE", "+WHEEL", "-WHEEL", "-MOUSEX", "+MOUSEX", "-MOUSEY", "+MOUSEY",
+			"+SIDE", "+FWD", "+ROTATE", "-SIDE", "-FWD", "-ROTATE", "+WHEEL", "-WHEEL", "-MOUSEX", "+MOUSEX", "-MOUSEY", "+MOUSEY",
 			"BUTTON1", "BUTTON2", "BUTTON3"};
 
-	public BoardCamera(UpVector up) {
-		this.up = up;
+	private float rotationSpeed;
+	private float rotationAcceleration;
+	private float rotationMaxSpeed;
 
+	public BoardCamera() {
 		setMinMaxValues(DoF.SIDE, Float.NEGATIVE_INFINITY, Float.POSITIVE_INFINITY);
 		setMinMaxValues(DoF.FWD, Float.NEGATIVE_INFINITY, Float.POSITIVE_INFINITY);
 		setMinMaxValues(DoF.ROTATE, Float.NEGATIVE_INFINITY, Float.POSITIVE_INFINITY);
-		setMinMaxValues(DoF.TILT, 0.2f, (float) (Math.PI / 2) - 0.001f);
-		setMinMaxValues(DoF.DISTANCE, 2, Float.POSITIVE_INFINITY);
 
 		setMaxSpeed(DoF.SIDE, 10f, 0.4f);
 		setMaxSpeed(DoF.FWD, 10f, 0.4f);
-		setMaxSpeed(DoF.ROTATE, 2f, 0.4f);
-		setMaxSpeed(DoF.TILT, 1f, 0.4f);
-		setMaxSpeed(DoF.DISTANCE, 15f, 0.4f);
+		setMaxSpeed(DoF.ROTATE, 10f, 0.4f);
+
+		rotationMaxSpeed = 0.3f;
 	}
 
 	@Override
@@ -253,16 +217,11 @@ public class BoardCamera extends AbstractAppState {
 
 		}
 
-		float distanceChange = maxSpeedPerSecondOfAccell[DISTANCE] * accelTime[DISTANCE] * tpf;
-		distance += distanceChange;
-		distance += offsetMoves[DISTANCE];
-
-		tilt += maxSpeedPerSecondOfAccell[TILT] * accelTime[TILT] * tpf + offsetMoves[TILT];
-		rot += maxSpeedPerSecondOfAccell[ROTATE] * accelTime[ROTATE] * tpf + offsetMoves[ROTATE];
-
-		distance = clamp(minValue[DISTANCE], distance, maxValue[DISTANCE]);
+		//rot += maxSpeedPerSecondOfAccell[ROTATE] * accelTime[ROTATE] * tpf + offsetMoves[ROTATE];
+		rotationSpeed += rotationAcceleration;
+		rot += rotationSpeed * tpf;
 		rot = clamp(minValue[ROTATE], rot % (FastMath.PI * 2), maxValue[ROTATE]);
-		tilt = clamp(minValue[TILT], tilt, maxValue[TILT]);
+		direction[ROTATE] = 0;
 
 		double offX = maxSpeedPerSecondOfAccell[SIDE] * accelTime[SIDE] * tpf + offsetMoves[SIDE];
 		double offY = maxSpeedPerSecondOfAccell[FWD] * accelTime[FWD] * tpf + offsetMoves[FWD];
@@ -274,35 +233,20 @@ public class BoardCamera extends AbstractAppState {
 
 
 		center.x += offX * cosRot + offY * sinRot;
-		if (up == UpVector.Y_UP) {
-			center.z += offX * -sinRot + offY * cosRot;
-		} else {
-			center.y += offX * -sinRot + offY * cosRot;
-		}
+		center.z += offX * -sinRot + offY * cosRot;
 
 		if (centerBounds != null) {
 			//TODO: clamp center to bounds
 		}
 
-		if (up == UpVector.Y_UP) {
-			position.x = center.x + (float) (distance * cosTilt * sinRot);
-			position.y = center.y + (float) (distance * sinTilt);
-			position.z = center.z + (float) (distance * cosTilt * cosRot);
-			if (heightProvider != null) {
-				float h = heightProvider.getHeight(tempVec2.set(position.x, position.z));
-				if (position.y < h) {
-					position.y = h;
-				}
-			}
-		} else {
-			position.x = center.x + (float) (distance * cosTilt * sinRot);
-			position.y = center.y + (float) (distance * cosTilt * cosRot);
-			position.z = center.z + (float) (distance * sinTilt);
-			if (heightProvider != null) {
-				float h = heightProvider.getHeight(tempVec2.set(position.x, position.y));
-				if (position.z < h) {
-					position.z = h;
-				}
+		position.x = center.x + distance * cosTilt * sinRot;
+		position.y = center.y + distance * sinTilt;
+		position.z = center.z + distance * cosTilt * cosRot;
+
+		if (heightProvider != null) {
+			float h = heightProvider.getHeight(tempVec2.set(position.x, position.z));
+			if (position.y < h) {
+				position.y = h;
 			}
 		}
 
@@ -319,7 +263,7 @@ public class BoardCamera extends AbstractAppState {
 		}
 
 		cam.setLocation(position);
-		cam.lookAt(center, up.upVector);
+		cam.lookAt(center, Vector3f.UNIT_Y);
 
 		oldPosition.set(position);
 		oldCenter.set(center);
@@ -403,25 +347,11 @@ public class BoardCamera extends AbstractAppState {
 	private void registerWithInput(InputManager inputManager) {
 		this.inputManager = inputManager;
 
-		if (up == UpVector.Y_UP) {
-			inputManager.addMapping("-SIDE", new KeyTrigger(KeyInput.KEY_A));
-			inputManager.addMapping("+SIDE", new KeyTrigger(KeyInput.KEY_D));
-			inputManager.addMapping("+ROTATE", new KeyTrigger(KeyInput.KEY_Q));
-			inputManager.addMapping("-ROTATE", new KeyTrigger(KeyInput.KEY_E));
-		} else {
-			inputManager.addMapping("+SIDE", new KeyTrigger(KeyInput.KEY_A));
-			inputManager.addMapping("-SIDE", new KeyTrigger(KeyInput.KEY_D));
-			inputManager.addMapping("-ROTATE", new KeyTrigger(KeyInput.KEY_Q));
-			inputManager.addMapping("+ROTATE", new KeyTrigger(KeyInput.KEY_E));
-		}
+		inputManager.addMapping("-SIDE", new KeyTrigger(KeyInput.KEY_A));
+		inputManager.addMapping("+SIDE", new KeyTrigger(KeyInput.KEY_D));
 
 		inputManager.addMapping("+FWD", new KeyTrigger(KeyInput.KEY_S));
 		inputManager.addMapping("-FWD", new KeyTrigger(KeyInput.KEY_W));
-
-		inputManager.addMapping("+TILT", new KeyTrigger(KeyInput.KEY_R));
-		inputManager.addMapping("-TILT", new KeyTrigger(KeyInput.KEY_F));
-		inputManager.addMapping("-DISTANCE", new KeyTrigger(KeyInput.KEY_Z));
-		inputManager.addMapping("+DISTANCE", new KeyTrigger(KeyInput.KEY_X));
 
 		inputManager.addMapping("-WHEEL", new MouseAxisTrigger(MouseInput.AXIS_WHEEL, false));
 		inputManager.addMapping("+WHEEL", new MouseAxisTrigger(MouseInput.AXIS_WHEEL, true));
@@ -507,27 +437,14 @@ public class BoardCamera extends AbstractAppState {
 				if (!wheelEnabled) {
 					return;
 				}
-				float speed = maxSpeedPerSecondOfAccell[DISTANCE] * maxAccellPeriod[DISTANCE] * WHEEL_SPEED;
-				offsetMoves[DISTANCE] += value * speed;
+				//float speed = maxSpeedPerSecondOfAccell[ROTATE] * maxAccellPeriod[ROTATE] * WHEEL_SPEED;
+				//offsetMoves[ROTATE] += value * speed;
+				direction[ROTATE] = (int) Math.signum(value);
 			} else if (name.contains("MOUSE")) {
-				if (mouseRotation) {
-					int direction;
-					if (name.endsWith("X")) {
-						direction = ROTATE;
-						if (up == UpVector.Z_UP) {
-							value = -value;
-						}
-					} else {
-						direction = TILT;
-					}
-					offsetMoves[direction] += value;
-				} else if (mouseDrag) {
+				if (mouseDrag) {
 					int direction;
 					if (name.endsWith("X")) {
 						direction = SIDE;
-						if (up == UpVector.Z_UP) {
-							value = -value;
-						}
 					} else {
 						direction = FWD;
 						value = -value;

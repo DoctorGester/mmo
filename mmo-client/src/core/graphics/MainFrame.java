@@ -60,7 +60,6 @@ import java.util.logging.Logger;
 
 public class MainFrame extends SimpleApplication {
 	private Screen guiScreen;
-	private ChaseCamera chaseCamera;
 	private DirectionalLightShadowRenderer shadowRenderer;
 
 	private Scene currentScene;
@@ -302,8 +301,6 @@ public class MainFrame extends SimpleApplication {
 
 		cam.setFrustumFar(1000);
 
-		chaseCamera = new ChaseCamera(cam, inputManager);
-
 		// Init main shadow render
 		shadowRenderer = new DirectionalLightShadowRenderer(assetManager, 1024, 3);
 		viewPort.addProcessor(shadowRenderer);
@@ -352,7 +349,7 @@ public class MainFrame extends SimpleApplication {
 					if (currentScene != null)
 						currentScene.unloadScene(MainFrame.this);
 
-					scene.setupCamera(chaseCamera);
+					scene.setupCamera(cam, inputManager);
 					scene.setupLight(shadowRenderer);
 					scene.setupInput(inputManager);
 					scene.loadScene(MainFrame.this);
@@ -410,7 +407,8 @@ public class MainFrame extends SimpleApplication {
 					if (stateManager.hasState(state))
 						stateManager.detach(state);
 
-				stateManager.attach(newState);
+				if (newState != null)
+					stateManager.attach(newState);
 				return null;
 			}
 		});

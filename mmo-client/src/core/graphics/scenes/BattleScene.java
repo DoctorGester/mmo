@@ -7,6 +7,7 @@ import com.jme3.app.SimpleApplication;
 import com.jme3.asset.AssetManager;
 import com.jme3.collision.CollisionResults;
 import com.jme3.input.ChaseCamera;
+import com.jme3.input.InputManager;
 import com.jme3.input.KeyInput;
 import com.jme3.input.MouseInput;
 import com.jme3.input.controls.ActionListener;
@@ -30,10 +31,7 @@ import com.jme3.texture.Texture;
 import com.jme3.util.SkyFactory;
 import core.board.*;
 import core.board.turns.TurnQueue;
-import core.graphics.FloatingText;
-import core.graphics.MainFrame;
-import core.graphics.MaterialDebugAppState;
-import core.graphics.UnitSpatial;
+import core.graphics.*;
 import core.ui.BattleController;
 import core.ui.BattleState;
 import core.ui.UI;
@@ -60,6 +58,7 @@ public class BattleScene extends AbstractScene implements ActionListener {
 
 	private BattleState battleState;
 	private TurnQueue turnQueue = new TurnQueue();
+	private BoardCamera camera;
 
 	private List<UnitSpatial> unitSpatials;
 	private List<FloatingText> floatingTexts;
@@ -72,7 +71,7 @@ public class BattleScene extends AbstractScene implements ActionListener {
 
 	private Program program;
 
-	private ChaseCamera camera;
+	//private ChaseCamera camera;
 	private ClientAbility focusedSpell;
 	private SpellCardItem focusedSpellCard;
 	private ClientSpell focusedCardSpell;
@@ -81,7 +80,9 @@ public class BattleScene extends AbstractScene implements ActionListener {
 	private static final float QUAD_UPDATE_PERIOD = 0.1f;
 
 	@Override
-	public void setupCamera(ChaseCamera camera) {
+	public void setupCamera(Camera cam, InputManager inputManager) {
+		/*camera = new ChaseCamera(cam, inputManager);
+
 		camera.setDefaultDistance(40);
 		camera.setMinDistance(20);
 		camera.setMaxDistance(60);
@@ -96,9 +97,18 @@ public class BattleScene extends AbstractScene implements ActionListener {
 		camera.setDefaultVerticalRotation(FastMath.DEG_TO_RAD * 50);
 
 		camera.setToggleRotationTrigger(new MouseButtonTrigger(MouseInput.BUTTON_MIDDLE),
-				new KeyTrigger(KeyInput.KEY_LCONTROL));
-
-		this.camera = camera;
+				new KeyTrigger(KeyInput.KEY_LCONTROL));*/
+		camera = new BoardCamera();
+		camera.setCenter(new Vector3f(0, 0, 0));
+		camera.setDistance(200);
+		camera.setMaxSpeed(BoardCamera.DoF.FWD, 100, 0.5f);
+		camera.setMaxSpeed(BoardCamera.DoF.SIDE, 100, 0.5f);
+		camera.setHeightProvider(new BoardCamera.HeightProvider() {
+			@Override
+			public float getHeight(Vector2f coord) {
+				return 0;
+			}
+		});
 	}
 
 	@Override
@@ -162,9 +172,11 @@ public class BattleScene extends AbstractScene implements ActionListener {
 		loadMaterials(app.getAssetManager());
 		loadFromBoard(board);
 
-		camera.setSpatial(center);
+		/*camera.setSpatial(center);
 		center.removeControl(camera);
-		center.addControl(camera);
+		center.addControl(camera);*/
+
+		app.getStateManager().attach(camera);
 
 		app.getRootNode().attachChild(root);
 

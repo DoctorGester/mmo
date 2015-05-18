@@ -7,6 +7,7 @@ import com.jme3.asset.AssetManager;
 import com.jme3.collision.CollisionResult;
 import com.jme3.collision.CollisionResults;
 import com.jme3.input.ChaseCamera;
+import com.jme3.input.InputManager;
 import com.jme3.input.KeyInput;
 import com.jme3.input.MouseInput;
 import com.jme3.input.controls.KeyTrigger;
@@ -38,7 +39,7 @@ import java.util.concurrent.CopyOnWriteArraySet;
 /**
  * @author doc
  */
-public class MapScene extends AbstractScene{
+public class MapScene extends AbstractScene {
 	private boolean created = false;
 	private DirectionalLight mapSceneSun;
 	private TerrainPager terrain;
@@ -79,7 +80,9 @@ public class MapScene extends AbstractScene{
 	}
 
 	@Override
-	public void setupCamera(ChaseCamera camera) {
+	public void setupCamera(Camera cam, InputManager inputManager) {
+		camera = new ChaseCamera(cam, inputManager);
+
 		camera.setDefaultDistance(40);
 		camera.setMinDistance(20);
 		camera.setMaxDistance(60);
@@ -95,8 +98,6 @@ public class MapScene extends AbstractScene{
 
 		camera.setToggleRotationTrigger(new MouseButtonTrigger(MouseInput.BUTTON_MIDDLE),
 										new KeyTrigger(KeyInput.KEY_LCONTROL));
-
-		this.camera = camera;
 	}
 
 	@Override

@@ -3,6 +3,7 @@ package core.graphics.scenes;
 import com.jme3.animation.*;
 import com.jme3.app.SimpleApplication;
 import com.jme3.input.ChaseCamera;
+import com.jme3.input.InputManager;
 import com.jme3.light.DirectionalLight;
 import com.jme3.math.ColorRGBA;
 import com.jme3.math.Vector3f;
@@ -11,6 +12,7 @@ import com.jme3.scene.Node;
 import com.jme3.shadow.DirectionalLightShadowRenderer;
 import program.main.Program;
 import program.main.data.ClientDataLoader;
+import shared.other.DataLoaderKey;
 
 /**
  * @author doc
@@ -18,13 +20,9 @@ import program.main.data.ClientDataLoader;
 public class MenuScene extends AbstractScene {
 	private DirectionalLight menuSceneSun;
 	private boolean created = false;
-	private ChaseCamera camera;
 
 	@Override
-	public void setupCamera(ChaseCamera camera) {
-		camera.setEnabled(false);
-		this.camera = camera;
-	}
+	public void setupCamera(Camera cam, InputManager inputManager) {}
 
 	@Override
 	public void setupLight(DirectionalLightShadowRenderer shadowRenderer) {
@@ -41,10 +39,8 @@ public class MenuScene extends AbstractScene {
 	@Override
 	public void loadScene(SimpleApplication app) {
 		if (!created){
-			ClientDataLoader dataLoader = Program.getInstance().getDataLoader();
-
 			try {
-				Node spatial = dataLoader.loadAnimatedModelAlt("res/models/angel/angel_m00");
+				Node spatial = ClientDataLoader.loadAnimatedModelAlt("res/models/angel/angel_m00");
 				AnimControl animControl = spatial.getControl(AnimControl.class);
 				animControl.createChannel();
 
@@ -60,18 +56,12 @@ public class MenuScene extends AbstractScene {
 			created = true;
 		}
 
-		Camera cam = app.getCamera();
+		/*Camera cam = app.getCamera();
 
 		cam.setLocation(new Vector3f(5, 10, 5));
 		cam.lookAt(new Vector3f(0, 0, 0), Vector3f.UNIT_Y);
-		cam.update();
+		cam.update();*/
 
 		app.getRootNode().attachChild(root);
-	}
-
-	@Override
-	public void unloadScene(SimpleApplication app){
-		camera.setEnabled(true);
-		super.unloadScene(app);
 	}
 }

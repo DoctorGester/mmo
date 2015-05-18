@@ -1,8 +1,8 @@
 package core.graphics.scenes;
 
 import com.jme3.app.SimpleApplication;
-import com.jme3.input.ChaseCamera;
 import com.jme3.input.InputManager;
+import com.jme3.renderer.Camera;
 import com.jme3.scene.Node;
 import com.jme3.shadow.DirectionalLightShadowRenderer;
 
@@ -11,7 +11,7 @@ import com.jme3.shadow.DirectionalLightShadowRenderer;
  */
 public interface Scene {
 
-	public void setupCamera(ChaseCamera camera);
+	public void setupCamera(Camera camera, InputManager inputManager);
 	public void setupLight(DirectionalLightShadowRenderer shadowRenderer);
 	public void setupInput(InputManager inputManager);
 	public void loadScene(SimpleApplication app);
