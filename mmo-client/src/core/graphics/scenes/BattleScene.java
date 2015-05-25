@@ -58,7 +58,7 @@ public class BattleScene extends AbstractScene implements ActionListener {
 
 	private BattleState battleState;
 	private TurnQueue turnQueue = new TurnQueue();
-	private BoardCamera camera;
+	private BoardCamera2 camera;
 
 	private List<UnitSpatial> unitSpatials;
 	private List<FloatingText> floatingTexts;
@@ -98,8 +98,8 @@ public class BattleScene extends AbstractScene implements ActionListener {
 
 		camera.setToggleRotationTrigger(new MouseButtonTrigger(MouseInput.BUTTON_MIDDLE),
 				new KeyTrigger(KeyInput.KEY_LCONTROL));*/
-		camera = new BoardCamera();
-		camera.setCenter(new Vector3f(0, 0, 0));
+		camera = new BoardCamera2();
+		/*camera.setCenter(new Vector3f(0, 0, 0));
 		camera.setDistance(200);
 		camera.setMaxSpeed(BoardCamera.DoF.FWD, 100, 0.5f);
 		camera.setMaxSpeed(BoardCamera.DoF.SIDE, 100, 0.5f);
@@ -108,7 +108,7 @@ public class BattleScene extends AbstractScene implements ActionListener {
 			public float getHeight(Vector2f coord) {
 				return 0;
 			}
-		});
+		});*/
 	}
 
 	@Override
@@ -168,6 +168,8 @@ public class BattleScene extends AbstractScene implements ActionListener {
 		root.attachChild(center);
 		center.setLocalTranslation(board.getWidth() * quadSize / 2f, 0,
 								  (board.getHeight() - 1) * quadSize / 2f - quadSize / 2f);
+
+		camera.setCenter(center.getLocalTranslation());
 
 		loadMaterials(app.getAssetManager());
 		loadFromBoard(board);

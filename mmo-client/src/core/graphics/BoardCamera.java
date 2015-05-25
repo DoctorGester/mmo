@@ -217,11 +217,18 @@ public class BoardCamera extends AbstractAppState {
 
 		}
 
-		//rot += maxSpeedPerSecondOfAccell[ROTATE] * accelTime[ROTATE] * tpf + offsetMoves[ROTATE];
-		rotationSpeed += rotationAcceleration;
+		/*float declineSpeed = -0.01f * tpf * Math.signum(rotationAcceleration);
+		if (rota)*/
+		rotationAcceleration += -0.1f * tpf * Math.signum(rotationSpeed);
+		rotationSpeed += rotationAcceleration * tpf;
+
+		if (rotationSpeed < 0.1f * tpf && rotationAcceleration * rotationSpeed < 0){
+			rotationAcceleration = 0f;
+			rotationSpeed = 0f;
+		}
+
 		rot += rotationSpeed * tpf;
-		rot = clamp(minValue[ROTATE], rot % (FastMath.PI * 2), maxValue[ROTATE]);
-		direction[ROTATE] = 0;
+		rot = rot % (FastMath.PI * 2);
 
 		double offX = maxSpeedPerSecondOfAccell[SIDE] * accelTime[SIDE] * tpf + offsetMoves[SIDE];
 		double offY = maxSpeedPerSecondOfAccell[FWD] * accelTime[FWD] * tpf + offsetMoves[FWD];
@@ -439,7 +446,8 @@ public class BoardCamera extends AbstractAppState {
 				}
 				//float speed = maxSpeedPerSecondOfAccell[ROTATE] * maxAccellPeriod[ROTATE] * WHEEL_SPEED;
 				//offsetMoves[ROTATE] += value * speed;
-				direction[ROTATE] = (int) Math.signum(value);
+				//direction[ROTATE] = (int) Math.signum(value);
+				rotationAcceleration += value;
 			} else if (name.contains("MOUSE")) {
 				if (mouseDrag) {
 					int direction;
