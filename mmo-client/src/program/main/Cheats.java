@@ -3,13 +3,15 @@ package program.main;
 import com.jme3.app.SimpleApplication;
 import com.jme3.input.InputManager;
 import com.jme3.input.KeyInput;
+import com.jme3.input.MouseInput;
 import com.jme3.input.controls.ActionListener;
+import com.jme3.input.controls.AnalogListener;
 import com.jme3.input.controls.KeyTrigger;
+import com.jme3.input.controls.MouseAxisTrigger;
 import com.jme3.material.Material;
 import com.jme3.math.FastMath;
 import com.jme3.math.Quaternion;
 import com.jme3.math.Vector3f;
-import com.jme3.renderer.Camera;
 import com.jme3.renderer.RenderManager;
 import com.jme3.renderer.ViewPort;
 import com.jme3.scene.Geometry;
@@ -17,9 +19,7 @@ import com.jme3.scene.Mesh;
 import com.jme3.scene.Node;
 import com.jme3.scene.control.AbstractControl;
 import com.jme3.scene.control.CameraControl;
-import com.jme3.scene.control.Control;
 import com.jme3.texture.Texture;
-import com.jme3.util.TempVars;
 import core.board.ClientBoard;
 import core.graphics.CardMesh;
 import core.graphics.scenes.BattleScene;
@@ -34,6 +34,7 @@ import java.util.List;
  */
 public class Cheats {
 	private Program program;
+	private CardControl cardControl;
 
 	public Cheats(Program program){
 		this.program = program;
@@ -60,17 +61,70 @@ public class Cheats {
 		inputManager.addListener(new ActionListener() {
 			@Override
 			public void onAction(String name, boolean isPressed, float tpf) {
+				if (!isPressed)
+					return;
+
 				Node root = program.getMainFrame().getRootNode();
-				root.addControl(new CardControl(program.getMainFrame()));
+				cardControl = new CardControl(program.getMainFrame());
+				root.addControl(cardControl);
 			}
 		}, "card_control");
 
+		inputManager.addMapping("wheel_down", new MouseAxisTrigger(MouseInput.AXIS_WHEEL, true));
+		inputManager.addListener(new AnalogListener() {
+			@Override
+			public void onAnalog(String name, float value, float tpf) {
+				cardControl.test(value * tpf);
+			}
+		}, "wheel_down");
 	}
 
 	private static class CardControl extends AbstractControl {
+
+		private class CardElement {
+			private Geometry geometry;
+			private float progressCurrent;
+			private float progressTarget;
+			private int order;
+		}
+
+		private class ControlPoint {
+			private Vector3f position;
+			private float rotation;
+
+			public ControlPoint(Vector3f position, float rotation) {
+				this.position = position;
+				this.rotation = rotation;
+			}
+
+			public void setPosition(Vector3f position) {
+				this.position = position;
+			}
+
+			public void setRotation(float rotation) {
+				this.rotation = rotation;
+			}
+
+			public Vector3f getPosition() {
+				return position;
+			}
+
+			public float getRotation() {
+				return rotation;
+			}
+		}
+
 		private Node origin;
 
-		private List<Geometry> cards = new ArrayList<Geometry>();
+		private List<CardElement> deckCards = new ArrayList<CardElement>();
+		private List<CardElement> freeCards = new ArrayList<CardElement>();
+
+		private ControlPoint[] innerCurve = new ControlPoint[]{
+				new ControlPoint(new Vector3f(1f, 0, 2f), FastMath.PI),
+				new ControlPoint(new Vector3f(0.75f, 0, 1.5f), 0f),
+				new ControlPoint(new Vector3f(-0.4f, 0, 1.5f), 0f),
+				new ControlPoint(new Vector3f(-1f, 0, 2.2f), 0f)
+		};
 
 		public CardControl(SimpleApplication application) {
 			origin = new Node();
@@ -82,35 +136,114 @@ public class Cheats {
 			application.getRootNode().attachChild(origin);
 
 			for (int i = 0; i < 50; i++){
-				float size = 0.3f;
+				final float size = 0.3f;
 				Mesh mesh = new CardMesh(size * 0.67f, size);
 				Geometry card = new Geometry("My Textured Box", mesh);
-				card.setLocalTranslation(0, 0, 2f);
 				Material cube1Mat = new Material(application.getAssetManager(), "Common/MatDefs/Misc/Unshaded.j3md");
 				Texture cube1Tex = application.getAssetManager().loadTexture("res/textures/card.png");
 				cube1Mat.setTexture("ColorMap", cube1Tex);
 				card.setMaterial(cube1Mat);
 
 				origin.attachChild(card);
-				cards.add(card);
+
+				CardElement element = new CardElement();
+				element.geometry = card;
+				element.order = i;
+
+				deckCards.add(element);
 			}
+		}
+
+		private ControlPoint getCardPosition(float at){
+			at = FastMath.clamp(at, 0, 1);
+
+			float curveProgress = at / 0.5f;
+			if (at < 0.5f){
+				Vector3f position = FastMath.interpolateBezier(
+						curveProgress,
+						innerCurve[0].getPosition(),
+						innerCurve[1].getPosition(),
+						innerCurve[2].getPosition(),
+						innerCurve[3].getPosition()
+				);
+
+				float rotation = FastMath.interpolateBezier(
+						curveProgress,
+						innerCurve[0].getRotation(),
+						innerCurve[1].getRotation(),
+						innerCurve[2].getRotation(),
+						innerCurve[3].getRotation()
+				);
+
+				return new ControlPoint(position, rotation);
+			}
+
+			return null;
+		}
+
+		public void test(float value){
+			final float space = 0.05f;
+
+			int freeCardAmount = freeCards.size();
+			CardElement lastFreeCard = null;
+
+			if (freeCardAmount != 0) {
+				lastFreeCard = freeCards.get(freeCardAmount - 1);
+			}
+
+			if (lastFreeCard == null) {
+				freeCards.add(deckCards.remove(0));
+			} else if (lastFreeCard.progressCurrent > space){
+				int cardsToAdd = (int) Math.floor(lastFreeCard.progressCurrent / space);
+				for (int i = 0; i < cardsToAdd; i++) {
+					if (deckCards.size() > 0) {
+						CardElement addedCard = deckCards.remove(0);
+
+						addedCard.progressTarget = lastFreeCard.progressCurrent - space * (i + 1);
+
+						freeCards.add(addedCard);
+					}
+				}
+			}
+
+			for (CardElement card: freeCards)
+				card.progressTarget += value;
 		}
 
 		@Override
 		protected void controlUpdate(float tpf) {
+			int index = 0;
 
-			/*TempVars vars = TempVars.get();
+			for (CardElement card: deckCards){
+				final float cardWidth = 0.005f;
 
-			Vector3f vecDiff = vars.vect1.set(camera.getLocation()).subtractLocal(origin.getWorldTranslation());
-			origin.setLocalTranslation(vecDiff.addLocal(origin.getLocalTranslation()));
+				Vector3f deckBase = innerCurve[0].getPosition().clone();
+				deckBase.z += index * cardWidth;
 
-			Quaternion worldDiff = vars.quat1.set(camera.getRotation()).subtractLocal(origin.getWorldRotation());
-			worldDiff.addLocal(origin.getLocalRotation());
-			origin.setLocalRotation(worldDiff);
+				card.geometry.setLocalTranslation(deckBase);
 
-			vars.release();*/
-			for (Geometry card: cards)
-				card.rotate(0.3f * tpf, 0, 0);
+				index++;
+			}
+
+			for (CardElement card: freeCards){
+				final float speed = 0.25f * tpf;
+				float sign = Math.signum(card.progressTarget - card.progressCurrent);
+				float progress = card.progressCurrent + sign * speed;
+
+				if (sign * (card.progressTarget - card.progressCurrent) < speed) {
+					progress = card.progressTarget;
+				}
+
+				card.progressCurrent = progress;
+
+				ControlPoint point = getCardPosition(progress);
+				if (point != null) {
+					card.geometry.setLocalTranslation(point.getPosition());
+					card.geometry.setLocalRotation(new Quaternion().fromAngles(0, point.getRotation(), 0));
+				} else {
+					//card.progressTarget = 0.0f;
+				}
+			}
 		}
 
 		@Override
