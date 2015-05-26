@@ -39,15 +39,15 @@ public class CardMesh extends Mesh {
 		});
 
 
-		setBuffer(VertexBuffer.Type.TexCoord, 2, new float[]{0, 0,
-															 1, 0,
+		setBuffer(VertexBuffer.Type.TexCoord, 2, new float[]{0.5f, 1,
 															 1, 1,
-															 0, 1,
+															 1, 0,
+															 0.5f, 0,
 
+															 0, 0,
+															 0.5f, 0,
+															 0.5f, 1,
 															 0, 1,
-															 1, 1,
-															 1, 0,
-															 0, 0
 		});
 
 		setBuffer(VertexBuffer.Type.Normal, 3, new float[]{0, 0, 1,
@@ -63,9 +63,8 @@ public class CardMesh extends Mesh {
 
 		setBuffer(VertexBuffer.Type.Index, 3, new short[]{0, 1, 2,
 														  0, 2, 3,
-
-														  2, 1, 0,
-														  3, 2, 0
+														  6, 5, 4,
+														  7, 6, 4
 		});
 
 		updateBound();

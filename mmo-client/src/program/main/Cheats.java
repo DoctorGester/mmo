@@ -19,6 +19,7 @@ import com.jme3.scene.Mesh;
 import com.jme3.scene.Node;
 import com.jme3.scene.control.AbstractControl;
 import com.jme3.scene.control.CameraControl;
+import com.jme3.scene.control.Control;
 import com.jme3.texture.Texture;
 import core.board.ClientBoard;
 import core.graphics.CardMesh;
@@ -126,6 +127,13 @@ public class Cheats {
 				new ControlPoint(new Vector3f(-1f, 0, 2.2f), 0f)
 		};
 
+		private ControlPoint[] outerCurve = new ControlPoint[]{
+				new ControlPoint(new Vector3f(-1f, 0, 2.2f), 0f),
+				new ControlPoint(new Vector3f(0.75f, -0.5f, 2.5f), FastMath.PI),
+				new ControlPoint(new Vector3f(-0.4f, -0.5f, 2.5f), FastMath.PI),
+				new ControlPoint(new Vector3f(1.5f, -0.5f, 2.5f), FastMath.PI + FastMath.HALF_PI),
+		};
+
 		public CardControl(SimpleApplication application) {
 			origin = new Node();
 
@@ -158,27 +166,30 @@ public class Cheats {
 			at = FastMath.clamp(at, 0, 1);
 
 			float curveProgress = at / 0.5f;
-			if (at < 0.5f){
-				Vector3f position = FastMath.interpolateBezier(
-						curveProgress,
-						innerCurve[0].getPosition(),
-						innerCurve[1].getPosition(),
-						innerCurve[2].getPosition(),
-						innerCurve[3].getPosition()
-				);
+			ControlPoint[] curve = innerCurve;
 
-				float rotation = FastMath.interpolateBezier(
-						curveProgress,
-						innerCurve[0].getRotation(),
-						innerCurve[1].getRotation(),
-						innerCurve[2].getRotation(),
-						innerCurve[3].getRotation()
-				);
-
-				return new ControlPoint(position, rotation);
+			if (at >= 0.5f){
+				curve = outerCurve;
+				curveProgress = (at - 0.5f) / 0.5f;
 			}
 
-			return null;
+			Vector3f position = FastMath.interpolateBezier(
+					curveProgress,
+					curve[0].getPosition(),
+					curve[1].getPosition(),
+					curve[2].getPosition(),
+					curve[3].getPosition()
+			);
+
+			float rotation = FastMath.interpolateBezier(
+					curveProgress,
+					curve[0].getRotation(),
+					curve[1].getRotation(),
+					curve[2].getRotation(),
+					curve[3].getRotation()
+			);
+
+			return new ControlPoint(position, rotation);
 		}
 
 		public void test(float value){
@@ -221,6 +232,7 @@ public class Cheats {
 				deckBase.z += index * cardWidth;
 
 				card.geometry.setLocalTranslation(deckBase);
+				card.geometry.setLocalRotation(new Quaternion().fromAngles(0, innerCurve[0].getRotation(), 0));
 
 				index++;
 			}
@@ -237,12 +249,8 @@ public class Cheats {
 				card.progressCurrent = progress;
 
 				ControlPoint point = getCardPosition(progress);
-				if (point != null) {
-					card.geometry.setLocalTranslation(point.getPosition());
-					card.geometry.setLocalRotation(new Quaternion().fromAngles(0, point.getRotation(), 0));
-				} else {
-					//card.progressTarget = 0.0f;
-				}
+				card.geometry.setLocalTranslation(point.getPosition());
+				card.geometry.setLocalRotation(new Quaternion().fromAngles(0, point.getRotation(), 0));
 			}
 		}
 
