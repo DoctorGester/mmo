@@ -19,7 +19,6 @@ import com.jme3.scene.Mesh;
 import com.jme3.scene.Node;
 import com.jme3.scene.control.AbstractControl;
 import com.jme3.scene.control.CameraControl;
-import com.jme3.scene.control.Control;
 import com.jme3.texture.Texture;
 import core.board.ClientBoard;
 import core.graphics.CardMesh;
@@ -37,11 +36,11 @@ public class Cheats {
 	private Program program;
 	private CardControl cardControl;
 
-	public Cheats(Program program){
+	public Cheats(Program program) {
 		this.program = program;
 	}
 
-	public void init(){
+	public void init() {
 		InputManager inputManager = program.getMainFrame().getInputManager();
 		inputManager.addMapping("enter_battle", new KeyTrigger(KeyInput.KEY_B));
 		inputManager.addListener(new ActionListener() {
@@ -143,7 +142,7 @@ public class Cheats {
 
 			application.getRootNode().attachChild(origin);
 
-			for (int i = 0; i < 50; i++){
+			for (int i = 0; i < 50; i++) {
 				final float size = 0.3f;
 				Mesh mesh = new CardMesh(size * 0.67f, size);
 				Geometry card = new Geometry("My Textured Box", mesh);
@@ -162,13 +161,13 @@ public class Cheats {
 			}
 		}
 
-		private ControlPoint getCardPosition(float at){
+		private ControlPoint getCardPosition(float at) {
 			at = FastMath.clamp(at, 0, 1);
 
 			float curveProgress = at / 0.5f;
 			ControlPoint[] curve = innerCurve;
 
-			if (at >= 0.5f){
+			if (at >= 0.5f) {
 				curve = outerCurve;
 				curveProgress = 1.0f - (at - 0.5f) / 0.5f;
 			}
@@ -192,7 +191,7 @@ public class Cheats {
 			return new ControlPoint(position, rotation);
 		}
 
-		public void test(float value){
+		public void test(float value) {
 			final float space = 0.05f;
 
 			int freeCardAmount = freeCards.size();
@@ -204,7 +203,7 @@ public class Cheats {
 
 			if (lastFreeCard == null) {
 				freeCards.add(deckCards.remove(0));
-			} else if (lastFreeCard.progressCurrent > space){
+			}/* else if (lastFreeCard.progressCurrent > space) {
 				int cardsToAdd = (int) Math.floor(lastFreeCard.progressCurrent / space);
 				for (int i = 0; i < cardsToAdd; i++) {
 					if (deckCards.size() > 0) {
@@ -215,9 +214,9 @@ public class Cheats {
 						freeCards.add(addedCard);
 					}
 				}
-			}
+			}*/
 
-			for (CardElement card: freeCards)
+			for (CardElement card : freeCards)
 				card.progressTarget += value;
 		}
 
@@ -225,7 +224,7 @@ public class Cheats {
 		protected void controlUpdate(float tpf) {
 			int index = 0;
 
-			for (CardElement card: deckCards){
+			for (CardElement card : deckCards) {
 				final float cardWidth = 0.005f;
 
 				Vector3f deckBase = innerCurve[0].getPosition().clone();
@@ -237,7 +236,7 @@ public class Cheats {
 				index++;
 			}
 
-			for (CardElement card: freeCards){
+			for (CardElement card : freeCards) {
 				final float speed = 0.25f * tpf;
 				float sign = Math.signum(card.progressTarget - card.progressCurrent);
 				float progress = card.progressCurrent + sign * speed;
@@ -251,6 +250,34 @@ public class Cheats {
 				ControlPoint point = getCardPosition(progress);
 				card.geometry.setLocalTranslation(point.getPosition());
 				card.geometry.setLocalRotation(new Quaternion().fromAngles(0, point.getRotation(), 0));
+			}
+
+			// Moving cards between view and deck
+
+			final float space = 0.05f;
+
+			if (freeCards.size() > 0 && deckCards.size() > 0) {
+				CardElement lastFreeCard = freeCards.get(freeCards.size() - 1);
+
+				if (lastFreeCard.progressCurrent > space) {
+					CardElement addedCard = deckCards.remove(0);
+					addedCard.progressTarget = lastFreeCard.progressTarget - space;
+
+					freeCards.add(addedCard);
+				}
+			}
+
+			if (freeCards.size() > 0) {
+				CardElement firstFreeCard = freeCards.get(0);
+
+				if (firstFreeCard.progressCurrent > 1.0f - space) {
+					freeCards.remove(firstFreeCard);
+					
+					firstFreeCard.progressCurrent = 0.0f;
+					firstFreeCard.progressTarget = 0.0f;
+
+					deckCards.add(firstFreeCard);
+				}
 			}
 		}
 
