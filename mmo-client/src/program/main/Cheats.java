@@ -121,17 +121,17 @@ public class Cheats {
 		private List<CardElement> freeCards = new ArrayList<CardElement>();
 
 		private ControlPoint[] innerCurve = new ControlPoint[]{
-				new ControlPoint(new Vector3f(1f, 0, 2f), FastMath.PI),
+				new ControlPoint(new Vector3f(1.2f, 0, 2f), FastMath.PI),
 				new ControlPoint(new Vector3f(0.75f, 0, 1.5f), 0f),
 				new ControlPoint(new Vector3f(-0.4f, 0, 1.5f), 0f),
-				new ControlPoint(new Vector3f(-1f, 0, 2.2f), 0f)
+				new ControlPoint(new Vector3f(-1.2f, 0, 2.2f), 0f)
 		};
 
 		private ControlPoint[] outerCurve = new ControlPoint[]{
-				new ControlPoint(new Vector3f(-1f, 0, 2.2f), 0f),
-				new ControlPoint(new Vector3f(0.75f, -0.5f, 2.5f), FastMath.PI),
-				new ControlPoint(new Vector3f(-0.4f, -0.5f, 2.5f), FastMath.PI),
-				new ControlPoint(new Vector3f(1.5f, -0.5f, 2.5f), FastMath.PI + FastMath.HALF_PI),
+				new ControlPoint(new Vector3f(1.2f, 0, 2.1f), FastMath.PI),
+				new ControlPoint(new Vector3f(0.75f, 0f, 2.5f), FastMath.PI),
+				new ControlPoint(new Vector3f(-0.4f, 0f, 2.5f), FastMath.PI),
+				new ControlPoint(new Vector3f(-1.2f, 0, 2.2f), 0f),
 		};
 
 		public CardControl(SimpleApplication application) {
@@ -170,7 +170,7 @@ public class Cheats {
 
 			if (at >= 0.5f){
 				curve = outerCurve;
-				curveProgress = (at - 0.5f) / 0.5f;
+				curveProgress = 1.0f - (at - 0.5f) / 0.5f;
 			}
 
 			Vector3f position = FastMath.interpolateBezier(
