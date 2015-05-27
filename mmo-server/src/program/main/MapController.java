@@ -151,6 +151,7 @@ public class MapController {
 			for(GameClient cl: program.getGameClients())
 				cl.getCardMaster().getWhoCanSeeMe().remove(client);
 			program.getDuelController().cancel(client.getCardMaster());
+			program.getTradingController().cancel(client.getCardMaster());
 			program.getGameClients().remove(client);
 			program.idCardMasterMap.remove(client.getCardMaster().getId());
 			program.idGameClientMap.remove(client.getId());
