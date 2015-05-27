@@ -70,13 +70,17 @@ public class Cheats {
 			}
 		}, "card_control");
 
-		inputManager.addMapping("wheel_down", new MouseAxisTrigger(MouseInput.AXIS_WHEEL, true));
+		inputManager.addMapping("+wheel", new MouseAxisTrigger(MouseInput.AXIS_WHEEL, true));
+		inputManager.addMapping("-wheel", new MouseAxisTrigger(MouseInput.AXIS_WHEEL, false));
 		inputManager.addListener(new AnalogListener() {
 			@Override
 			public void onAnalog(String name, float value, float tpf) {
-				cardControl.test(value * tpf);
+				if (name.startsWith("+"))
+					cardControl.spin(value * tpf);
+				else
+					cardControl.spin(-value * tpf);
 			}
-		}, "wheel_down");
+		}, "+wheel", "-wheel");
 	}
 
 	private static class CardControl extends AbstractControl {
@@ -142,7 +146,7 @@ public class Cheats {
 
 			application.getRootNode().attachChild(origin);
 
-			for (int i = 0; i < 50; i++) {
+			for (int i = 0; i < 20; i++) {
 				final float size = 0.3f;
 				Mesh mesh = new CardMesh(size * 0.67f, size);
 				Geometry card = new Geometry("My Textured Box", mesh);
@@ -191,30 +195,9 @@ public class Cheats {
 			return new ControlPoint(position, rotation);
 		}
 
-		public void test(float value) {
-			final float space = 0.05f;
-
-			int freeCardAmount = freeCards.size();
-			CardElement lastFreeCard = null;
-
-			if (freeCardAmount != 0) {
-				lastFreeCard = freeCards.get(freeCardAmount - 1);
-			}
-
-			if (lastFreeCard == null) {
+		public void spin(float value) {
+			if (freeCards.size() == 0 && value > 0)
 				freeCards.add(deckCards.remove(0));
-			}/* else if (lastFreeCard.progressCurrent > space) {
-				int cardsToAdd = (int) Math.floor(lastFreeCard.progressCurrent / space);
-				for (int i = 0; i < cardsToAdd; i++) {
-					if (deckCards.size() > 0) {
-						CardElement addedCard = deckCards.remove(0);
-
-						addedCard.progressTarget = lastFreeCard.progressCurrent - space * (i + 1);
-
-						freeCards.add(addedCard);
-					}
-				}
-			}*/
 
 			for (CardElement card : freeCards)
 				card.progressTarget += value;
@@ -236,6 +219,9 @@ public class Cheats {
 				index++;
 			}
 
+			List<CardElement> addToEnd = new ArrayList<CardElement>();
+			List<CardElement> addToStart = new ArrayList<CardElement>();
+
 			for (CardElement card : freeCards) {
 				final float speed = 0.25f * tpf;
 				float sign = Math.signum(card.progressTarget - card.progressCurrent);
@@ -246,6 +232,14 @@ public class Cheats {
 				}
 
 				card.progressCurrent = progress;
+
+				if (sign > 0 && progress >= 1.0f) {
+					addToEnd.add(card);
+				}
+
+				if (sign < 0 && progress <= 0.0f) {
+					addToStart.add(card);
+				}
 
 				ControlPoint point = getCardPosition(progress);
 				card.geometry.setLocalTranslation(point.getPosition());
@@ -267,17 +261,20 @@ public class Cheats {
 				}
 			}
 
-			if (freeCards.size() > 0) {
-				CardElement firstFreeCard = freeCards.get(0);
+			for (CardElement card: addToEnd) {
+				freeCards.remove(card);
+				deckCards.add(card);
 
-				if (firstFreeCard.progressCurrent > 1.0f - space) {
-					freeCards.remove(firstFreeCard);
-					
-					firstFreeCard.progressCurrent = 0.0f;
-					firstFreeCard.progressTarget = 0.0f;
+				card.progressCurrent = 0.0f;
+				card.progressTarget = 0.0f;
+			}
 
-					deckCards.add(firstFreeCard);
-				}
+			for (CardElement card: addToStart) {
+				freeCards.remove(card);
+				deckCards.add(0, card);
+
+				card.progressCurrent = 0.0f;
+				card.progressTarget = 0.0f;
 			}
 		}
 
