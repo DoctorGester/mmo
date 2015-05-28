@@ -1,22 +1,21 @@
 package core.ui.deck;
 
-import com.jme3.scene.Geometry;
 import com.jme3.scene.Spatial;
 
 /**
 * @author doc
 */
 public class DeckElement {
-	private Geometry geometry;
+	private Spatial model;
 	private float progressCurrent;
 	private float progressTarget;
 
-	public DeckElement(Geometry geometry) {
-		this.geometry = geometry;
+	public DeckElement(Spatial model) {
+		this.model = model;
 	}
 
 	public Spatial getModel() {
-		return geometry;
+		return model;
 	}
 
 	public float getProgressCurrent() {

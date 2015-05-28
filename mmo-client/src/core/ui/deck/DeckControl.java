@@ -10,6 +10,7 @@ import com.jme3.renderer.ViewPort;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.Mesh;
 import com.jme3.scene.Node;
+import com.jme3.scene.Spatial;
 import com.jme3.scene.control.AbstractControl;
 import com.jme3.scene.control.CameraControl;
 import com.jme3.texture.Texture;
@@ -40,8 +41,10 @@ public class DeckControl extends AbstractControl {
 			new ControlPoint(new Vector3f(-0.4f, 0f, 2.5f), FastMath.PI),
 			new ControlPoint(new Vector3f(-1.2f, 0, 2.2f), 0f),
 	};
+	private SimpleApplication application;
 
 	public DeckControl(SimpleApplication application) {
+		this.application = application;
 		origin = new Node();
 
 		CameraControl cameraControl = new CameraControl(application.getCamera());
@@ -49,20 +52,15 @@ public class DeckControl extends AbstractControl {
 		origin.addControl(cameraControl);
 
 		application.getRootNode().attachChild(origin);
+	}
 
-		for (int i = 0; i < 20; i++) {
-			final float size = 0.3f;
-			Mesh mesh = new CardMesh(size * 0.67f, size);
-			Geometry card = new Geometry("My Textured Box", mesh);
-			Material cube1Mat = new Material(application.getAssetManager(), "Common/MatDefs/Misc/Unshaded.j3md");
-			Texture cube1Tex = application.getAssetManager().loadTexture("res/textures/card.png");
-			cube1Mat.setTexture("ColorMap", cube1Tex);
-			card.setMaterial(cube1Mat);
+	public void setDeck(int size){
+		for (int i = 0; i < size; i++) {
+			final float cardSize = 0.3f;
+			Spatial model = new CardModel(application.getAssetManager(), cardSize);
+			DeckElement element = new DeckElement(model);
 
-			origin.attachChild(card);
-
-			DeckElement element = new DeckElement(card);
-
+			origin.attachChild(model);
 			deckCards.add(element);
 		}
 	}
