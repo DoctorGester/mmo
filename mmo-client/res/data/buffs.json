@@ -1,0 +1,58 @@
+{
+  "bonusDamageBuff": {
+    "id": "bonusDamageBuff",
+    "script": "bonusDamageBuff.groovy",
+    "icon": "res/textures/icons/totem-icon.png",
+    "name": "Undefined",
+    "description": "This unit's attack damage is increased"
+  },
+  "disarmBuff": {
+    "id": "disarmBuff",
+    "script": "disarmBuff.groovy",
+    "icon": "res/textures/icons/totem-icon.png",
+    "name": "Undefined",
+    "description": "This unit is disarmed and can't attack"
+  },
+  "contagionBuff": {
+    "id": "contagionBuff",
+    "script": "contagionBuff.groovy",
+    "icon": "res/textures/icons/contagion-icon.png",
+    "name": "Undefined",
+    "description": "This creature is infected and will take damage every turn, spreading the disease around it"
+  },
+  "rootBuff": {
+    "id": "rootBuff",
+    "script": "rootBuff.groovy",
+    "icon": "res/textures/icons/totem-icon.png",
+    "name": "Undefined",
+    "description": "This unit is rooted and can't move"
+  },
+  "testBuff": {
+    "id": "testBuff",
+    "script": "testBuff.groovy",
+    "icon": "res/textures/icons/fire-icon.png",
+    "name": "Undefined",
+    "description": "Tool tip missing!"
+  },
+  "poisonBuff": {
+    "id": "poisonBuff",
+    "script": "poisonBuff.groovy",
+    "icon": "res/textures/icons/hand-icon.png",
+    "name": "Undefined",
+    "description": "This unit is taking damage over time"
+  },
+  "silenceBuff": {
+    "id": "silenceBuff",
+    "script": "silenceBuff.groovy",
+    "icon": "res/textures/icons/silence-icon.png",
+    "name": "Undefined",
+    "description": "This unit is silenced and can't cast any spells"
+  },
+  "stunBuff": {
+    "id": "stunBuff",
+    "script": "stunBuff.groovy",
+    "icon": "res/textures/icons/totem-icon.png",
+    "name": "Undefined",
+    "description": "This unit is stunned and can't perform any actions"
+  }
+}

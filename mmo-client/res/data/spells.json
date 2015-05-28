@@ -1,0 +1,61 @@
+{
+  "contagion": {
+    "targets": [
+      "UNIT",
+      "SELF"
+    ],
+    "id": "contagion",
+    "coolDown": 12,
+    "scriptName": "contagion.groovy",
+    "name": "Contagion",
+    "description": "Spreads terrible disease on the target creature, dealing 1 poison damage per 2 turns 3 times. Every damage tick spreads the contagion in a small area around victim.",
+    "icon": "res/textures/icons/contagion-icon.png"
+  },
+  "heal": {
+    "targets": [
+      "UNIT",
+      "SELF"
+    ],
+    "id": "heal",
+    "coolDown": 16,
+    "scriptName": "heal.groovy",
+    "name": "True Arcanery",
+    "description": "Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
+    "icon": "res/textures/icons/heal-icon.png"
+  },
+  "silence": {
+    "targets": [
+      "UNIT",
+      "GROUND"
+    ],
+    "id": "silence",
+    "coolDown": 14,
+    "scriptName": "silence.groovy",
+    "name": "Terror",
+    "description": "Renders all creatures in a huge area silenced, preventing them from casting spells for 5 turns",
+    "icon": "res/textures/icons/silence-icon.png"
+  },
+  "damage": {
+    "targets": [
+      "UNIT",
+      "GROUND"
+    ],
+    "id": "damage",
+    "coolDown": 3,
+    "scriptName": "damage.groovy",
+    "name": "Undefined",
+    "description": "Tool tip missing!",
+    "icon": "res/textures/icons/fire-icon.png"
+  },
+  "poison": {
+    "targets": [
+      "UNIT"
+    ],
+    "id": "poison",
+    "coolDown": 32,
+    "scriptName": "poison.groovy",
+    "name": "Undefined",
+    "description": "Tool tip missing!",
+    "icon": "res/textures/icons/ice-icon.png"
+  }
+}

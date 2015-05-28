@@ -1,0 +1,4 @@
+id: purge
+script: purge.groovy
+name: Purge
+description: Purges all buffs from units on the board

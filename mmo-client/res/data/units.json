@@ -1,0 +1,76 @@
+{
+  "angel": {
+    "id": "angel",
+    "health": 16,
+    "damage": 4,
+    "actionPoints": 4,
+    "restTime": 4,
+    "name": "Angel",
+    "scriptName": "angel.groovy",
+    "modelPath": "res/models/angel/angel_m00",
+    "scale": 1.0,
+    "spells": [
+      "poison",
+      "heal"
+    ],
+    "passives": []
+  },
+  "evil_eye": {
+    "id": "evil_eye",
+    "health": 20,
+    "damage": 5,
+    "actionPoints": 4,
+    "restTime": 4,
+    "name": "Evil Eye",
+    "scriptName": "evil_eye.groovy",
+    "modelPath": "res/models/evil_eye/monster_eye_m00",
+    "scale": 1.8,
+    "spells": [
+      "silence"
+    ],
+    "passives": []
+  },
+  "minotaur": {
+    "id": "minotaur",
+    "health": 28,
+    "damage": 6,
+    "actionPoints": 3,
+    "restTime": 4,
+    "name": "Minotaur",
+    "scriptName": "minotaur.groovy",
+    "modelPath": "res/models/minotaur/minotaur_m00",
+    "scale": 1.7,
+    "spells": [
+      "poison"
+    ],
+    "passives": []
+  },
+  "kobold": {
+    "id": "kobold",
+    "health": 20,
+    "damage": 5,
+    "actionPoints": 4,
+    "restTime": 4,
+    "name": "Kobold",
+    "scriptName": "kobold.groovy",
+    "modelPath": "res/models/kobold/kobold_m00",
+    "scale": 3.5,
+    "spells": [
+      "contagion"
+    ],
+    "passives": []
+  },
+  "lizardman": {
+    "id": "lizardman",
+    "health": 20,
+    "damage": 5,
+    "actionPoints": 4,
+    "restTime": 4,
+    "name": "Lizardman",
+    "scriptName": "lizardman.groovy",
+    "modelPath": "res/models/lizardman/lizardman_m00",
+    "scale": 2.3,
+    "spells": [],
+    "passives": []
+  }
+}
