@@ -1,4 +1,0 @@
-id: bonusDamageBuff
-script: bonusDamageBuff.groovy
-icon: res/textures/icons/totem-icon.png
-description: This unit's attack damage is increased

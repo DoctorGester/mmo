@@ -1,9 +1,0 @@
-id: lizardman
-name: Lizardman
-damage: 5
-health: 20
-actionPoints: 4
-restTime: 4
-script: lizardman.groovy
-model: res/models/lizardman/lizardman_m00
-scale: 2.3

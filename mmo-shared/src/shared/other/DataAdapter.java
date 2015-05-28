@@ -93,6 +93,7 @@ public class DataAdapter<T extends DataElement> extends TypeAdapter<Map<String, 
 			try {
 				String id = in.nextName();
 				T instance = type.newInstance();
+				instance.setId(id);
 
 				in.beginObject();
 

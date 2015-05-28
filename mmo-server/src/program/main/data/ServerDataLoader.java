@@ -25,10 +25,7 @@ public class ServerDataLoader {
 	public GroovyScriptEngine loadScriptEngine(){
 		try {
 			String[] roots = new String[] {
-					"res/units/scripts",
-					"res/spells/unit/scripts",
-					"res/spells/hero/scripts",
-					"res/buffs/scripts"
+					"res/data",
 			};
 			return new GroovyScriptEngine(roots);
 		} catch (IOException e) {

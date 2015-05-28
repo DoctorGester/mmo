@@ -3,6 +3,14 @@ package shared.other;
 /**
  * @author doc
  */
-public interface DataElement {
-	String getId();
+public class DataElement {
+	protected String id;
+
+	public String getId(){
+		return id;
+	}
+
+	void setId(String id){
+		this.id = id;
+	}
 }

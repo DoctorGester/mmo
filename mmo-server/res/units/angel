@@ -1,8 +1,0 @@
-id: angel
-damage: 4
-health: 16
-actionPoints: 4
-restTime: 4
-script: angel.groovy
-spell: poison
-spell: heal

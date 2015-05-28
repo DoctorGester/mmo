@@ -1,5 +1,0 @@
-id: poison
-cooldown: 32
-target: UNIT
-script: poison.groovy
-icon: res/textures/icons/ice-icon.png

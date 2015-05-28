@@ -1,4 +1,0 @@
-id: rootBuff
-script: rootBuff.groovy
-icon: res/textures/icons/totem-icon.png
-description: This unit is rooted and can't move

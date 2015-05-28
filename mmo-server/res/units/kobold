@@ -1,7 +1,0 @@
-id: kobold
-damage: 5
-health: 20
-actionPoints: 4
-restTime: 4
-script: kobold.groovy
-spell: contagion

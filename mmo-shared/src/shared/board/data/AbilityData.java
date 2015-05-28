@@ -10,11 +10,10 @@ import shared.other.DataLoaderKey;
 import java.util.HashSet;
 import java.util.Set;
 
-public class AbilityData implements DataElement {
+public class AbilityData extends DataElement {
 	@DataLoaderKey(value = "target", function = "addTarget", dataEnum = AbilityTarget.class)
 	private Set<AbilityTarget> targets = new HashSet<AbilityTarget>();
 
-	@DataLoaderKey private String id;
 	@DataLoaderKey private int coolDown;
 	@DataLoaderKey("script") private String scriptName;
 
@@ -33,10 +32,6 @@ public class AbilityData implements DataElement {
 
 	public void addTarget(AbilityTarget target) {
 		targets.add(target);
-	}
-
-	public String getId() {
-		return id;
 	}
 
 	public int getCoolDown() {

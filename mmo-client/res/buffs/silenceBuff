@@ -1,4 +1,0 @@
-id: silenceBuff
-script: silenceBuff.groovy
-icon: res/textures/icons/silence-icon.png
-description: This unit is silenced and can't cast any spells

@@ -1,4 +1,0 @@
-id: disarmBuff
-script: disarmBuff.groovy
-icon: res/textures/icons/totem-icon.png
-description: This unit is disarmed and can't attack

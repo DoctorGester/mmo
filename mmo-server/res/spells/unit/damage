@@ -1,5 +1,0 @@
-id: damage
-cooldown: 3
-target: UNIT
-target: GROUND
-script: damage.groovy

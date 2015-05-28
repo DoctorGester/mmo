@@ -6,18 +6,13 @@ import groovy.util.GroovyScriptEngine;
 import shared.other.DataElement;
 import shared.other.DataLoaderKey;
 
-public class PassiveData implements DataElement {
-	@DataLoaderKey private String id;
+public class PassiveData extends DataElement {
 	@DataLoaderKey("script") private String scriptName;
 
 	// Client unique data
 	@DataLoaderKey private String name = "Undefined";
 	@DataLoaderKey private String description = "Tool tip missing!";
 	@DataLoaderKey private String icon;
-
-	public String getId() {
-		return id;
-	}
 
 	public String getIcon() {
 		return icon;

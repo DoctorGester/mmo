@@ -160,7 +160,7 @@ public class RegisterMessageHandler extends PacketHandler{
 		items.add(spellCardItem);
 
 		spellCardItem = new SpellCardItem();
-		spellCardItem.setSpellId("pressTheAttack");
+		spellCardItem.setSpellId("press_the_attack");
 		items.add(spellCardItem);
 
 		for(Item item: items){

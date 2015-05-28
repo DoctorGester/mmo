@@ -1,4 +1,0 @@
-id: stunBuff
-script: stunBuff.groovy
-icon: res/textures/icons/totem-icon.png
-description: This unit is stunned and can't perform any actions

@@ -6,18 +6,13 @@ import groovy.util.GroovyScriptEngine;
 import shared.other.DataElement;
 import shared.other.DataLoaderKey;
 
-public class BuffData implements DataElement {
-	@DataLoaderKey private String id;
+public class BuffData extends DataElement {
 	@DataLoaderKey private String script;
 	@DataLoaderKey private String icon;
 	@DataLoaderKey private String name = "Undefined";
 	@DataLoaderKey private String description = "Tool tip missing!";
 
 	private Class<?> compiledClass;
-
-	public String getId() {
-		return id;
-	}
 
 	public String getName() {
 		return name;

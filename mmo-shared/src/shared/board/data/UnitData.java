@@ -9,10 +9,7 @@ import shared.other.DataLoaderKey;
 import java.util.ArrayList;
 import java.util.List;
 
-public class UnitData implements DataElement {
-	@DataLoaderKey
-	private String id;
-
+public class UnitData extends DataElement {
 	@DataLoaderKey
 	private int health,
 				damage,
@@ -44,14 +41,6 @@ public class UnitData implements DataElement {
 
 	public List<String> getPassives() {
 		return passives;
-	}
-
-	public String getId() {
-		return id;
-	}
-
-	public void setId(String id) {
-		this.id = id;
 	}
 
 	public String getName() {
