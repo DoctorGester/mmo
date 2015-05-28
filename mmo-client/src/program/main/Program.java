@@ -110,10 +110,10 @@ public class Program {
     private Map<Integer, Faction> factions;
 	protected Map<String, UnitData> unitDataMap;
 	protected Map<String, BuffData> buffDataMap;
-	protected Map<String, AbilityData> spellDataMap;
+	protected Map<String, AbilityData> abilityDataMap;
 	protected Map<String, PassiveData> passiveDataMap;
 	protected Map<String, String> effectScriptMap;
-	protected Map<String, SpellData> cardSpellDataMap;
+	protected Map<String, SpellData> spellDataMap;
 
 	private MapController mapController;
 	private BattleController battleController;
@@ -153,10 +153,10 @@ public class Program {
         factions = new ConcurrentHashMap<Integer, Faction>();
 		playerMap = new ConcurrentHashMap<Integer, ClientCardMaster>();
 		buffDataMap = new HashMap<String, BuffData>();
-		spellDataMap = new HashMap<String, AbilityData>();
+		abilityDataMap = new HashMap<String, AbilityData>();
 		passiveDataMap = new HashMap<String, PassiveData>();
 		effectScriptMap = new HashMap<String, String>();
-		cardSpellDataMap = new HashMap<String, SpellData>();
+		spellDataMap = new HashMap<String, SpellData>();
         unitDataMap = new HashMap<String, UnitData>();
 	}
 
@@ -217,11 +217,11 @@ public class Program {
 		mainFrame.setScene(Scenes.MENU);
 
 		try {
-			DataUtil.loadDataList("res/data/units.json", UnitData.class);
-			DataUtil.loadDataList("res/data/passives.json", PassiveData.class);
-			DataUtil.loadDataList("res/data/spells.json", SpellData.class);
-			DataUtil.loadDataList("res/data/abilities.json", AbilityData.class);
-			DataUtil.loadDataList("res/data/buffs.json", BuffData.class);
+			unitDataMap = DataUtil.loadDataList("res/data/units.json", UnitData.class);
+			passiveDataMap = DataUtil.loadDataList("res/data/passives.json", PassiveData.class);
+			spellDataMap = DataUtil.loadDataList("res/data/spells.json", SpellData.class);
+			abilityDataMap = DataUtil.loadDataList("res/data/abilities.json", AbilityData.class);
+			buffDataMap = DataUtil.loadDataList("res/data/buffs.json", BuffData.class);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -240,13 +240,13 @@ public class Program {
 				for (String key: effectScriptMap.keySet())
 					groovyScriptEngine.createScript(effectScriptMap.get(key), new Binding());
 
-				for (String key: spellDataMap.keySet())
+				for (String key: abilityDataMap.keySet())
 					getSpellDataById(key).compileScript(groovyScriptEngine, new Binding());
 
 				for (String key: passiveDataMap.keySet())
 					getSpellDataById(key).compileScript(groovyScriptEngine, new Binding());
 
-				for (String key: cardSpellDataMap.keySet())
+				for (String key: spellDataMap.keySet())
 					getCardSpellDataById(key).compileScript(groovyScriptEngine, new Binding());
 
 				for (String key: buffDataMap.keySet())
@@ -281,7 +281,7 @@ public class Program {
 	}
 
 	public AbilityData getSpellDataById(String id){
-		return spellDataMap.get(id);
+		return abilityDataMap.get(id);
 	}
 
 	public PassiveData getPassiveDataById(String id){
@@ -289,7 +289,7 @@ public class Program {
 	}
 
 	public SpellData getCardSpellDataById(String id){
-		return cardSpellDataMap.get(id);
+		return spellDataMap.get(id);
 	}
 
 	public BuffData getBuffScriptById(String id){
