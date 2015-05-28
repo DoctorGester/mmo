@@ -216,27 +216,21 @@ public class Program {
 		setClientState(STATE_MENU);
 		mainFrame.setScene(Scenes.MENU);
 
-		DataUtil.loadDataList("res/units/datalist", String.class, UnitData.class, unitDataMap);
-		DataUtil.loadDataList("res/spells/unit/datalist", String.class, AbilityData.class, spellDataMap);
-		DataUtil.loadDataList("res/spells/hero/datalist", String.class, SpellData.class, cardSpellDataMap);
-		DataUtil.loadDataList("res/spells/passive/datalist", String.class, PassiveData.class, passiveDataMap);
-		DataUtil.loadDataList("res/buffs/datalist", String.class, BuffData.class, buffDataMap);
+		try {
+			DataUtil.loadDataList("res/data/units.json", UnitData.class);
+			DataUtil.loadDataList("res/data/passives.json", PassiveData.class);
+			DataUtil.loadDataList("res/data/spells.json", SpellData.class);
+			DataUtil.loadDataList("res/data/abilities.json", AbilityData.class);
+			DataUtil.loadDataList("res/data/buffs.json", BuffData.class);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 
 		dataLoader.loadSpecialEffectsFromFileSystem();
 
 		loadScripts();
 
 		new Cheats(this).init();
-
-		try {
-			DataUtil.saveDataList("res/units.json", unitDataMap, UnitData.class);
-			DataUtil.saveDataList("res/spells.json", spellDataMap, AbilityData.class);
-			DataUtil.saveDataList("res/cardSpells.json", cardSpellDataMap, SpellData.class);
-			DataUtil.saveDataList("res/passives.json", passiveDataMap, PassiveData.class);
-			DataUtil.saveDataList("res/buffs.json", buffDataMap, BuffData.class);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
 	}
 
 	public void loadScripts(){

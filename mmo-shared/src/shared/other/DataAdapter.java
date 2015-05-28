@@ -84,6 +84,11 @@ public class DataAdapter<T extends DataElement> extends TypeAdapter<Map<String, 
 
 		in.beginObject();
 
+		if (in.peek() == JsonToken.END_OBJECT) {
+			in.endObject();
+			return result;
+		}
+
 		while(true) {
 			try {
 				String id = in.nextName();
@@ -104,6 +109,7 @@ public class DataAdapter<T extends DataElement> extends TypeAdapter<Map<String, 
 							Object converted = getTypedObject(in, field, dataLoaderKey);
 
 							if (converted == null) {
+								in.skipValue();
 								continue;
 							}
 
@@ -117,7 +123,6 @@ public class DataAdapter<T extends DataElement> extends TypeAdapter<Map<String, 
 
 						if (converted == null) {
 							in.skipValue();
-							continue;
 						}
 
 						writeObject(field, dataLoaderKey, instance, converted);
@@ -178,10 +183,10 @@ public class DataAdapter<T extends DataElement> extends TypeAdapter<Map<String, 
 			converted = in.nextBoolean();
 		} else if (type == Double.class || type == Float.class || type == double.class || type == float.class) {
 			converted = (float) in.nextDouble();
-		} else if (type == String.class) {
-			converted = in.nextString();
 		} else if (Enum.class.isAssignableFrom(type)) {
 			converted = Enum.valueOf(dataLoaderKey.dataEnum(), in.nextString());
+		} else if (in.peek() == JsonToken.STRING){
+			converted = in.nextString();
 		}
 
 		return converted;
