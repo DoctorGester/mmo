@@ -11,20 +11,22 @@ import core.graphics.CardMesh;
 /**
  * Created by kartemov on 28.05.2015.
  */
-public class CardModel extends Node {
-	private Geometry geometry;
+public abstract class CardModel extends Node {
+	protected Geometry base;
 
 	public CardModel(AssetManager manager, float size){
 		super();
 
 		Mesh mesh = new CardMesh(size * 0.67f, size);
-		geometry = new Geometry("Card", mesh);
+		base = new Geometry("Card", mesh);
 
 		Material material = new Material(manager, "Common/MatDefs/Misc/Unshaded.j3md");
 		Texture texture = manager.loadTexture("res/textures/card.png");
 		material.setTexture("ColorMap", texture);
-		geometry.setMaterial(material);
+		base.setMaterial(material);
 
-		attachChild(geometry);
+		attachChild(base);
 	}
+
+	public abstract void createContent();
 }

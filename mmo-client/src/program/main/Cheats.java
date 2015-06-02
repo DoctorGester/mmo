@@ -13,6 +13,12 @@ import core.graphics.scenes.BattleScene;
 import core.graphics.scenes.Scenes;
 import core.ui.BattleState;
 import core.ui.deck.DeckControl;
+import shared.items.Item;
+import shared.items.types.UnitCardItem;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 /**
  * @author doc
@@ -49,9 +55,20 @@ public class Cheats {
 				if (!isPressed)
 					return;
 
+				List<Item> deck = new ArrayList<Item>();
+
+				for (int i = 0; i < 30; i++){
+					UnitCardItem item = new UnitCardItem();
+					List<String> idList = new ArrayList<String>(Program.getInstance().unitDataMap.keySet());
+					Collections.shuffle(idList);
+					item.setUnitId(idList.get(0));
+
+					deck.add(item);
+				}
+
 				Node root = program.getMainFrame().getRootNode();
 				deckControl = new DeckControl(program.getMainFrame());
-				deckControl.setDeck(30);
+				deckControl.setDeck(deck);
 				root.addControl(deckControl);
 			}
 		}, "card_control");

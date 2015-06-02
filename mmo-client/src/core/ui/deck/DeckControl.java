@@ -1,20 +1,16 @@
 package core.ui.deck;
 
 import com.jme3.app.SimpleApplication;
-import com.jme3.material.Material;
 import com.jme3.math.FastMath;
 import com.jme3.math.Quaternion;
 import com.jme3.math.Vector3f;
 import com.jme3.renderer.RenderManager;
 import com.jme3.renderer.ViewPort;
-import com.jme3.scene.Geometry;
-import com.jme3.scene.Mesh;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 import com.jme3.scene.control.AbstractControl;
 import com.jme3.scene.control.CameraControl;
-import com.jme3.texture.Texture;
-import core.graphics.CardMesh;
+import shared.items.Item;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -54,10 +50,11 @@ public class DeckControl extends AbstractControl {
 		application.getRootNode().attachChild(origin);
 	}
 
-	public void setDeck(int size){
-		for (int i = 0; i < size; i++) {
+	public void setDeck(List<Item> deck){
+		for (Item item: deck) {
 			final float cardSize = 0.3f;
-			Spatial model = new CardModel(application.getAssetManager(), cardSize);
+
+			Spatial model = CardModelFactory.createModel(item, cardSize);
 			DeckElement element = new DeckElement(model);
 
 			origin.attachChild(model);
