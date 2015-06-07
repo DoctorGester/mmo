@@ -1,0 +1,22 @@
+MaterialDef Colored Textured {
+
+    MaterialParameters {
+        Texture2D Base
+        Texture2D Mask
+        Texture2D Portrait
+        Texture2D Content
+    }
+
+    Technique {
+        VertexShader GLSL100:   res/shaders/Card.vert
+        FragmentShader GLSL100: res/shaders/Card.frag
+
+        WorldParameters {
+            WorldViewProjectionMatrix
+        }
+    }
+
+    Technique {
+    }
+
+}

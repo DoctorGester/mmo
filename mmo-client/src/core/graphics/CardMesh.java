@@ -44,10 +44,10 @@ public class CardMesh extends Mesh {
 															 1, 0,
 															 0.5f, 0,
 
-															 0, 0,
 															 0.5f, 0,
-															 0.5f, 1,
+															 0, 0,
 															 0, 1,
+															 0.5f, 1,
 		});
 
 		setBuffer(VertexBuffer.Type.Normal, 3, new float[]{0, 0, 1,

@@ -31,6 +31,6 @@ public class UnitCardModel extends CardModel {
 		bitmapText.setText(unitData.getName());
 		bitmapText.setLocalTranslation(0, 0, -0.05f);
 
-		attachChild(bitmapText);
+		//attachChild(bitmapText);
 	}
 }
