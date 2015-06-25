@@ -97,7 +97,7 @@ public class MainFrame extends SimpleApplication {
 		//settings.setSamples(4);
 		//settings.setVSync(true);
 
-		settings.setResolution(1920, 900);
+		//settings.setResolution(1920, 900);
 		//settings.setFullscreen(true);
 
 		setSettings(settings);  

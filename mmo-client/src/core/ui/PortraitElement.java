@@ -25,7 +25,7 @@ public class PortraitElement extends Element {
 	private static final int PORTRAIT_TEX_HEIGHT = 256;
 	private static final float PORTRAIT_WIDTH_MUL = 0.67f;
 
-	private static final Map<String, OffScreenView> bridgeCache = new HashMap<String, OffScreenView>();
+	private static final Map<String, RenderingBuffer> bridgeCache = new HashMap<String, RenderingBuffer>();
 
 	private Node createNode(Spatial spatial){
 		Node node = new Node();
@@ -48,33 +48,31 @@ public class PortraitElement extends Element {
 	public PortraitElement(ElementManager screen, String key, float height, Spatial model, Vector3f cameraPosition, Vector3f cameraTarget) {
 		super(screen, UIDUtil.getUID(), new Vector2f(), new Vector2f(height * PORTRAIT_WIDTH_MUL, height), new Vector4f(), null);
 
-		OffScreenView view = bridgeCache.get(key);
+		RenderingBuffer buffer = bridgeCache.get(key);
 
-		if (view == null){
+		if (buffer == null){
 			Node node = createNode(model);
-			view = new OffScreenView(screen.getApplication().getRenderManager(),
-					(int) (PORTRAIT_TEX_HEIGHT * PORTRAIT_WIDTH_MUL),
-					PORTRAIT_TEX_HEIGHT,
-					node);
-			view.setViewPortColor(ColorRGBA.White);
 
-			node.removeControl(ChaseCamera.class);
+			PortraitData portraitData = new PortraitData();
+			portraitData.setScene(node);
+			portraitData.setWidth((int) (PORTRAIT_TEX_HEIGHT * PORTRAIT_WIDTH_MUL));
+			portraitData.setHeight(PORTRAIT_TEX_HEIGHT);
+			portraitData.setBackground(ColorRGBA.White);
+			portraitData.setCameraLocation(cameraPosition);
+			portraitData.setCameraTarget(cameraTarget);
 
-			Camera camera = view.getCamera();
-			camera.setLocation(cameraPosition);
-			camera.lookAt(cameraTarget, Vector3f.UNIT_Y);
-			camera.update();
+			buffer = new PortraitBuffer(screen.getApplication().getRenderManager(), portraitData);
 
-			bridgeCache.put(key, view);
+			bridgeCache.put(key, buffer);
 		}
 
-		setOffScreenView(view);
+		setOffScreenView(buffer);
 
 		setIgnoreMouse(true);
 	}
 
-	public void setOffScreenView(OffScreenView view){
-		getElementMaterial().setTexture("ColorMap", view.getTexture());
+	public void setOffScreenView(RenderingBuffer buffer){
+		getElementMaterial().setTexture("ColorMap", buffer.getTexture());
 		getElementMaterial().setColor("Color", ColorRGBA.White);
 	}
 }
