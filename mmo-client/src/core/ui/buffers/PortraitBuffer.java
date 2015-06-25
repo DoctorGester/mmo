@@ -1,4 +1,4 @@
-package core.ui;
+package core.ui.buffers;
 
 import com.jme3.math.ColorRGBA;
 import com.jme3.math.Vector3f;
@@ -6,6 +6,7 @@ import com.jme3.renderer.Camera;
 import com.jme3.renderer.RenderManager;
 import com.jme3.renderer.ViewPort;
 import com.jme3.scene.Node;
+import core.ui.PortraitData;
 
 public class PortraitBuffer extends RenderingBuffer {
     private PortraitData portraitData;
@@ -31,7 +32,6 @@ public class PortraitBuffer extends RenderingBuffer {
         camera.setFrustumPerspective(45f, aspect, 0.1f, camera.getFrustumFar());
         camera.setLocation(portraitData.getCameraLocation());
         camera.lookAt(portraitData.getCameraTarget(), Vector3f.UNIT_Y);
-        camera.update();
     }
 
     @Override

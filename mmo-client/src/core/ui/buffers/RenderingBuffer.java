@@ -1,4 +1,4 @@
-package core.ui;
+package core.ui.buffers;
 
 import com.jme3.renderer.Camera;
 import com.jme3.renderer.RenderManager;

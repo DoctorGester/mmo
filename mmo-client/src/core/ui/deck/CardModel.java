@@ -12,15 +12,18 @@ import core.graphics.CardMesh;
  * Created by kartemov on 28.05.2015.
  */
 public abstract class CardModel extends Node {
+	protected AssetManager manager;
 	protected Geometry base;
+	protected Material material;
 
 	public CardModel(AssetManager manager, float size){
 		super();
+		this.manager = manager;
 
 		Mesh mesh = new CardMesh(size * 0.67f, size);
 		base = new Geometry("Card", mesh);
 
-		Material material = new Material(manager, "res/shaders/Card.j3md");
+		material = new Material(manager, "res/shaders/Card.j3md");
 
 		material.setTexture("Base", manager.loadTexture("res/textures/card.png"));
 		material.setTexture("Mask", manager.loadTexture("res/textures/card_mask.png"));

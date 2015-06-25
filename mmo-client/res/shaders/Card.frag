@@ -8,10 +8,10 @@ uniform sampler2D m_Content;
 void main(){
     vec4 baseColor = texture2D(m_Base, texCoord);
     vec4 maskColor = texture2D(m_Mask, texCoord);
-    vec4 portraitColor = texture2D(m_Portrait, texCoord);
+    vec4 portraitColor = texture2D(m_Portrait, vec2(texCoord.x * 2, texCoord.y));
     vec4 contentColor = texture2D(m_Content, texCoord);
 
-    float a = min(1.0, portraitColor.a + contentColor.a);
+    float a = min(1.0, maskColor.a + contentColor.a);
 
     vec4 overlayColor = vec4(mix(contentColor.rgb, portraitColor.rgb, maskColor.a), 1.0);
 
