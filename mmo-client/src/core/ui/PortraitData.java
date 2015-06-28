@@ -2,26 +2,25 @@ package core.ui;
 
 import com.jme3.math.ColorRGBA;
 import com.jme3.math.Vector3f;
-import com.jme3.scene.Node;
+import com.jme3.scene.Spatial;
 
 /**
  * Created by Gester on 6/25/2015.
  */
 public class PortraitData {
+    private Spatial scene;
     private int width, height;
     private Vector3f cameraLocation;
     private Vector3f cameraTarget;
     private ColorRGBA background;
 
-    public Node getScene() {
+    public Spatial getScene() {
         return scene;
     }
 
-    public void setScene(Node scene) {
+    public void setScene(Spatial scene) {
         this.scene = scene;
     }
-
-    private Node scene;
 
     public int getWidth() {
         return width;
