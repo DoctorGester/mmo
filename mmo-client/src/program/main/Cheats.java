@@ -69,6 +69,7 @@ public class Cheats {
 				Node root = program.getMainFrame().getRootNode();
 				deckControl = new DeckControl(program.getMainFrame());
 				deckControl.setDeck(deck);
+				deckControl.enableElementHover();
 				root.addControl(deckControl);
 			}
 		}, "card_control");

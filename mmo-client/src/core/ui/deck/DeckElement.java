@@ -2,6 +2,7 @@ package core.ui.deck;
 
 import com.jme3.math.FastMath;
 import com.jme3.scene.Spatial;
+import com.simsilica.lemur.event.CursorEventControl;
 
 /**
 * @author doc
@@ -11,7 +12,10 @@ public class DeckElement {
 	private float progressCurrent;
 	private float progressTarget;
 	private float floatingStep;
+	private float hoverStep;
 	private int floatDirection = 1;
+
+	private CardHoverListener hoverListener;
 
 	public DeckElement(Spatial model) {
 		this.model = model;
@@ -42,6 +46,18 @@ public class DeckElement {
 		return floatingStep;
 	}
 
+	public void registerHoverListener(){
+		hoverListener = new CardHoverListener(this);
+
+		CursorEventControl.addListenersToSpatial(model, hoverListener);
+	}
+
+	public void removeHoverListener(){
+		CursorEventControl.removeListenersFromSpatial(model, hoverListener);
+
+		hoverListener = null;
+	}
+
 	/**
 	 *
 	 * @return sign Movement direction
@@ -61,6 +77,11 @@ public class DeckElement {
 
 		if (floatingStep == floatDirection) {
 			floatDirection *= -1;
+		}
+
+		if (hoverListener != null) {
+			int direction = hoverListener.isHovered() ? 1 : -1;
+			hoverStep = FastMath.clamp(hoverStep + direction * speed, -1, 1);
 		}
 
 		return sign;

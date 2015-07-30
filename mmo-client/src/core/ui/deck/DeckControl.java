@@ -10,6 +10,7 @@ import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 import com.jme3.scene.control.AbstractControl;
 import com.jme3.scene.control.CameraControl;
+import com.simsilica.lemur.event.CursorEventControl;
 import shared.items.Item;
 
 import java.util.ArrayList;
@@ -23,6 +24,8 @@ public class DeckControl extends AbstractControl {
 
 	private List<DeckElement> deckCards = new ArrayList<DeckElement>();
 	private List<DeckElement> freeCards = new ArrayList<DeckElement>();
+
+	private boolean hoverEnabled = false;
 
 	private ControlPoint[] innerCurve = new ControlPoint[]{
 			new ControlPoint(new Vector3f(1.2f, 0, 2f), FastMath.PI),
@@ -100,6 +103,15 @@ public class DeckControl extends AbstractControl {
 			card.setProgressTarget(card.getProgressTarget() + value);
 	}
 
+	public void enableElementHover(){
+		hoverEnabled = true;
+
+		for (DeckElement element: freeCards) {
+			element.registerHoverListener();
+		}
+	}
+
+
 	@Override
 	protected void controlUpdate(float tpf) {
 		int index = 0;
@@ -150,6 +162,9 @@ public class DeckControl extends AbstractControl {
 					addedCard.setProgressTarget(lastFreeCard.getProgressTarget() - space);
 
 					freeCards.add(addedCard);
+
+					if (hoverEnabled)
+						addedCard.registerHoverListener();
 				} else {
 					break;
 				}
@@ -160,6 +175,9 @@ public class DeckControl extends AbstractControl {
 			freeCards.remove(card);
 			deckCards.add(card);
 
+			if (hoverEnabled)
+				card.removeHoverListener();
+
 			card.setProgressCurrent(0.0f);
 			card.setProgressTarget(0.0f);
 		}
@@ -167,6 +185,9 @@ public class DeckControl extends AbstractControl {
 		for (DeckElement card: addToStart) {
 			freeCards.remove(card);
 			deckCards.add(0, card);
+
+			if (hoverEnabled)
+				card.removeHoverListener();
 
 			card.setProgressCurrent(0.0f);
 			card.setProgressTarget(0.0f);
