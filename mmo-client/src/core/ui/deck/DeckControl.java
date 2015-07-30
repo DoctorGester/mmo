@@ -121,14 +121,8 @@ public class DeckControl extends AbstractControl {
 
 		for (DeckElement card : freeCards) {
 			final float speed = 0.25f * tpf;
-			float sign = Math.signum(card.getProgressTarget() - card.getProgressCurrent());
-			float progress = card.getProgressCurrent() + sign * speed;
-
-			if (sign * (card.getProgressTarget() - card.getProgressCurrent()) < speed) {
-				progress = card.getProgressTarget();
-			}
-
-			card.setProgressCurrent(progress);
+			float sign = card.updateMovement(speed);
+			float progress = card.getProgressCurrent();
 
 			if (sign > 0 && progress >= 1.0f) {
 				addToEnd.add(card);
@@ -139,7 +133,7 @@ public class DeckControl extends AbstractControl {
 			}
 
 			ControlPoint point = getCardPosition(progress);
-			card.getModel().setLocalTranslation(point.getPosition());
+			card.getModel().setLocalTranslation(point.getPosition().add(0, 0, card.getFloatingStep() * 0.02f));
 			card.getModel().setLocalRotation(new Quaternion().fromAngles(0, point.getRotation(), 0));
 		}
 

@@ -84,19 +84,11 @@ public class UnitCardModel extends CardModel {
 	private UIBuffer createUIBuffer(RenderManager manager){
 		Node scene = new Node();
 
-		String stats = String.format("%s/%s/%s", unitData.getDamage(), unitData.getActionPoints(), unitData.getHealth());
+		String stats = String.format("%s/%s/%s", unitData.getDamage(), unitData.getActionPoints() - 1, unitData.getHealth());
 
 		BitmapText nameText = createTextSimple(unitData.getName(), 0.7f);
 		BitmapText statsText = createTextSimple(stats, 0.6f);
 		statsText.setLocalTranslation(statsText.getLocalTranslation().setY(-1.2f));
-
-		/*BitmapText bitmapText = new BitmapText(Program.getInstance().getMainFrame().getOutlinedFont(), false);
-		bitmapText.setColor(new ColorRGBA(1f, 0.0f, 0.0f, 1f));
-		bitmapText.setSize(0.7f);
-		bitmapText.setQueueBucket(RenderQueue.Bucket.Transparent);
-		bitmapText.setText(unitData.getName());
-		bitmapText.setColor(ColorRGBA.White);
-		bitmapText.setLocalTranslation(-bitmapText.getLineWidth() / 2f, -1.0f, 0);*/
 
 		scene.attachChild(nameText);
 		scene.attachChild(statsText);
