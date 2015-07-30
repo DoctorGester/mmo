@@ -1,6 +1,7 @@
 package core.ui.deck;
 
 import com.jme3.animation.AnimControl;
+import com.jme3.font.BitmapFont;
 import com.jme3.font.BitmapText;
 import com.jme3.light.AmbientLight;
 import com.jme3.light.DirectionalLight;
@@ -68,18 +69,37 @@ public class UnitCardModel extends CardModel {
 		material.setTexture("Content", uiBuffer.getTexture());
 	}
 
+	private BitmapText createTextSimple(String text, float fontSize){
+		BitmapText bitmapText = new BitmapText(Program.getInstance().getMainFrame().getOutlinedFont(), false);
+		bitmapText.setColor(new ColorRGBA(1f, 0.0f, 0.0f, 1f));
+		bitmapText.setSize(fontSize);
+		bitmapText.setQueueBucket(RenderQueue.Bucket.Transparent);
+		bitmapText.setText(text);
+		bitmapText.setColor(ColorRGBA.White);
+		bitmapText.setLocalTranslation(-bitmapText.getLineWidth() / 2f, 0, 0);
+
+		return bitmapText;
+	}
+
 	private UIBuffer createUIBuffer(RenderManager manager){
 		Node scene = new Node();
 
-		BitmapText bitmapText = new BitmapText(Program.getInstance().getMainFrame().getOutlinedFont(), false);
-		//bitmapText.setLocalRotation(new Quaternion().fromAngles(0, FastMath.PI, 0));
+		String stats = String.format("%s/%s/%s", unitData.getDamage(), unitData.getActionPoints(), unitData.getHealth());
+
+		BitmapText nameText = createTextSimple(unitData.getName(), 0.7f);
+		BitmapText statsText = createTextSimple(stats, 0.6f);
+		statsText.setLocalTranslation(statsText.getLocalTranslation().setY(-1.2f));
+
+		/*BitmapText bitmapText = new BitmapText(Program.getInstance().getMainFrame().getOutlinedFont(), false);
 		bitmapText.setColor(new ColorRGBA(1f, 0.0f, 0.0f, 1f));
-		bitmapText.setSize(1f);
+		bitmapText.setSize(0.7f);
 		bitmapText.setQueueBucket(RenderQueue.Bucket.Transparent);
 		bitmapText.setText(unitData.getName());
-		//bitmapText.setLocalTranslation(0, 3f, 0);
+		bitmapText.setColor(ColorRGBA.White);
+		bitmapText.setLocalTranslation(-bitmapText.getLineWidth() / 2f, -1.0f, 0);*/
 
-		scene.attachChild(bitmapText);
+		scene.attachChild(nameText);
+		scene.attachChild(statsText);
 
 		return new UIBuffer(manager, PORTRAIT_TEX_WIDTH, PORTRAIT_TEX_HEIGHT, scene);
 	}

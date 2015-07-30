@@ -38,7 +38,7 @@ public class UIBuffer extends RenderingBuffer {
     public ViewPort createViewPort(RenderManager renderManager, Camera camera){
         ViewPort viewPort = super.createViewPort(renderManager, camera);
         //viewPort.setClearFlags(false, false, false);
-        viewPort.setBackgroundColor(ColorRGBA.BlackNoAlpha);
+        viewPort.setBackgroundColor(new ColorRGBA(1f, 1f, 1f, 0f));
 
         return viewPort;
     }
