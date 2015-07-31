@@ -23,7 +23,7 @@ public class ControlPoint {
 	}
 
 	public Vector3f getPosition() {
-		return position;
+		return position.clone();
 	}
 
 	public float getRotation() {

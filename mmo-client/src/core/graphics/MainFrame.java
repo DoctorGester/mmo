@@ -195,7 +195,7 @@ public class MainFrame extends SimpleApplication {
 			e.printStackTrace();
 		}
 
-		StyleLoader loader = new StyleLoader("res/ui/scripts/api.ui.groovy");
+		/*StyleLoader loader = new StyleLoader("res/ui/scripts/api.ui.groovy");
 		loader.loadStyle("res/ui/scripts/style.ui.groovy");
 
 		Container hudPanel = new Container("glass");
@@ -283,7 +283,7 @@ public class MainFrame extends SimpleApplication {
 		CursorEventControl.addListenersToSpatial(node, new DefaultCursorListener());
 
 		//testPanel.addChild(node);
-		rootNode.attachChild(node);
+		rootNode.attachChild(node);*/
 	}
 
 	public void simpleInitApp() {
@@ -299,7 +299,8 @@ public class MainFrame extends SimpleApplication {
 		flyCam.setEnabled(false);
 		inputManager.setCursorVisible(true);
 
-		cam.setFrustumFar(1000);
+		/*cam.setFrustumNear(0.1f);
+		cam.setFrustumFar(1000);*/
 
 		// Init main shadow render
 		shadowRenderer = new DirectionalLightShadowRenderer(assetManager, 1024, 3);
@@ -323,7 +324,7 @@ public class MainFrame extends SimpleApplication {
 		stateManager.attach(screenShotState);
 
 		initData();
-		//initUI();
+		initUI();
 
 		Program.getInstance().endGraphicsInit();
 	}

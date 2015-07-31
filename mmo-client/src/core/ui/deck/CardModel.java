@@ -6,6 +6,7 @@ import com.jme3.scene.Geometry;
 import com.jme3.scene.Mesh;
 import com.jme3.scene.Node;
 import com.jme3.texture.Texture;
+import com.simsilica.lemur.core.GuiControl;
 import core.graphics.CardMesh;
 
 /**
@@ -33,6 +34,7 @@ public abstract class CardModel extends Node {
 		base.setMaterial(material);
 
 		attachChild(base);
+		addControl(new GuiControl());
 	}
 
 	public abstract void createContent();

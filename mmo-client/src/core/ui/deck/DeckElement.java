@@ -46,6 +46,10 @@ public class DeckElement {
 		return floatingStep;
 	}
 
+	public float getHoverStep() {
+		return hoverStep;
+	}
+
 	public void registerHoverListener(){
 		hoverListener = new CardHoverListener(this);
 
@@ -81,7 +85,7 @@ public class DeckElement {
 
 		if (hoverListener != null) {
 			int direction = hoverListener.isHovered() ? 1 : -1;
-			hoverStep = FastMath.clamp(hoverStep + direction * speed, -1, 1);
+			hoverStep = FastMath.clamp(hoverStep + direction * speed * 16, 0, 1);
 		}
 
 		return sign;

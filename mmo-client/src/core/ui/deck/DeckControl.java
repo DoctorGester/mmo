@@ -95,9 +95,19 @@ public class DeckControl extends AbstractControl {
 		return new ControlPoint(position, rotation);
 	}
 
+	private DeckElement extractTopCard(){
+		DeckElement card = deckCards.remove(0);
+		freeCards.add(card);
+
+		if (hoverEnabled)
+			card.registerHoverListener();
+
+		return card;
+	}
+
 	public void spin(float value) {
 		if (freeCards.size() == 0 && value > 0)
-			freeCards.add(deckCards.remove(0));
+			extractTopCard();
 
 		for (DeckElement card : freeCards)
 			card.setProgressTarget(card.getProgressTarget() + value);
@@ -145,8 +155,23 @@ public class DeckControl extends AbstractControl {
 			}
 
 			ControlPoint point = getCardPosition(progress);
-			card.getModel().setLocalTranslation(point.getPosition().add(0, 0, card.getFloatingStep() * 0.02f));
-			card.getModel().setLocalRotation(new Quaternion().fromAngles(0, point.getRotation(), 0));
+
+			Vector3f resultPosition = point.getPosition();
+
+			float diff = -resultPosition.x;
+			float hoverStep = FastMath.tan(card.getHoverStep()) / FastMath.HALF_PI;
+
+			resultPosition.addLocal(0, 0, card.getFloatingStep() * 0.02f);
+			resultPosition.addLocal(0, 0, -hoverStep * 0.5f);
+			resultPosition.addLocal(diff * hoverStep * 0.2f, 0, 0);
+
+			Quaternion rotationTarget = new Quaternion().fromAngles(0, point.getRotation(), 0);
+			Quaternion rotationHover = new Quaternion();
+			Quaternion rotationResult = new Quaternion().slerp(rotationTarget, rotationHover, hoverStep);
+
+			card.getModel().setLocalTranslation(resultPosition);
+			card.getModel().setLocalRotation(rotationResult);
+			card.getModel().setLocalScale(1 + hoverStep * 0.65f);
 		}
 
 		// Moving cards between view and deck
@@ -158,13 +183,8 @@ public class DeckControl extends AbstractControl {
 				DeckElement lastFreeCard = freeCards.get(freeCards.size() - 1);
 
 				if (lastFreeCard.getProgressCurrent() > space) {
-					DeckElement addedCard = deckCards.remove(0);
+					DeckElement addedCard = extractTopCard();
 					addedCard.setProgressTarget(lastFreeCard.getProgressTarget() - space);
-
-					freeCards.add(addedCard);
-
-					if (hoverEnabled)
-						addedCard.registerHoverListener();
 				} else {
 					break;
 				}
