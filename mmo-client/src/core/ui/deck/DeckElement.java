@@ -66,7 +66,7 @@ public class DeckElement {
 	 *
 	 * @return sign Movement direction
 	 */
-	public float updateMovement(float speed){
+	public float updateMovement(float speed, float floatingMul){
 		float sign = Math.signum(progressTarget - progressCurrent);
 		float progress = progressCurrent + sign * speed;
 
@@ -77,17 +77,19 @@ public class DeckElement {
 		progressCurrent = progress;
 
 		float abs = Math.abs(floatDirection);
-		floatingStep = FastMath.clamp(floatingStep + floatDirection * speed * 2, -abs, abs);
+		floatingStep = FastMath.clamp(floatingStep + floatDirection * speed * floatingMul, -abs, abs);
 
 		if (floatingStep == floatDirection) {
 			floatDirection *= -1;
 		}
 
+		return sign;
+	}
+
+	public void updateHover(float speed){
 		if (hoverListener != null) {
 			int direction = hoverListener.isHovered() ? 1 : -1;
-			hoverStep = FastMath.clamp(hoverStep + direction * speed * 16, 0, 1);
+			hoverStep = FastMath.clamp(hoverStep + direction * speed, 0, 1);
 		}
-
-		return sign;
 	}
 }
