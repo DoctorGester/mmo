@@ -36,6 +36,7 @@ import java.util.concurrent.Callable;
  * @author doc
  */
 public class UnitCardModel extends CardModel {
+	private static final int TEXTURE_UP_SCALE = 2;
 	private static final int PORTRAIT_TEX_HEIGHT = 256;
 	private static final float PORTRAIT_WIDTH_MUL = 0.67f;
 	private static final int PORTRAIT_TEX_WIDTH = (int) (PORTRAIT_TEX_HEIGHT * PORTRAIT_WIDTH_MUL);
@@ -93,7 +94,7 @@ public class UnitCardModel extends CardModel {
 		scene.attachChild(nameText);
 		scene.attachChild(statsText);
 
-		return new UIBuffer(manager, PORTRAIT_TEX_WIDTH, PORTRAIT_TEX_HEIGHT, scene);
+		return new UIBuffer(manager, PORTRAIT_TEX_WIDTH * TEXTURE_UP_SCALE, PORTRAIT_TEX_HEIGHT * TEXTURE_UP_SCALE, scene);
 	}
 
 	private PortraitData createPortraitData(Spatial model){
@@ -101,8 +102,8 @@ public class UnitCardModel extends CardModel {
 
 		PortraitData portraitData = new PortraitData();
 		portraitData.setScene(node);
-		portraitData.setWidth(PORTRAIT_TEX_WIDTH);
-		portraitData.setHeight(PORTRAIT_TEX_HEIGHT);
+		portraitData.setWidth(PORTRAIT_TEX_WIDTH * TEXTURE_UP_SCALE);
+		portraitData.setHeight(PORTRAIT_TEX_HEIGHT * TEXTURE_UP_SCALE);
 		portraitData.setBackground(ColorRGBA.White);
 		portraitData.setCameraLocation(CAMERA_POSITION);
 		portraitData.setCameraTarget(CAMERA_TARGET);
