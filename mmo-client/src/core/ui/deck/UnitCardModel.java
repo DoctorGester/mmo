@@ -50,24 +50,26 @@ public class UnitCardModel extends CardModel {
 	public UnitCardModel(UnitData unitData, float size){
 		super(Program.getInstance().getMainFrame().getAssetManager(), size);
 		this.unitData = unitData;
-
-		createContent();
 	}
 
 	@Override
 	public void createContent() {
-		Spatial model = ClientDataLoader.getUnitModel(unitData);
-		RenderManager renderManager = Program.getInstance().getMainFrame().getRenderManager();
-		PortraitBuffer buffer = bridgeCache.get(unitData.getName());
-		UIBuffer uiBuffer = createUIBuffer(renderManager);
+		ClientDataLoader.getUnitModel(unitData, new ClientDataLoader.ModelLoadingTask() {
+			@Override
+			public void loaded(Node result) {
+				RenderManager renderManager = Program.getInstance().getMainFrame().getRenderManager();
+				PortraitBuffer buffer = bridgeCache.get(unitData.getName());
+				UIBuffer uiBuffer = createUIBuffer(renderManager);
 
-		if (buffer == null){
-			buffer = new PortraitBuffer(renderManager, createPortraitData(model));
-			bridgeCache.put(unitData.getName(), buffer);
-		}
+				if (buffer == null){
+					buffer = new PortraitBuffer(renderManager, createPortraitData(result));
+					bridgeCache.put(unitData.getName(), buffer);
+				}
 
-		material.setTexture("Portrait", buffer.getTexture());
-		material.setTexture("Content", uiBuffer.getTexture());
+				material.setTexture("Portrait", buffer.getTexture());
+				material.setTexture("Content", uiBuffer.getTexture());
+			}
+		});
 	}
 
 	private BitmapText createTextSimple(String text, float fontSize){

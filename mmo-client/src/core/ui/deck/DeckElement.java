@@ -8,21 +8,23 @@ import com.simsilica.lemur.event.CursorEventControl;
 * @author doc
 */
 public class DeckElement {
-	private Spatial model;
+	private CardModel model;
 	private float progressCurrent;
 	private float progressTarget;
 	private float floatingStep;
 	private float hoverStep;
 	private int floatDirection = 1;
 
+	private boolean contentCreated = false;
+
 	private CardHoverListener hoverListener;
 
-	public DeckElement(Spatial model) {
+	public DeckElement(CardModel model) {
 		this.model = model;
 		floatingStep = FastMath.nextRandomFloat() * 2f - 1f;
 	}
 
-	public Spatial getModel() {
+	public CardModel getModel() {
 		return model;
 	}
 
@@ -60,6 +62,14 @@ public class DeckElement {
 		CursorEventControl.removeListenersFromSpatial(model, hoverListener);
 
 		hoverListener = null;
+	}
+
+	public boolean isContentCreated() {
+		return contentCreated;
+	}
+
+	public void setContentCreated(boolean contentCreated) {
+		this.contentCreated = contentCreated;
 	}
 
 	/**

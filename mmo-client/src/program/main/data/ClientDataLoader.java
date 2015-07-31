@@ -22,12 +22,27 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.StringTokenizer;
+import java.util.concurrent.Callable;
 
 /**
  * @author doc
  */
 public class ClientDataLoader {
 	private static Map<UnitData, Node> unitModels = new HashMap<UnitData, Node>();
+
+	public static abstract class ModelLoadingTask {
+		public abstract void loaded(Node result);
+
+		private void execute(final Node result){
+			Program.getInstance().getMainFrame().enqueue(new Callable<Void>() {
+				@Override
+				public Void call() throws Exception {
+					loaded(result);
+					return null;
+				}
+			});
+		}
+	}
 
 	public GroovyScriptEngine loadScriptEngine(){
 		try {
@@ -75,6 +90,29 @@ public class ClientDataLoader {
 		} catch (IOException e) {
 			e.printStackTrace();
 			return new Node();
+		}
+	}
+
+	public static void getUnitModel(final UnitData data, final ModelLoadingTask task) {
+		Node model = unitModels.get(data);
+
+		if (model == null) {
+			new Thread(){
+				public void run() {
+					try {
+						Node model = loadAnimatedModelAlt(data.getModelPath());
+						model.setLocalScale((float) data.getScale());
+						model.setShadowMode(RenderQueue.ShadowMode.CastAndReceive);
+						unitModels.put(data, model);
+
+						task.execute(model);
+					} catch (IOException e) {
+						task.execute(new Node());
+					}
+				}
+			}.start();
+		} else {
+			task.execute(model.clone(false));
 		}
 	}
 

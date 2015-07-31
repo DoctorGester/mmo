@@ -57,7 +57,7 @@ public class DeckControl extends AbstractControl {
 		for (Item item: deck) {
 			final float cardSize = 0.3f;
 
-			Spatial model = CardModelFactory.createModel(item, cardSize);
+			CardModel model = CardModelFactory.createModel(item, cardSize);
 			DeckElement element = new DeckElement(model);
 
 			origin.attachChild(model);
@@ -98,6 +98,11 @@ public class DeckControl extends AbstractControl {
 	private DeckElement extractTopCard(){
 		DeckElement card = deckCards.remove(0);
 		freeCards.add(card);
+
+		if (!card.isContentCreated()) {
+			card.getModel().createContent();
+			card.setContentCreated(true);
+		}
 
 		if (hoverEnabled)
 			card.registerHoverListener();
