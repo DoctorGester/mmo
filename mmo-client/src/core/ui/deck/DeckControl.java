@@ -26,6 +26,7 @@ public class DeckControl extends AbstractControl {
 	private List<DeckElement> freeCards = new ArrayList<DeckElement>();
 
 	private boolean hoverEnabled = false;
+	private boolean cardDragEnabled = false;
 
 	private ControlPoint[] innerCurve = new ControlPoint[]{
 			new ControlPoint(new Vector3f(1.2f, 0, 2f), FastMath.PI),
@@ -107,6 +108,9 @@ public class DeckControl extends AbstractControl {
 		if (hoverEnabled)
 			card.registerHoverListener();
 
+		if (cardDragEnabled)
+			card.registerDragListener();
+
 		return card;
 	}
 
@@ -118,7 +122,7 @@ public class DeckControl extends AbstractControl {
 			card.setProgressTarget(card.getProgressTarget() + value);
 	}
 
-	public void enableElementHover(){
+	public void enableCardHover(){
 		hoverEnabled = true;
 
 		for (DeckElement element: freeCards) {
@@ -126,6 +130,37 @@ public class DeckControl extends AbstractControl {
 		}
 	}
 
+	public void enableCardDrag(){
+		cardDragEnabled = true;
+
+		for (DeckElement element: freeCards) {
+			element.registerDragListener();
+		}
+	}
+
+	private void updateCardPosition(DeckElement card, ControlPoint point){
+		Vector3f resultPosition = point.getPosition();
+
+		float diff = -resultPosition.x;
+		float hoverStep = FastMath.tan(card.getHoverStep()) / FastMath.HALF_PI;
+		float floatingStep = card.getFloatingStep();
+
+		resultPosition.addLocal(0, 0, floatingStep * 0.02f);
+		resultPosition.addLocal(0, 0, -hoverStep * 0.5f);
+		resultPosition.addLocal(diff * hoverStep * 0.2f, 0, 0);
+
+		if (card.isBeingDragged()) {
+
+		}
+
+		Quaternion rotationTarget = new Quaternion().fromAngles(0, point.getRotation(), 0);
+		Quaternion rotationHover = new Quaternion().fromAngles(0, 0, floatingStep * 0.035f - 0.017f);
+		Quaternion rotationResult = new Quaternion().slerp(rotationTarget, rotationHover, hoverStep);
+
+		card.getModel().setLocalTranslation(resultPosition);
+		card.getModel().setLocalRotation(rotationResult);
+		card.getModel().setLocalScale(1 + hoverStep * 0.65f);
+	}
 
 	@Override
 	protected void controlUpdate(float tpf) {
@@ -165,28 +200,7 @@ public class DeckControl extends AbstractControl {
 				card.updateHover(speed * 18);
 			}
 
-			Vector3f resultPosition = point.getPosition();
-
-			// Extrapolate hover step to tangent function graph
-			// Move card closer to the camera
-			// Move card closer to the center
-			// Scale it
-
-			float diff = -resultPosition.x;
-			float hoverStep = FastMath.tan(card.getHoverStep()) / FastMath.HALF_PI;
-			float floatingStep = card.getFloatingStep();
-
-			resultPosition.addLocal(0, 0, floatingStep * 0.02f);
-			resultPosition.addLocal(0, 0, -hoverStep * 0.5f);
-			resultPosition.addLocal(diff * hoverStep * 0.2f, 0, 0);
-
-			Quaternion rotationTarget = new Quaternion().fromAngles(0, point.getRotation(), 0);
-			Quaternion rotationHover = new Quaternion().fromAngles(0, 0, floatingStep * 0.035f - 0.017f);
-			Quaternion rotationResult = new Quaternion().slerp(rotationTarget, rotationHover, hoverStep);
-
-			card.getModel().setLocalTranslation(resultPosition);
-			card.getModel().setLocalRotation(rotationResult);
-			card.getModel().setLocalScale(1 + hoverStep * 0.65f);
+			updateCardPosition(card, point);
 		}
 
 		// Moving cards between view and deck

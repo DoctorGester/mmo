@@ -1,7 +1,6 @@
 package core.ui.deck;
 
 import com.jme3.math.FastMath;
-import com.jme3.scene.Spatial;
 import com.simsilica.lemur.event.CursorEventControl;
 
 /**
@@ -18,6 +17,7 @@ public class DeckElement {
 	private boolean contentCreated = false;
 
 	private CardHoverListener hoverListener;
+	private CardDragListener dragListener;
 
 	public DeckElement(CardModel model) {
 		this.model = model;
@@ -53,7 +53,7 @@ public class DeckElement {
 	}
 
 	public void registerHoverListener(){
-		hoverListener = new CardHoverListener(this);
+		hoverListener = new CardHoverListener();
 
 		CursorEventControl.addListenersToSpatial(model, hoverListener);
 	}
@@ -62,6 +62,18 @@ public class DeckElement {
 		CursorEventControl.removeListenersFromSpatial(model, hoverListener);
 
 		hoverListener = null;
+	}
+
+	public void registerDragListener(){
+		dragListener = new CardDragListener();
+
+		CursorEventControl.addListenersToSpatial(model, dragListener);
+	}
+
+	public void removeDragListener(){
+		CursorEventControl.removeListenersFromSpatial(model, dragListener);
+
+		dragListener = null;
 	}
 
 	public boolean isContentCreated() {
@@ -101,5 +113,9 @@ public class DeckElement {
 			int direction = hoverListener.isHovered() ? 1 : -1;
 			hoverStep = FastMath.clamp(hoverStep + direction * speed, 0, 1);
 		}
+	}
+
+	public boolean isBeingDragged(){
+		return dragListener != null && dragListener.isDragging();
 	}
 }
