@@ -7,6 +7,7 @@ import com.jme3.input.controls.ActionListener;
 import com.jme3.input.controls.AnalogListener;
 import com.jme3.input.controls.KeyTrigger;
 import com.jme3.input.controls.MouseAxisTrigger;
+import com.jme3.math.Vector2f;
 import com.jme3.scene.Node;
 import core.board.ClientBoard;
 import core.graphics.scenes.BattleScene;
@@ -67,7 +68,7 @@ public class Cheats {
 				}
 
 				Node root = program.getMainFrame().getRootNode();
-				deckControl = new DeckControl(program.getMainFrame());
+				deckControl = new DeckControl(program.getMainFrame().getCamera(), new Vector2f(0, -0.5f));
 				deckControl.setDeck(deck);
 				deckControl.enableCardHover();
 				deckControl.enableCardDrag();

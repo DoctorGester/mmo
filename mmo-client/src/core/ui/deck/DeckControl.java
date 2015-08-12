@@ -1,16 +1,16 @@
 package core.ui.deck;
 
-import com.jme3.app.SimpleApplication;
 import com.jme3.math.FastMath;
 import com.jme3.math.Quaternion;
+import com.jme3.math.Vector2f;
 import com.jme3.math.Vector3f;
+import com.jme3.renderer.Camera;
 import com.jme3.renderer.RenderManager;
 import com.jme3.renderer.ViewPort;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 import com.jme3.scene.control.AbstractControl;
-import com.jme3.scene.control.CameraControl;
-import com.simsilica.lemur.event.CursorEventControl;
+import core.ui.UIElementControl;
 import shared.items.Item;
 
 import java.util.ArrayList;
@@ -41,18 +41,12 @@ public class DeckControl extends AbstractControl {
 			new ControlPoint(new Vector3f(-0.4f, 0f, 2.5f), FastMath.PI),
 			new ControlPoint(new Vector3f(-1.2f, 0, 2.2f), 0f),
 	};
-	private SimpleApplication application;
 
-	public DeckControl(SimpleApplication application) {
-		this.application = application;
+	public DeckControl(Camera camera, Vector2f location) {
 		origin = new Node();
-
-		CameraControl cameraControl = new CameraControl(application.getCamera());
-		cameraControl.setControlDir(CameraControl.ControlDirection.CameraToSpatial);
-		origin.addControl(cameraControl);
-
-		application.getRootNode().attachChild(origin);
-	}
+		origin.setLocalTranslation(location.x, location.y, 0);
+		origin.addControl(new UIElementControl(camera, new Vector3f(location.x, location.y, 0f)));
+ 	}
 
 	public void setDeck(List<Item> deck){
 		for (Item item: deck) {
@@ -146,7 +140,7 @@ public class DeckControl extends AbstractControl {
 		float floatingStep = card.getFloatingStep();
 
 		resultPosition.addLocal(0, 0, floatingStep * 0.02f);
-		resultPosition.addLocal(0, 0, -hoverStep * 0.5f);
+		resultPosition.addLocal(0, hoverStep * 0.3f, -hoverStep * 0.5f);
 		resultPosition.addLocal(diff * hoverStep * 0.2f, 0, 0);
 
 		if (card.isBeingDragged()) {
@@ -246,5 +240,14 @@ public class DeckControl extends AbstractControl {
 	@Override
 	protected void controlRender(RenderManager rm, ViewPort vp) {
 
+	}
+
+	@Override
+	public void setSpatial(Spatial spatial) {
+		super.setSpatial(spatial);
+
+		if (spatial instanceof Node) {
+			((Node) spatial).attachChild(origin);
+		}
 	}
 }
